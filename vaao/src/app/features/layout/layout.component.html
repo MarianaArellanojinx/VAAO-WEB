@@ -1,0 +1,23 @@
+<div id="particles-js" class="w-screen h-screen"></div>
+
+<header 
+  class="app-topbar flex align-items-center justify-content-between px-3 py-2">
+  <div class="flex align-items-center gap-2">
+    <i 
+      class="pi pi-bars" 
+      style="color: white; cursor: pointer;"
+      ></i>
+    <span style="color: white" class="ml-1 font-bold text-xl">VAAO</span>
+  </div>
+  <div class="flex flex-column gap-1">
+    <div class="flex align-items-center gap-2" style="cursor: pointer;">
+      <i class="pi pi-sign-in"></i>
+      <label>Iniciar sesión</label>
+    </div>
+    <small class="flex justify-content-end" style="color: white;">Versión demo</small>
+  </div>
+</header>
+
+<main class="mt-8 px-3">
+    <router-outlet/>
+</main>
