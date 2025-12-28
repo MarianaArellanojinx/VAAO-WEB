@@ -2,15 +2,61 @@
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;          
+    right: 0;
     height: 3.7rem;
-    background-color: #18beffdd;
-    backdrop-filter: blur(8px);
+    background: #1B4F72dd;
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     z-index: 1000;
 }
 
-label, p, span, small, i {
+label,
+p,
+span,
+small,
+i {
     color: white;
+}
+
+.item {
+    border-radius: 0.7rem;
+    transition: all 0.25s ease-out;
+    cursor: pointer;
+    padding: 0.7rem;
+}
+
+.item:hover {
+    border: solid 1px #0685b7dd;
+    background-color: #53c1ecdd;
+    transition: all 0.25s ease-in;
+}
+
+/* FOOTER FIXED */
+.app-footer-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    z-index: 9999;
+    background-color: #1B4F72dd;
+    color: #ffffff;
+    font-size: 0.85rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* LINKS */
+.footer-link {
+    cursor: pointer;
+    opacity: 0.85;
+}
+
+.footer-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+.app-main {
+  background: transparent;
 }
