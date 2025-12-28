@@ -1,1 +1,120 @@
-<p>home works!</p>
+<div class="home-welcome p-4">
+
+    <!-- HERO -->
+    <section class="welcome-hero mb-6">
+        <div class="grid align-items-center mb-0">
+
+            <div class="col-12 md:col-7 mb-0">
+                <h1 class="welcome-title">Bienvenido a VAAO</h1>
+                <p class="welcome-subtitle">
+                    Sistema web para la venta, gestión y distribución de hielo,
+                    diseñado para facilitar pedidos, entregas y control operativo.
+                </p>
+
+                <div class="flex gap-3 mt-4">
+                    <p-button
+                        severity="success"
+                        label="Iniciar pedido" 
+                        icon="pi pi-shopping-cart"/>
+                    <p-button
+                        severity="contrast"
+                        label="Conocer el sistema" 
+                        icon="pi pi-info-circle"
+                        [text]="true"
+                        [outlined]="true"/>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-5 text-center mb-0">
+                <i class="pi pi-box welcome-icon"></i>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- QUE PUEDES HACER -->
+    <section class="mb-6">
+        <h2 class="section-title text-center mb-4">
+            ¿Qué puedes hacer en VAAO?
+        </h2>
+
+        <div class="grid">
+
+            <div class="col-12 md:col-4">
+                <p-card class="info-card">
+                    <i class="pi pi-shopping-cart info-icon"></i>
+                    <h3>Realizar pedidos</h3>
+                    <p>
+                        Solicita hielo de forma rápida y segura,
+                        con seguimiento de entrega.
+                    </p>
+                </p-card>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <p-card class="info-card">
+                    <i class="pi pi-users info-icon"></i>
+                    <h3>Gestionar clientes</h3>
+                    <p>
+                        Administra clientes, direcciones y pedidos asociados.
+                    </p>
+                </p-card>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <p-card class="info-card">
+                    <i class="pi pi-truck info-icon"></i>
+                    <h3>Coordinar entregas</h3>
+                    <p>
+                        Asigna repartidores y controla la entrega del producto.
+                    </p>
+                </p-card>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FLUJO -->
+    <section class="mb-6">
+        <h2 class="section-title text-center mb-4">
+            ¿Cómo funciona?
+        </h2>
+
+        <div class="grid text-center">
+
+            <div class="col-12 md:col-3">
+                <p-card>
+                    <i class="pi pi-file step-icon"></i>
+                    <h4>Pedido</h4>
+                    <p>El cliente registra su pedido</p>
+                </p-card>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <p-card>
+                    <i class="pi pi-box step-icon"></i>
+                    <h4>Preparación</h4>
+                    <p>Se prepara el hielo solicitado</p>
+                </p-card>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <p-card>
+                    <i class="pi pi-truck step-icon"></i>
+                    <h4>Reparto</h4>
+                    <p>Asignación y salida a entrega</p>
+                </p-card>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <p-card>
+                    <i class="pi pi-check-circle step-icon"></i>
+                    <h4>Entrega</h4>
+                    <p>Pedido entregado al cliente</p>
+                </p-card>
+            </div>
+
+        </div>
+    </section>
+
+</div>
