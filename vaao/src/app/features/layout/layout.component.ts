@@ -1,22 +1,41 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { RouterOutlet } from "@angular/router";
-
+import { AfterViewInit, Component, inject } from '@angular/core';
+import { Router, RouterOutlet } from "@angular/router";
+import { SidebarModule } from 'primeng/sidebar';
+import { MenuItem } from '../../shared/interfaces/MenuItem';
 declare var particlesJS: any;
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [
+    RouterOutlet,
+    SidebarModule
+  ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent implements AfterViewInit{
- 
+
+  router: Router = inject(Router);
+
+  visible: boolean = false;
+  items: MenuItem[] = [
+    {
+      path: '/dashboard',
+      icon: 'pi pi-chart-bar',
+      label: 'Dashboard'
+    },
+    {
+      path: '/dashboard',
+      icon: 'pi pi-chart-bar',
+      label: 'Dashboard'
+    }
+  ];
 
   ngAfterViewInit() {
     particlesJS('particles-js', {
       particles: {
         number: {
-          value: 160,
+          value: 300,
           density: {
             enable: true,
             value_area: 800
@@ -58,5 +77,12 @@ export class LayoutComponent implements AfterViewInit{
       },
       retina_detect: true
     });
+  }
+  
+  navigate(url: string) {
+    this.router.navigate([url])
+  }
+  open(){
+    this.visible = true;
   }
 }
