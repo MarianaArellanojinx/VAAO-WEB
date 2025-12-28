@@ -1,1 +1,33 @@
-<p>users works!</p>
+<div class="p-fluid p-formgrid grid mt-3">
+    <div class="field col-12">
+        <p-button
+            label="Agregar nuevo usuario"
+            icon="pi pi-user-plus"
+            severity="success"/>
+    </div>
+    <div class="field col-12">
+        <p-table [value]="users">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Id del usuario</th>
+                    <th>Nombre del usuario</th>
+                    <th>¿Esta activo?</th>
+                    <th>Rol del usuario</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+                <tr>
+                    <td>{{user.idUser}}</td>
+                    <td>{{user.userName}}</td>
+                    <td>
+                        <p-checkbox
+                            [(ngModel)]="user.isActive"
+                            [binary]="true"
+                            [disabled]="true"/>
+                    </td>
+                    <td>{{user.rol}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

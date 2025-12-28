@@ -3,6 +3,7 @@ import { CardComponent } from "../../../shared/components/card/card.component";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
 import { ChartModule } from 'primeng/chart'
+import { TableModule } from 'primeng/table'
 
 @Component({
   selector: 'app-dashboard',
@@ -10,7 +11,8 @@ import { ChartModule } from 'primeng/chart'
   imports: [
     CardComponent,
     FontAwesomeModule,
-    ChartModule
+    ChartModule,
+    TableModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -123,4 +125,28 @@ export class DashboardComponent {
       }
     }
   };
+
+  tableData: any[] = [
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+    {a: 'Hola'},
+  ];
 }

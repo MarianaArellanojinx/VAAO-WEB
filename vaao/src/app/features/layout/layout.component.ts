@@ -20,14 +20,24 @@ export class LayoutComponent implements AfterViewInit{
   visible: boolean = false;
   items: MenuItem[] = [
     {
-      path: '/dashboard',
-      icon: 'pi pi-chart-bar',
-      label: 'Dashboard'
+      path: '/',
+      icon: 'pi pi-home',
+      label: 'Inicio'
     },
     {
       path: '/dashboard',
       icon: 'pi pi-chart-bar',
       label: 'Dashboard'
+    },
+    {
+      path: '/users',
+      icon: 'pi pi-users',
+      label: 'Usuarios'
+    },
+    {
+      path: '/client',
+      icon: 'pi pi-users',
+      label: 'Clientes'
     }
   ];
 
@@ -62,7 +72,7 @@ export class LayoutComponent implements AfterViewInit{
           enable: true,
           speed: 1.5,
           direction: 'bottom',
-          random: false,
+          random: true,
           straight: false,
           out_mode: 'out'
         }
@@ -81,6 +91,7 @@ export class LayoutComponent implements AfterViewInit{
   
   navigate(url: string) {
     this.router.navigate([url])
+    this.visible = false;
   }
   open(){
     this.visible = true;
