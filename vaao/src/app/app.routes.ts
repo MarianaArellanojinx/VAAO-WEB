@@ -5,6 +5,8 @@ import { LoginComponent } from './features/login/login.component';
 import { DashboardComponent } from './features/admin/dashboard/dashboard.component';
 import { AddClientComponent } from './features/admin/add-client/add-client.component';
 import { UsersComponent } from './features/admin/users/users.component';
+import { DealersComponent } from './features/dealers/dealers.component';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
     {
@@ -18,7 +20,8 @@ export const routes: Routes = [
             },
             {
                 path: "dashboard",
-                component: DashboardComponent
+                component: DashboardComponent,
+                canActivate: [adminGuard]
             },
             {
                 path: 'auth',
@@ -31,6 +34,10 @@ export const routes: Routes = [
             {
                 path: 'users',
                 component: UsersComponent
+            },
+            {
+                path: 'dealers',
+                component: DealersComponent
             }
         ]
     }

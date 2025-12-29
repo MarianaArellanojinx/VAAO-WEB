@@ -1,0 +1,24 @@
+<div class="p-fluid p-formgrid grid">
+    <div class="field col-12">
+        <label>Seleccione usuario:</label>
+        <p-dropdown
+            [options]="users"
+            optionLabel="userName"
+            optionValue="idUser"
+            [(ngModel)]="idUser"/>
+    </div>
+    <div class="field col-12">
+        <label for="">Ingrese el nombre del repartidor:</label>
+        <input type="text" pInputText [(ngModel)]="name" />
+    </div>
+    <div class="field col-12">
+        <label for="">Ingrese el apellido del repartidor:</label>
+        <input type="text" pInputText [(ngModel)]="lastName" />
+    </div>
+    <div class="field col-12">
+        <p-button
+            label="Guardar repartidor"
+            severity="success"
+            icon="pi pi-save"/>
+    </div>
+</div>
