@@ -1,40 +1,41 @@
 <div class="p-fluid p-formgrid grid mt-2">
     <div class="field col-12 mb-0">
         <label>Nombre del negocio:</label>
-        <input type="text" pInputText />
+        <input type="text" pInputText [(ngModel)]="bussinesName"/>
     </div>
     <div class="field col-12 mb-0">
         <label>Nombre(s) del cliente:</label>
-        <input type="text" pInputText />
+        <input type="text" pInputText [(ngModel)]="clientName"/>
     </div>
     <div class="field col-12 mb-0">
         <label>Apellidos:</label>
-        <input type="text" pInputText />
+        <input type="text" pInputText [(ngModel)]="clientLastName"/>
     </div>
     <div class="field col-12 mb-0">
         <label>Colonia:</label>
-        <input type="text" pInputText />
+        <input type="text" pInputText [(ngModel)]="colony"/>
     </div>
     <div class="field col-12 mb-0">
         <label>Número exterior</label>
-        <input type="text" pInputText />
+        <input type="text" pInputText [(ngModel)]="externalNumber"/>
     </div>
     <div class="field col-12 mb-0">
         <label>Código Postal (C.P.)</label>
-        <input type="text" pInputText />
+        <input type="text" pInputText [(ngModel)]="cp"/>
     </div>
     <div class="field col-12 mb-0">
         <label>Núm. telefono</label>
-        <input type="number" pInputText />
+        <input type="number" pInputText [(ngModel)]="phone"/>
     </div>
     <div class="field col-12 mb-0">
         <label>Núm. Conservadores</label>
-        <input type="text" pInputText />
+        <input type="text" pInputText [(ngModel)]="fridges"/>
     </div>
     <div class="field col-12 mb-0">
         <p-button
             severity="success"
             icon="pi pi-save"
-            label="Guardar"/>
+            label="Guardar"
+            (onClick)="saveClient()"/>
     </div>
 </div>

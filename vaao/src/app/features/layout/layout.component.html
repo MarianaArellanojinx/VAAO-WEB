@@ -17,6 +17,13 @@
       <i class="pi pi-bars text-white cursor-pointer" (click)="open()"></i>
       <img src="assets/imgs/VAAO_LOGO.png" width="100" alt="" (click)="navigate('')" style="cursor: pointer;">
     </div>
+    <div class="flex flex-column align-items-center">
+      @if(user.userName !== ''){
+        <label>Bienvenido de nuevo,</label>
+        <label><b>{{user.userName}}</b></label>
+      }
+
+    </div>
     <div class="flex flex-column gap-1">
       <div class="flex align-items-center justify-content-end gap-2 cursor-pointer text-white"
         (click)="navigate('auth')">
