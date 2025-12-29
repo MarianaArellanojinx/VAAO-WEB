@@ -39,7 +39,7 @@ export class LayoutComponent implements AfterViewInit{
       label: 'Usuarios'
     },
     {
-      path: '/client',
+      path: '/clients',
       icon: 'pi pi-users',
       label: 'Clientes'
     },
