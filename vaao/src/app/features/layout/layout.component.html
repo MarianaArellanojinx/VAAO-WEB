@@ -18,7 +18,7 @@
       <img src="assets/imgs/VAAO_LOGO.png" width="100" alt="" (click)="navigate('')" style="cursor: pointer;">
     </div>
     <div class="flex flex-column align-items-center">
-      @if(user.userName !== ''){
+      @if(user.userName !== '' && user.userName !== undefined){
         <label>Bienvenido de nuevo,</label>
         <label><b>{{user.userName}}</b></label>
       }
@@ -41,7 +41,7 @@
   <footer class="app-footer-fixed">
     <div class="flex align-items-center justify-content-between px-4 h-full">
       <span>© 2025 VAAO</span>
-      <span>Developed by Mariana A. & Gerardo C.</span>
+      <span>Developed M&G Solutions.</span>
     </div>
   </footer>
 </div>
