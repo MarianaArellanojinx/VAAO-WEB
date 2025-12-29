@@ -1,7 +1,8 @@
 export interface User {
     idUser?: number,
-    userName: string,
-    userPassword: string,
-    isActive: boolean,
-    rol: number
+    userName?: string,
+    userPassword?: string,
+    isActive?: boolean,
+    rol?: number,
+    rolDescription?: string
 }

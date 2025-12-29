@@ -2,6 +2,8 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from "@angular/router";
 import { SidebarModule } from 'primeng/sidebar';
 import { MenuItem } from '../../shared/interfaces/MenuItem';
+import { AuthService } from '../../core/services/auth.service';
+import { User } from '../../shared/interfaces/User';
 declare var particlesJS: any;
 @Component({
   selector: 'app-layout',
@@ -16,7 +18,9 @@ declare var particlesJS: any;
 export class LayoutComponent implements AfterViewInit{
 
   router: Router = inject(Router);
-
+  auth: AuthService = inject(AuthService);
+  
+  user: User = this.auth.getUser();
   visible: boolean = false;
   items: MenuItem[] = [
     {
@@ -38,6 +42,11 @@ export class LayoutComponent implements AfterViewInit{
       path: '/client',
       icon: 'pi pi-users',
       label: 'Clientes'
+    },
+    {
+      path: '/dealers',
+      icon: 'pi pi-box',
+      label: 'Repartidores'
     }
   ];
 
