@@ -7,6 +7,8 @@ import { AddClientComponent } from './features/admin/add-client/add-client.compo
 import { UsersComponent } from './features/admin/users/users.component';
 import { DealersComponent } from './features/dealers/dealers.component';
 import { adminGuard } from './core/guards/admin.guard';
+import { ClientsComponent } from './features/clients/clients.component';
+import { OrdersComponent } from './features/orders/orders.component';
 
 export const routes: Routes = [
     {
@@ -29,7 +31,7 @@ export const routes: Routes = [
             },
             {
                 path: 'clients',
-                component: AddClientComponent
+                component: ClientsComponent
             },
             {
                 path: 'users',
@@ -38,6 +40,10 @@ export const routes: Routes = [
             {
                 path: 'dealers',
                 component: DealersComponent
+            },
+            {
+                path: 'orders',
+                component: OrdersComponent
             }
         ]
     }

@@ -1,0 +1,41 @@
+<div class="p-fluid p-formgrid grid mt-3">
+    <div class="field col-12 my-0">
+        <p-button
+            label="Hacer pedido"
+            icon="pi pi-cart-arrow-down"
+            severity="success"
+            (onClick)="openModal()"/>
+    </div>
+    <div class="field col-12">
+        <app-card header="Pedidos activos">
+            <p-table [value]="orders" styleClass="mt-5 mb-3 px-3">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Id pedido</th>
+                        <th>Cliente</th>
+                        <th>Fecha de pedido</th>
+                        <th>Fecha de entrega</th>
+                        <th>Total de bolsas</th>
+                        <th>Precio unitario</th>
+                        <th>Precio total</th>
+                        <th>Estatus del pedido</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+                    <tr>
+                        <td>{{order.idPedido}}</td>
+                        <td>{{order.nombreCliente}}</td>
+                        <td>{{order.fechaPedido}}</td>
+                        <td>{{order.fechaProgramada}}</td>
+                        <td>{{order.totalBolsas}}</td>
+                        <td>${{order.precioUnitario}}</td>
+                        <td>${{order.totalPagar}}</td>
+                        <td>{{order.estatusPedido}}</td>
+                        <td>{{order.observaciones}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </app-card>
+    </div>
+</div>
