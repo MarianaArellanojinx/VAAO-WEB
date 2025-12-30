@@ -8,18 +8,20 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { CalendarModule } from "primeng/calendar";
+import { DropdownModule } from "primeng/dropdown";
 
 @Component({
   selector: 'app-add-order',
   standalone: true,
-  imports: [InputTextModule, InputTextareaModule, Button, FormsModule],
+  imports: [InputTextModule, InputTextareaModule, Button, FormsModule, CalendarModule, DropdownModule],
   templateUrl: './add-order.component.html',
   styleUrl: './add-order.component.scss'
 })
 export class AddOrderComponent implements OnInit {
 
   ngOnInit(): void {
-    
+    this.getClients();
   }
 
   private api: ApiService = inject(ApiService);
@@ -30,11 +32,13 @@ export class AddOrderComponent implements OnInit {
   comments: string = '';
   loading: boolean = false;
   idCliente: number = 0;
+  clientes: any[] = [];
+  scheduledDate: Date = new Date();
 
   getClients() {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Clientes/GetClientes`).subscribe({
       next: response => {
-        this.idCliente = response.data.filter((c: any) => c.idUser === this.auth.getUser().idUser)[0].idCliente
+        this.clientes = response.data.filter((c: any) => c.idUser === this.auth.getUser().idUser);
       }
     })
   }
@@ -45,7 +49,7 @@ export class AddOrderComponent implements OnInit {
       idPedido: 0,
       idCliente: this.idCliente,
       fechaPedido: new Date().toISOString(),
-      fechaProgramada: new Date().toISOString(),
+      fechaProgramada: this.scheduledDate.toISOString(),
       totalBolsas: this.bolsas,
       precioUnitario: 25,
       totalPagar: this.bolsas*25,

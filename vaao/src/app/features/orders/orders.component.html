@@ -26,8 +26,8 @@
                     <tr>
                         <td>{{order.idPedido}}</td>
                         <td>{{order.nombreCliente}}</td>
-                        <td>{{order.fechaPedido}}</td>
-                        <td>{{order.fechaProgramada}}</td>
+                        <td>{{order.fechaPedido | date:'dd-MM-yyyy hh:mm:ss'}}</td>
+                        <td>{{order.fechaProgramada | date:'dd-MM-yyyy'}}</td>
                         <td>{{order.totalBolsas}}</td>
                         <td>${{order.precioUnitario}}</td>
                         <td>${{order.totalPagar}}</td>

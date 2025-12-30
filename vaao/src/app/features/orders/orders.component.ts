@@ -8,11 +8,12 @@ import { environment } from '../../../environments/environment';
 import { ResponseBackend } from '../../shared/interfaces/ResponseBackend';
 import { DialogService } from 'primeng/dynamicdialog';
 import { AddOrderComponent } from '../add-order/add-order.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [Button, TableModule, CardComponent, HttpClientModule],
+  imports: [Button, TableModule, CardComponent, HttpClientModule, CommonModule],
   providers: [ApiService, DialogService],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss'

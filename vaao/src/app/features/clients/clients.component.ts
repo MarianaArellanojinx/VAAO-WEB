@@ -29,10 +29,13 @@ export class ClientsComponent implements OnInit {
   clients: any[] = [];
 
   openModal() {
-    this.dialog.open(AddClientComponent, {
+    const modal = this.dialog.open(AddClientComponent, {
       header: 'Agregar nuevo cliente',
       baseZIndex: 9999,
       width: '80%'
+    })
+    modal?.onClose.subscribe({
+      next: response => this.getClients()
     })
   }
   getClients() {
