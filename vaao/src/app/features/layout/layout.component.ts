@@ -47,6 +47,11 @@ export class LayoutComponent implements AfterViewInit{
       path: '/dealers',
       icon: 'pi pi-box',
       label: 'Repartidores'
+    },
+    {
+      path: '/orders',
+      icon: 'pi pi-cart-arrow-down',
+      label: 'Compras'
     }
   ];
 
