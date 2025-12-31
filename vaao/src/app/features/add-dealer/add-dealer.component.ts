@@ -29,6 +29,7 @@ export class AddDealerComponent implements OnInit {
   ref: DynamicDialogRef = inject(DynamicDialogRef);
   alert: AlertService = inject(AlertService);
 
+  loading: boolean = false;
   name: string = '';
   lastName: string = '';
   idUser: number | undefined = undefined;
@@ -46,6 +47,7 @@ export class AddDealerComponent implements OnInit {
   }
 
   saveDealer(): void {
+    this.loading = true;
     const payload = {
       idUser: this.idUser,
       nombreRepartidor: this.name,
@@ -55,6 +57,7 @@ export class AddDealerComponent implements OnInit {
     }
     this.api.post<ResponseBackend<boolean>>(``, payload).subscribe({
       next: response => {
+        this.loading = false;
         if(response.data === true){
           this.alert.dinamycMessage('Hecho!!', 'Se agregó un nuevo repartidor.', 'success')
           this.ref.close();
