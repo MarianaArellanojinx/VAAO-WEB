@@ -1,5 +1,5 @@
 <div class="p-fluid p-formgrid grid mt-3">
-    <div class="field col-4 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
         <label  style="color: #FFF;">Seleccione un rango de fechas para filtrar</label>
         <p-calendar
             [showIcon]="true"
@@ -8,7 +8,7 @@
             selectionMode="range"
             dateFormat="dd/mm/yy"/>
     </div>
-    <div class="field col-4 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
         <p-button
             severity="success"
             styleClass="mt-4"
@@ -16,7 +16,7 @@
             (onClick)="getOrders()"
             label="Filtrar"/>
     </div>
-    <div class="field col-4 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
         <p-button
             label="Hacer pedido"
             styleClass="mt-4"
@@ -24,7 +24,7 @@
             severity="success"
             (onClick)="openModal()"/>
     </div>
-    <div class="field col-12">
+    <div class="field col-12 mb-7">
         <app-card header="Pedidos activos">
             <p-table 
                 [value]="orders" 
