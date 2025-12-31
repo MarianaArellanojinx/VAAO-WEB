@@ -10,11 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CalendarModule } from "primeng/calendar";
 import { DropdownModule } from "primeng/dropdown";
+import { SpeedDialModule } from 'primeng/speeddial';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-add-order',
   standalone: true,
-  imports: [InputTextModule, InputTextareaModule, Button, FormsModule, CalendarModule, DropdownModule],
+  imports: [InputTextModule, InputTextareaModule, Button, FormsModule, CalendarModule, DropdownModule, SpeedDialModule],
   templateUrl: './add-order.component.html',
   styleUrl: './add-order.component.scss'
 })
@@ -27,6 +29,7 @@ export class AddOrderComponent implements OnInit {
   private api: ApiService = inject(ApiService);
   private auth: AuthService = inject(AuthService);
   private ref: DynamicDialogRef = inject(DynamicDialogRef);
+
 
   bolsas: number = 0;
   comments: string = '';

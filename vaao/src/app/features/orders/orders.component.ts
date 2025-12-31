@@ -14,11 +14,13 @@ import { Pedido } from '../../shared/interfaces/Pedido';
 import { AlertService } from '../../core/services/alert.service';
 import { CalendarModule } from "primeng/calendar";
 import { FormsModule } from '@angular/forms';
+import { SpeedDialModule } from "primeng/speeddial";
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [Button, TableModule, CardComponent, HttpClientModule, CommonModule, CalendarModule, FormsModule],
+  imports: [Button, TableModule, CardComponent, HttpClientModule, CommonModule, CalendarModule, FormsModule, SpeedDialModule],
   providers: [ApiService, DialogService],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss'
@@ -29,6 +31,12 @@ export class OrdersComponent implements OnInit {
     this.getOrders()
     this.userRole = this.auth.getUser().rol ?? 0
   }
+  items: MenuItem[] = [
+    {
+      icon: 'pi pi-plus',
+      command: () => {}
+    }
+  ];
 
   private api: ApiService = inject(ApiService);
   private dialog: DialogService = inject(DialogService);
