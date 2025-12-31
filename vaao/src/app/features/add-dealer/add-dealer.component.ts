@@ -55,7 +55,7 @@ export class AddDealerComponent implements OnInit {
       altaRepartidor: new Date().toISOString(),
       bajaRepartidor: null
     }
-    this.api.post<ResponseBackend<boolean>>(``, payload).subscribe({
+    this.api.post<ResponseBackend<boolean>>(`${environment.urlBackend}Repartidores/InsertRepartidores`, payload).subscribe({
       next: response => {
         this.loading = false;
         if(response.data === true){
