@@ -16,6 +16,7 @@ import { CalendarModule } from "primeng/calendar";
 import { FormsModule } from '@angular/forms';
 import { SpeedDialModule } from "primeng/speeddial";
 import { MenuItem } from 'primeng/api';
+import { ArrivalsDeliveryComponent } from '../arrivals-delivery/arrivals-delivery.component';
 
 @Component({
   selector: 'app-orders',
@@ -29,6 +30,7 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getOrders()
+    this.getRepartidores();
     this.userRole = this.auth.getUser().rol ?? 0
   }
   items: MenuItem[] = [
@@ -43,12 +45,17 @@ export class OrdersComponent implements OnInit {
   private auth: AuthService = inject(AuthService);
   private alert: AlertService = inject(AlertService);
 
-  private readonly PENDIENTE: number = 1;
-  private readonly APROBADO: number = 2;
-  private readonly CANCELADO: number = 3;
+  readonly PENDIENTE: number = 1;
+  readonly APROBADO: number = 2;
+  readonly CANCELADO: number = 3;
+  readonly EN_CAMINO: number = 1;
+  readonly LLEGADA: number = 2;
 
   orders: Pedido[] = [];
+  delivery: any[] = [];
   userRole: number = 0;
+  repartidores: any[] = [];
+  idRepartidor: number = 0;
 
   dates: Date[] = [new Date(), new Date()]
 
@@ -59,15 +66,76 @@ export class OrdersComponent implements OnInit {
       baseZIndex: 9999
     })
   }
+  openArrivals(order: Pedido){
+    const entrega = this.delivery.filter(x => x.idPedido === order.idPedido)[0]
+    this.dialog.open(ArrivalsDeliveryComponent, {
+      header: 'Tomar evidencia',
+      baseZIndex: 9999,
+      width: '80%',
+      data: entrega
+    })
+  }
   getOrders(): void {
     const start = this.dates[0].toISOString().split('T')[0];
     const end = this.dates[1].toISOString().split('T')[0];
     this.api.get<ResponseBackend<Pedido[]>>(`${environment.urlBackend}Pedidos/GetPedidosFiltrados?start=${start}&end=${end}`)
     .subscribe({
       next: response => {
-        this.orders = response.data.filter(x => x.estatusPedido === this.PENDIENTE);
+        if(this.userRole === 1){
+          this.orders = response.data
+        }else if(this.userRole === 3){
+          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
+        }else{
+          this.orders = response.data.filter(x => x.estatusPedido === this.PENDIENTE);
+        }
+        this.getDelivery()
       }
     })
+  }
+  getRepartidores() {
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Repartidores/GetRepartidores`).subscribe({
+      next: response => {
+        this.repartidores = response.data;
+        this.idRepartidor = this.repartidores.filter(x => x.idUser === this.auth.getUser().idUser)[0].idRepartidor
+      }
+    });
+  }
+  createDelivery(order: Pedido){
+    const payload = {
+      idRepartidor: this.idRepartidor,
+      idPedido: order.idPedido,
+      fechaEntrega: null,
+      horaInicio: new Date().toISOString(),
+      horaRegreso: null,
+      horaLlegada: null,
+      estatusReparto: 1,
+      observaciones: null,
+      imagenConservadorLlegada: null,
+      imagenConservadorSalida: null,
+      imagenIncidenciaConservador: null
+    }
+    this.api.post<ResponseBackend<boolean>>(`${environment.urlBackend}Entregas/CreateEntrega`, payload).subscribe({
+      next: response => {
+        if(response.data === true){
+          this.alert.dinamycMessage('Hecho!!', 'Se ha iniciado la entrega del pedido.', 'success')
+          this.getOrders()
+        }
+      }
+    });
+  }
+  getDelivery(){
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Entregas/GetAllEntregas`)
+    .subscribe({
+      next: response => {
+        this.delivery = response.data;
+      }
+    });
+  }
+  hasDelivery(pedido: Pedido){
+    return this.delivery.filter(x => x.idPedido === pedido.idPedido).length > 0 ? true : false;
+  }
+  getStatusDelivery(pedido: Pedido){
+    return this.delivery.filter(x => x.idPedido === pedido.idPedido)[0].estatusReparto
   }
   acceptOrder(order: Pedido){
     order.estatusPedido = this.APROBADO;

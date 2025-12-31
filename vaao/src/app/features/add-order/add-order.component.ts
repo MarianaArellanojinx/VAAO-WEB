@@ -12,6 +12,7 @@ import { CalendarModule } from "primeng/calendar";
 import { DropdownModule } from "primeng/dropdown";
 import { SpeedDialModule } from 'primeng/speeddial';
 import { MenuItem } from 'primeng/api';
+import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-add-order',
@@ -29,6 +30,7 @@ export class AddOrderComponent implements OnInit {
   private api: ApiService = inject(ApiService);
   private auth: AuthService = inject(AuthService);
   private ref: DynamicDialogRef = inject(DynamicDialogRef);
+  private alert: AlertService = inject(AlertService);
 
 
   bolsas: number = 0;
@@ -63,6 +65,7 @@ export class AddOrderComponent implements OnInit {
     this.api.post<ResponseBackend<boolean>>(`${environment.urlBackend}Pedidos/InsertPedidos`, payload).subscribe({
       next: response =>{
         this.loading = false;
+        this.alert.dinamycMessage('Hecho!!', 'Se ha creado su orden, espere confirmación', 'success')
         if(response.data === true) this.ref.close()
       }
     });

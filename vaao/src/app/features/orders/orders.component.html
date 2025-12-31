@@ -42,8 +42,12 @@
                         <th>Precio total</th>
                         <th>Estatus del pedido</th>
                         <th>Observaciones</th>
-                        @if (userRole === 1) {
+                        @if (userRole === 1 || userRole === 2) {
                             <th>Editar</th>
+                        }@else if (userRole === 3) {
+                            <th>Acciones</th>
+                        }@else if(userRole === 4) {
+
                         }
                     </tr>
                 </ng-template>
@@ -56,23 +60,42 @@
                         <td>{{order.totalBolsas}}</td>
                         <td>${{order.precioUnitario}}</td>
                         <td>${{order.totalPagar}}</td>
-                        <td>{{order.estatusPedido === 1 ? 'Pendiente de aprobación' : ''}}</td>
+                        <td>{{(order.estatusPedido === PENDIENTE ? 'Pendiente de aprobación' : order.estatusPedido === APROBADO ? 'Aprobado' : 'Rechazado')}}</td>
                         <td>{{order.observaciones}}</td>
-                        @if (userRole === 1) {
+                        @if (userRole === 1 || userRole === 2) {
                             <td>
-                                <div class="flex align-items-center gap-2">
+                                <div class="flex flex-column align-items-center gap-2">
                                     <p-button
-                                        [rounded]="true"
-                                        [text]="true"
                                         severity="success"
                                         icon="pi pi-check"
+                                        label="Aprobar"
                                         (onClick)="acceptOrder(order)"/>
                                     <p-button
-                                        [rounded]="true"
-                                        [text]="true"
                                         icon="pi pi-times"
+                                        label="Rechazar"
                                         (onClick)="cancelOrder(order)"
                                         severity="danger"/>
+                                </div>
+                            </td>
+                        }@else if (userRole === 3) {
+                            <td>
+                                <div class="flex align-items-center gap-2">
+                                    @if(order.estatusPedido === APROBADO && !hasDelivery(order)){
+                                        <p-button 
+                                            icon="pi pi-play"
+                                            label="Comenzar"
+                                            (onClick)="createDelivery(order)"/>
+                                    }@else if (order.estatusPedido === APROBADO && hasDelivery(order) && getStatusDelivery(order) === EN_CAMINO) {
+                                        <p-button 
+                                            icon="pi pi-truck"
+                                            label="Llegada"
+                                            (onClick)="openArrivals(order)"/>
+                                    }@else if(order.estatusPedido === APROBADO && hasDelivery(order) && getStatusDelivery(order) === LLEGADA) {
+                                        <p-button 
+                                            icon="pi pi-check" 
+                                            label="Terminar"
+                                            severity="success"/>
+                                    }
                                 </div>
                             </td>
                         }
