@@ -1,6 +1,4 @@
 <div class="home-welcome p-4">
-
-    <!-- HERO -->
     <section class="welcome-hero mb-6">
         <div class="grid align-items-center mb-0">
 
@@ -28,13 +26,14 @@
         <div class="grid">
 
             <div class="col-12 md:col-4">
-                <p-card class="info-card">
+                <p-card class="info-card" (click)="navigate('/orders')">
                     <i class="pi pi-shopping-cart info-icon"></i>
                     <h3>Realizar pedidos</h3>
                     <p>
                         Solicita hielo de forma rápida y segura,
                         con seguimiento de entrega.
                     </p>
+                    <p-button label="Realizar pedido" icon="pi pi-shopping-cart" (onClick)="navigate('/orders')"></p-button>
                 </p-card>
             </div>
 
@@ -45,6 +44,7 @@
                     <p>
                         Administra clientes, direcciones y pedidos asociados.
                     </p>
+                    <p-button label="Crear cliente" icon="pi pi-users" ></p-button>
                 </p-card>
             </div>
 

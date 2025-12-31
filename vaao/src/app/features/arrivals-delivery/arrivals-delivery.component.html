@@ -1,0 +1,16 @@
+<div class="p-fluid p-formgrid grid">
+    <div class="field col-12">
+        <p-fileUpload
+            accept="image/*"
+            mode="basic"
+            styleClass="w-full"
+            chooseLabel="Tomar foto"
+            chooseIcon="pi pi-camera"
+            maxFileSize="1000000"
+            [auto]="true" 
+            (onSelect)="test($event)" />
+    </div>
+    <div class="field col-12">
+        <p-button severity="success" label="Guardar" (onClick)="saveImage()"></p-button>
+    </div>
+</div>

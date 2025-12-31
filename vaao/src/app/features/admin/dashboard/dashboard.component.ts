@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CardComponent } from "../../../shared/components/card/card.component";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
 import { ChartModule } from 'primeng/chart'
 import { TableModule } from 'primeng/table'
+import { ApiService } from '../../../infrastructure/api.service';
+import { HttpClientModule } from '@angular/common/http';
+import { ResponseBackend } from '../../../shared/interfaces/ResponseBackend';
+import { environment } from '../../../../environments/environment';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,13 +17,40 @@ import { TableModule } from 'primeng/table'
     CardComponent,
     FontAwesomeModule,
     ChartModule,
-    TableModule
+    TableModule,
+    HttpClientModule,
+    CommonModule
   ],
+  providers: [ApiService],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
+  ngOnInit(): void {
+    this.getData()
+    this.getStatusChart();
+  }
+
+  private api: ApiService = inject(ApiService);
+
+  statusChart: any = {};
+
+  getStatusChart() {
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetEstatusPedidos`).subscribe({
+      next: response => {
+        this.statusChart = response.data;
+      }
+    });
+  }
+  ventas: any = undefined;
+  getData() {
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetHistoricoVentas`).subscribe({
+      next: response => {
+        this.ventas = response.data;
+      }
+    });
+  }
   snowflake: any = faSnowflake;
 
   historicoVentas30DiasDataset = {
@@ -114,39 +146,46 @@ export class DashboardComponent {
   };
   options = {
     responsive: true,
+    plugins: {
+      legend: {
+        labels: {
+          color: '#000'
+        }
+      },
+    },
     scales: {
       x: {
         stacked: true,
-        ticks: { color: '#ffffff' }
+        ticks: { color: '#000' }
       },
       y: {
         stacked: true,
-        ticks: { color: '#ffffff' }
+        ticks: { color: '#000' }
       }
     }
   };
 
   tableData: any[] = [
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
+    { a: 'Hola' },
   ];
 }

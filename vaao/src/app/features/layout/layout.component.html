@@ -25,11 +25,20 @@
 
     </div>
     <div class="flex flex-column gap-1">
-      <div class="flex align-items-center justify-content-end gap-2 cursor-pointer text-white"
-        (click)="navigate('auth')">
-        <i class="pi pi-sign-in"></i>
-        <label class="cursor-pointer">Iniciar sesión</label>
-      </div>
+      @if (user.idUser !== undefined) {
+        <div class="flex align-items-center justify-content-end gap-2 cursor-pointer text-white"
+          (click)="navigate('auth')">
+          <i class="pi pi-sign-out"></i>
+          <label class="cursor-pointer">Cerrar sesión</label>
+        </div>
+      }@else {
+        <div class="flex align-items-center justify-content-end gap-2 cursor-pointer text-white"
+          (click)="navigate('auth')">
+          <i class="pi pi-sign-in"></i>
+          <label class="cursor-pointer">Iniciar sesión</label>
+        </div>
+      }
+      
     </div>
   </header>
   <main class="app-main relative flex-1 mt-5">
