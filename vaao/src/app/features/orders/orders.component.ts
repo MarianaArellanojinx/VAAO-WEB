@@ -56,9 +56,17 @@ export class OrdersComponent implements OnInit {
   userRole: number = 0;
   repartidores: any[] = [];
   idRepartidor: number = 0;
+  idCliente: number = 0;
 
   dates: Date[] = [new Date(), new Date()]
 
+  getClientes() {
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Clientes/GetClientes`).subscribe({
+      next: response => {
+        this.idCliente = response.data.filter((x: any) => x.idUser === this.auth.getUser().idUser)
+      }
+    })
+  }
   openModal(){
     this.dialog.open(AddOrderComponent, {
       header: 'Crear pedido',
@@ -84,7 +92,7 @@ export class OrdersComponent implements OnInit {
         if(this.userRole === 1){
           this.orders = response.data
         }else if(this.userRole === 3){
-          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
+          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO && x.idCliente === this.idCliente)
         }else{
           this.orders = response.data.filter(x => x.estatusPedido === this.PENDIENTE);
         }
