@@ -27,7 +27,7 @@
     <div class="flex flex-column gap-1">
       @if (user.idUser !== undefined) {
         <div class="flex align-items-center justify-content-end gap-2 cursor-pointer text-white"
-          (click)="navigate('auth')">
+          (click)="endSession()">
           <i class="pi pi-sign-out"></i>
           <label class="cursor-pointer">Cerrar sesión</label>
         </div>

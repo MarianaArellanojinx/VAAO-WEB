@@ -110,4 +110,8 @@ export class LayoutComponent implements AfterViewInit{
   open(){
     this.visible = true;
   }
+  endSession() {
+    this.auth.deleteUser();
+    this.navigate('/auth')
+  }
 }

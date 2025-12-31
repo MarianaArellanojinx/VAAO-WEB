@@ -68,10 +68,13 @@ export class OrdersComponent implements OnInit {
     })
   }
   openModal(){
-    this.dialog.open(AddOrderComponent, {
+    const modal = this.dialog.open(AddOrderComponent, {
       header: 'Crear pedido',
       width: '80%',
       baseZIndex: 9999
+    });
+    modal?.onClose.subscribe({
+      next: response => this.getOrders()
     })
   }
   openArrivals(order: Pedido){
@@ -89,12 +92,14 @@ export class OrdersComponent implements OnInit {
     this.api.get<ResponseBackend<Pedido[]>>(`${environment.urlBackend}Pedidos/GetPedidosFiltrados?start=${start}&end=${end}`)
     .subscribe({
       next: response => {
+        console.log(this.userRole)
         if(this.userRole === 1){
           this.orders = response.data
         }else if(this.userRole === 3){
-          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO && x.idCliente === this.idCliente)
+          console.log(this.idCliente)
+          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
         }else{
-          this.orders = response.data.filter(x => x.estatusPedido === this.PENDIENTE);
+          this.orders = response.data.filter(x => x.idCliente === this.idCliente);
         }
         this.getDelivery()
       }
