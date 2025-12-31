@@ -8,6 +8,7 @@ import { ApiService } from '../../../infrastructure/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ResponseBackend } from '../../../shared/interfaces/ResponseBackend';
 import { environment } from '../../../../environments/environment';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +18,8 @@ import { environment } from '../../../../environments/environment';
     FontAwesomeModule,
     ChartModule,
     TableModule,
-    HttpClientModule
+    HttpClientModule,
+    CommonModule
   ],
   providers: [ApiService],
   templateUrl: './dashboard.component.html',
@@ -26,6 +28,7 @@ import { environment } from '../../../../environments/environment';
 export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
+    this.getData()
     this.getStatusChart();
   }
 
@@ -40,7 +43,14 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
-
+  ventas: any = undefined;
+  getData() {
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetHistoricoVentas`).subscribe({
+      next: response => {
+        this.ventas = response.data;
+      }
+    });
+  }
   snowflake: any = faSnowflake;
 
   historicoVentas30DiasDataset = {
