@@ -16,14 +16,16 @@
             (onClick)="getOrders()"
             label="Filtrar"/>
     </div>
-    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
-        <p-button
-            label="Hacer pedido"
-            styleClass="mt-4"
-            icon="pi pi-cart-arrow-down"
-            severity="success"
-            (onClick)="openModal()"/>
-    </div>
+    @if(userRole === 2 || userRole === 4){
+        <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+            <p-button
+                label="Hacer pedido"
+                styleClass="mt-4"
+                icon="pi pi-cart-arrow-down"
+                severity="success"
+                (onClick)="openModal()"/>
+        </div>
+    }
     <div class="field col-12 mb-7">
         <app-card header="Pedidos activos">
             <p-table 

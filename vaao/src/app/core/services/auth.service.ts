@@ -25,4 +25,8 @@ export class AuthService {
     }
     return user;
   }
+
+  deleteUser() {
+    localStorage.removeItem(this.key);
+  }
 }
