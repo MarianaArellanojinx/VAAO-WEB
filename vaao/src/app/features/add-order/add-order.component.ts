@@ -60,7 +60,7 @@ export class AddOrderComponent implements OnInit {
       totalPagar: this.bolsas*25,
       estatusPedido: 1,
       observaciones: this.comments,
-      idRepartidor: 2
+      idRepartidor: null
     }
     this.api.post<ResponseBackend<boolean>>(`${environment.urlBackend}Pedidos/InsertPedidos`, payload).subscribe({
       next: response =>{
