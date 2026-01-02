@@ -43,7 +43,7 @@ export class AddOrderComponent implements OnInit {
   getClients() {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Clientes/GetClientes`).subscribe({
       next: response => {
-        this.clientes = response.data.filter((c: any) => c.idUser === this.auth.getUser().idUser);
+        this.clientes = response.data.filter((c: any) => c.idUser === this.auth.getUser()?.idUser);
       }
     })
   }

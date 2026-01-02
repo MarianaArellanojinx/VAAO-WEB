@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from "@angular/router";
 import { SidebarModule } from 'primeng/sidebar';
 import { MenuItem } from '../../shared/interfaces/MenuItem';
@@ -15,12 +15,18 @@ declare var particlesJS: any;
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
-export class LayoutComponent implements AfterViewInit{
+export class LayoutComponent implements AfterViewInit, OnInit {
+
+  ngOnInit(): void {
+    this.auth.user$.subscribe(user => {
+      this.user = user;
+    });
+  }
 
   router: Router = inject(Router);
   auth: AuthService = inject(AuthService);
   
-  user: User = this.auth.getUser();
+  user: User | null = null;
   visible: boolean = false;
   items: MenuItem[] = [
     {
@@ -112,6 +118,7 @@ export class LayoutComponent implements AfterViewInit{
   }
   endSession() {
     this.auth.deleteUser();
+    this.user = null;
     this.navigate('/auth')
   }
 }

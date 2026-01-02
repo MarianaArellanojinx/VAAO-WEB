@@ -1,3 +1,15 @@
+<p-dialog [(visible)]="modalRepartidor" header="Seleccione repartidor">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12">
+            <label>Seleccione repartidor para el pedido:</label>
+            <p-dropdown
+                appendTo="body"
+                [options]="repartidores"
+                optionLabel="nombreRepartidor"
+                optionValue="idRepartidor"/>
+        </div>
+    </div>
+</p-dialog>
 <div class="p-fluid p-formgrid grid mt-3">
     <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
         <label  style="color: #FFF;">Seleccione un rango de fechas para filtrar</label>

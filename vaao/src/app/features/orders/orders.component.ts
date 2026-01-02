@@ -17,11 +17,25 @@ import { FormsModule } from '@angular/forms';
 import { SpeedDialModule } from "primeng/speeddial";
 import { MenuItem } from 'primeng/api';
 import { ArrivalsDeliveryComponent } from '../arrivals-delivery/arrivals-delivery.component';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from "primeng/dropdown";
+import { DateService } from '../../core/services/date.service';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [Button, TableModule, CardComponent, HttpClientModule, CommonModule, CalendarModule, FormsModule, SpeedDialModule],
+  imports: [
+    Button,
+    TableModule,
+    CardComponent,
+    HttpClientModule,
+    CommonModule,
+    CalendarModule,
+    FormsModule,
+    SpeedDialModule,
+    DialogModule,
+    DropdownModule
+],
   providers: [ApiService, DialogService],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss'
@@ -29,9 +43,9 @@ import { ArrivalsDeliveryComponent } from '../arrivals-delivery/arrivals-deliver
 export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
-    this.getOrders()
+    this.getClientes();
     this.getRepartidores();
-    this.userRole = this.auth.getUser().rol ?? 0
+    this.userRole = this.auth.getUser()?.rol ?? 0
   }
   items: MenuItem[] = [
     {
@@ -44,6 +58,7 @@ export class OrdersComponent implements OnInit {
   private dialog: DialogService = inject(DialogService);
   private auth: AuthService = inject(AuthService);
   private alert: AlertService = inject(AlertService);
+  private date: DateService = inject(DateService);
 
   readonly PENDIENTE: number = 1;
   readonly APROBADO: number = 2;
@@ -51,6 +66,7 @@ export class OrdersComponent implements OnInit {
   readonly EN_CAMINO: number = 1;
   readonly LLEGADA: number = 2;
 
+  modalRepartidor: boolean = false;
   orders: Pedido[] = [];
   delivery: any[] = [];
   userRole: number = 0;
@@ -58,12 +74,15 @@ export class OrdersComponent implements OnInit {
   idRepartidor: number = 0;
   idCliente: number = 0;
 
-  dates: Date[] = [new Date(), new Date()]
+  dates: Date[] = [this.date.getMonday(new Date()), this.date.addDays(this.date.getMonday(new Date()), 6)]
 
   getClientes() {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Clientes/GetClientes`).subscribe({
       next: response => {
-        this.idCliente = response.data.filter((x: any) => x.idUser === this.auth.getUser().idUser)
+        if(this.userRole === 4){
+          this.idCliente = response.data.filter((x: any) => x.idUser === this.auth.getUser()?.idUser)[0].idCliente
+        }
+        this.getOrders();
       }
     })
   }
@@ -92,14 +111,13 @@ export class OrdersComponent implements OnInit {
     this.api.get<ResponseBackend<Pedido[]>>(`${environment.urlBackend}Pedidos/GetPedidosFiltrados?start=${start}&end=${end}`)
     .subscribe({
       next: response => {
-        console.log(this.userRole)
         if(this.userRole === 1){
           this.orders = response.data
         }else if(this.userRole === 3){
-          console.log(this.idCliente)
           this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
         }else{
           this.orders = response.data.filter(x => x.idCliente === this.idCliente);
+          console.log(this.orders, this.idCliente)
         }
         this.getDelivery()
       }
@@ -109,7 +127,9 @@ export class OrdersComponent implements OnInit {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Repartidores/GetRepartidores`).subscribe({
       next: response => {
         this.repartidores = response.data;
-        this.idRepartidor = this.repartidores.filter(x => x.idUser === this.auth.getUser().idUser)[0].idRepartidor
+        if(this.userRole === 3){
+          this.idRepartidor = this.repartidores.filter(x => x.idUser === this.auth.getUser()?.idUser)[0].idRepartidor
+        }
       }
     });
   }
@@ -151,12 +171,7 @@ export class OrdersComponent implements OnInit {
     return this.delivery.filter(x => x.idPedido === pedido.idPedido)[0].estatusReparto
   }
   acceptOrder(order: Pedido){
-    order.estatusPedido = this.APROBADO;
-    this.api.patch<ResponseBackend<any>>(`${environment.urlBackend}Pedidos/UpdatePedido/${order.idPedido}`, order).subscribe({
-      next: response => {
-        this.alert.dinamycMessage('Hecho!!', 'Se ha aprobado el pedido', 'success');
-      }
-    });
+    this.modalRepartidor = true;
   }
   cancelOrder(order: Pedido){
     order.estatusPedido = this.CANCELADO;

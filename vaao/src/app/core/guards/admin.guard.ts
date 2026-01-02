@@ -5,7 +5,7 @@ import { inject } from '@angular/core';
 export const adminGuard: CanActivateFn = (route, state) => {
   const router: Router = inject(Router);
   const auth: AuthService = inject(AuthService);
-  if(auth.getUser().rolDescription !== "Admin"){
+  if(auth.getUser()?.rolDescription !== "Admin"){
     router.navigate(['/auth'])
     return false;
   }else {
