@@ -10,4 +10,5 @@ export interface Pedido {
   estatusPedido: number;
   observaciones: string;
   idRepartidor: number;
+  estatusTexto?: string;
 }

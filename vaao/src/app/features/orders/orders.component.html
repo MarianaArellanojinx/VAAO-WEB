@@ -1,3 +1,15 @@
+<p-dialog [(visible)]="modalRepartidor" header="Seleccione repartidor">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12">
+            <label>Seleccione repartidor para el pedido:</label>
+            <p-dropdown
+                appendTo="body"
+                [options]="repartidores"
+                optionLabel="nombreRepartidor"
+                optionValue="idRepartidor"/>
+        </div>
+    </div>
+</p-dialog>
 <div class="p-fluid p-formgrid grid mt-3">
     <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
         <label  style="color: #FFF;">Seleccione un rango de fechas para filtrar</label>
@@ -27,12 +39,22 @@
         </div>
     }
     <div class="field col-12 mb-7">
-        <app-card header="Pedidos activos">
+        <app-card-dashboard title="Pedidos activos" icon="pi pi-box">
             <p-table 
+                #dataTable
                 [value]="orders" 
                 [scrollable]="true"
                 scrollHeight="38rem"
-                styleClass="mt-5 mb-3 px-3">
+                [columns]="cols">
+                <ng-template pTemplate="caption">
+                    <div class="flex my-0 justify-content-end">
+                        <p-button
+                            severity="success"
+                            label="Exportar"
+                            icon="pi pi-file-excel"
+                            (onClick)="dataTable.exportCSV()"/>
+                    </div>
+                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Id pedido</th>
@@ -62,7 +84,7 @@
                         <td>{{order.totalBolsas}}</td>
                         <td>${{order.precioUnitario}}</td>
                         <td>${{order.totalPagar}}</td>
-                        <td>{{(order.estatusPedido === PENDIENTE ? 'Pendiente de aprobación' : order.estatusPedido === APROBADO ? 'Aprobado' : 'Rechazado')}}</td>
+                        <td>{{order.estatusTexto}}</td>
                         <td>{{order.observaciones}}</td>
                         @if (userRole === 1 || userRole === 2) {
                             <td>
@@ -104,6 +126,6 @@
                     </tr>
                 </ng-template>
             </p-table>
-        </app-card>
+        </app-card-dashboard>
     </div>
 </div>

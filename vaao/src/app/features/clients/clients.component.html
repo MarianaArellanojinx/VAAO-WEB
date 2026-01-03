@@ -1,16 +1,10 @@
 <div class="p-fluid p-formgrid grid mt-3">
     <div class="field col-12 my-0">
-        <p-button 
-            label="Agregar nuevo cliente" 
-            severity="success" 
-            (onClick)="openModal()"
-            icon="pi pi-user-plus" />
-        </div>
-        <div class="field col-12 mb-7 mt-0">
-        <app-card header="Clientes registrados">
-            <p-table
-                [value]="clients"
-                styleClass="mt-5 mb-3 px-3">
+        <p-button label="Agregar nuevo cliente" severity="success" (onClick)="openModal()" icon="pi pi-user-plus" />
+    </div>
+    <div class="field col-12 mb-7 mt-0">
+        <app-card-dashboard title="Clientes registrados" icon="pi pi-users">
+            <p-table [value]="clients" styleClass="mt-5 mb-3 px-3">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Id cliente</th>
@@ -34,6 +28,6 @@
                     </tr>
                 </ng-template>
             </p-table>
-        </app-card>
+        </app-card-dashboard>
     </div>
 </div>

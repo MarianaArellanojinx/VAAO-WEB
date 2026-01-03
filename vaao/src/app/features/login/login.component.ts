@@ -41,9 +41,17 @@ export class LoginComponent {
     }
     this.api.post<ResponseBackend<User>>(`${environment.urlBackend}Users/Login/login`, payload).subscribe({
       next: response => {
-        this.alert.dinamycMessage('Bienvenido!!', `Bienvenido de nuevo ${this.username}`, 'success')
+        this.alert.dinamycMessage('Bienvenido!!', `Bienvenido de nuevo ${this.username}`, 'success');
         this.auth.addUser(response.data);
-        this.router.navigate([''])
+        if(response.data.rol === 1){
+          this.router.navigate(['/dashboard']);
+        }else if(response.data.rol === 2) {
+          this.router.navigate(['']);
+        }else if(response.data.rol === 3) {
+          this.router.navigate(['/orders']);
+        }else {
+          this.router.navigate(['/orders']);
+        }
       },
       error: error => {
 
