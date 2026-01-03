@@ -17,15 +17,14 @@
         </div>
     </section>
 
-    <!-- QUE PUEDES HACER -->
-    <section class="mb-6">
-        <h2 class="section-title text-center mb-4">
+    <section class="section mb-6 shadow-5">
+        <h2 class="section-title text-center mb-4" style="color: white;">
             ¿Qué puedes hacer en VAAO?
         </h2>
 
         <div class="grid">
 
-            <div class="col-12 md:col-4">
+            <div class="col-12 md:col-4" style="cursor: pointer;">
                 <p-card class="info-card" (click)="navigate('/orders')">
                     <i class="pi pi-shopping-cart info-icon"></i>
                     <h3>Realizar pedidos</h3>
@@ -37,7 +36,7 @@
                 </p-card>
             </div>
 
-            <div class="col-12 md:col-4" (click)="navigate('/clients')">
+            <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/clients')">
                 <p-card class="info-card">
                     <i class="pi pi-users info-icon"></i>
                     <h3>Gestionar clientes</h3>
@@ -48,7 +47,7 @@
                 </p-card>
             </div>
 
-            <div class="col-12 md:col-4">
+            <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/orders')">
                 <p-card class="info-card">
                     <i class="pi pi-truck info-icon"></i>
                     <h3>Coordinar entregas</h3>
@@ -66,8 +65,8 @@
     </section>
 
     <!-- FLUJO -->
-    <section class="mb-6">
-        <h2 class="section-title text-center mb-4">
+    <section class="mb-6 section shadow-5">
+        <h2 class="section-title text-center mb-4" style="color: white">
             ¿Cómo funciona?
         </h2>
 
