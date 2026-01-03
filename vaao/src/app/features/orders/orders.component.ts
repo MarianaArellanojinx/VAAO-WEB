@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Button } from "primeng/button";
 import { TableModule } from "primeng/table";
-import { CardComponent } from "../../shared/components/card/card.component";
 import { ApiService } from '../../infrastructure/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -20,6 +19,7 @@ import { ArrivalsDeliveryComponent } from '../arrivals-delivery/arrivals-deliver
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from "primeng/dropdown";
 import { DateService } from '../../core/services/date.service';
+import { CardDashboardComponent } from "../../shared/components/card-dashboard/card-dashboard.component";
 
 @Component({
   selector: 'app-orders',
@@ -27,14 +27,14 @@ import { DateService } from '../../core/services/date.service';
   imports: [
     Button,
     TableModule,
-    CardComponent,
     HttpClientModule,
     CommonModule,
     CalendarModule,
     FormsModule,
     SpeedDialModule,
     DialogModule,
-    DropdownModule
+    DropdownModule,
+    CardDashboardComponent
 ],
   providers: [ApiService, DialogService],
   templateUrl: './orders.component.html',
@@ -43,9 +43,9 @@ import { DateService } from '../../core/services/date.service';
 export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
+    this.userRole = this.auth.getUser()?.rol ?? 0
     this.getClientes();
     this.getRepartidores();
-    this.userRole = this.auth.getUser()?.rol ?? 0
   }
   items: MenuItem[] = [
     {
@@ -75,6 +75,48 @@ export class OrdersComponent implements OnInit {
   idCliente: number = 0;
 
   dates: Date[] = [this.date.getMonday(new Date()), this.date.addDays(this.date.getMonday(new Date()), 6)]
+  cols: {field: string, header: string, customExportHeader?: string}[] = [
+    {
+      field: 'idPedido',
+      header: 'Pedido',
+      customExportHeader: 'Folio del pedido'
+    },
+    {
+      field: 'nombreCliente',
+      header: 'Nombre',
+      customExportHeader: 'Nombre del cliente'
+    },
+    {
+      field: 'fechaPedido',
+      header: 'Fecha',
+      customExportHeader: 'Fecha del pedido'
+    },
+    {
+      field: 'fechaProgramada',
+      header: 'Programada',
+      customExportHeader: 'Fecha de entrega programada'
+    },
+    {
+      field: 'totalBolsas',
+      header: 'Total',
+      customExportHeader: 'Total de bolsas'
+    },
+    {
+      field: 'precioUnitario',
+      header: 'precio',
+      customExportHeader: 'Precio por bolsa'
+    },
+    {
+      field: 'totalPagar',
+      header: 'totalPagar',
+      customExportHeader: 'Total a pagar'
+    },
+    {
+      field: 'estatusTexto',
+      header: 'estatus',
+      customExportHeader: 'Estatus del pedido'
+    }
+  ]
 
   getClientes() {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Clientes/GetClientes`).subscribe({
@@ -113,12 +155,21 @@ export class OrdersComponent implements OnInit {
       next: response => {
         if(this.userRole === 1){
           this.orders = response.data
+        }else if(this.userRole === 2){
+          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO || x.estatusPedido === this.PENDIENTE)
         }else if(this.userRole === 3){
           this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
         }else{
           this.orders = response.data.filter(x => x.idCliente === this.idCliente);
           console.log(this.orders, this.idCliente)
         }
+        this.orders = this.orders.map(p => ({
+          ...p,
+          estatusTexto: 
+            p.estatusPedido === this.PENDIENTE ? 'Pendiente de aprobación' : 
+            p.estatusPedido === this.APROBADO ? 'Aprobado' : 
+            'Cancelado/Rechazado'
+        }))
         this.getDelivery()
       }
     })
@@ -177,6 +228,7 @@ export class OrdersComponent implements OnInit {
     order.estatusPedido = this.CANCELADO;
     this.api.patch<ResponseBackend<any>>(`${environment.urlBackend}Pedidos/UpdatePedido/${order.idPedido}`, order).subscribe({
       next: response => {
+        this.orders = this.orders.filter(x => x.idPedido !== order.idPedido);
         this.alert.dinamycMessage('Ok', 'Se ha rechazado el pedido', 'error');
       }
     });

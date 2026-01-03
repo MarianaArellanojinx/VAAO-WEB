@@ -3,6 +3,18 @@
 
 @import "primeflex/primeflex.scss";
 @import "primeicons/primeicons.css";
+
+:root {
+    --safe-top: env(safe-area-inset-top);
+}
+
 body {
+    padding-top: var(--safe-top);
     background-color: #5482c8;
+}
+
+.app-topbar,
+.p-toolbar {
+    padding-top: var(--safe-top);
+    min-height: calc(56px + var(--safe-top));
 }

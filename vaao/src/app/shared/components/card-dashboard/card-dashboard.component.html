@@ -1,0 +1,26 @@
+<div class="report-card shadow-4">
+
+  <!-- HEADER -->
+  <div class="report-header">
+    <div>
+      <i [class]="icon" style="font-size: 1.2rem;"></i>
+    </div>
+
+    <div class="report-title">
+      <h2>{{ title }}</h2>
+      @if (startDate !== undefined && endDate !== undefined) {
+        <small>
+          Periodo:
+          {{ startDate | date:'dd/MM/yyyy' }} –
+          {{ endDate | date:'dd/MM/yyyy' }}
+        </small>
+      }
+    </div>
+  </div>
+
+  <!-- BODY DINÁMICO -->
+  <div class="report-body">
+    <ng-content></ng-content>
+  </div>
+
+</div>

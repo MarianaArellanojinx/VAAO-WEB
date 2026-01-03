@@ -11,6 +11,7 @@ import { environment } from '../../../../environments/environment';
 import { CardComponent } from "../../../shared/components/card/card.component";
 import { DialogService } from 'primeng/dynamicdialog';
 import { AddUserComponent } from '../add-user/add-user.component';
+import { CardDashboardComponent } from "../../../shared/components/card-dashboard/card-dashboard.component";
 
 @Component({
   selector: 'app-users',
@@ -21,7 +22,8 @@ import { AddUserComponent } from '../add-user/add-user.component';
     FormsModule,
     Button,
     HttpClientModule,
-    CardComponent
+    CardComponent,
+    CardDashboardComponent
 ],
   providers: [ApiService, DialogService],
   templateUrl: './users.component.html',

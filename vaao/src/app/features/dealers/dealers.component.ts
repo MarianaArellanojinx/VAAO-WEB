@@ -8,11 +8,12 @@ import { ApiService } from '../../infrastructure/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ResponseBackend } from '../../shared/interfaces/ResponseBackend';
 import { environment } from '../../../environments/environment';
+import { CardDashboardComponent } from "../../shared/components/card-dashboard/card-dashboard.component";
 
 @Component({
   selector: 'app-dealers',
   standalone: true,
-  imports: [Button, TableModule, CardComponent, HttpClientModule],
+  imports: [Button, TableModule, CardComponent, HttpClientModule, CardDashboardComponent],
   providers: [DialogService, ApiService],
   templateUrl: './dealers.component.html',
   styleUrl: './dealers.component.scss'

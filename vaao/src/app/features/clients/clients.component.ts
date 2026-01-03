@@ -8,11 +8,12 @@ import { ResponseBackend } from '../../shared/interfaces/ResponseBackend';
 import { HttpClientModule } from '@angular/common/http';
 import { DialogService } from 'primeng/dynamicdialog';
 import { AddClientComponent } from '../admin/add-client/add-client.component';
+import { CardDashboardComponent } from "../../shared/components/card-dashboard/card-dashboard.component";
 
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [Button, TableModule, CardComponent, HttpClientModule],
+  imports: [Button, TableModule, CardComponent, HttpClientModule, CardDashboardComponent],
   providers: [ApiService, DialogService],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'
