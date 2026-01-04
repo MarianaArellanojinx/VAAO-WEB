@@ -11,7 +11,6 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CalendarModule } from "primeng/calendar";
 import { DropdownModule } from "primeng/dropdown";
 import { SpeedDialModule } from 'primeng/speeddial';
-import { MenuItem } from 'primeng/api';
 import { AlertService } from '../../core/services/alert.service';
 
 @Component({
@@ -24,21 +23,28 @@ import { AlertService } from '../../core/services/alert.service';
 export class AddOrderComponent implements OnInit {
 
   ngOnInit(): void {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate());
+    this.minDate = yesterday;
     this.getClients();
   }
 
   private api: ApiService = inject(ApiService);
   private auth: AuthService = inject(AuthService);
-  private ref: DynamicDialogRef = inject(DynamicDialogRef);
   private alert: AlertService = inject(AlertService);
+  private ref: DynamicDialogRef = inject(DynamicDialogRef);
 
-
+  minDate: Date | undefined;
   bolsas: number = 0;
   comments: string = '';
   loading: boolean = false;
   idCliente: number = 0;
   clientes: any[] = [];
   scheduledDate: Date = new Date();
+
+  isValid(): boolean {
+    return (this.idCliente > 0 && this.bolsas > 0 && this.comments.trim() !== '')
+  }
 
   getClients() {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Clientes/GetClientes`).subscribe({
@@ -47,7 +53,6 @@ export class AddOrderComponent implements OnInit {
       }
     })
   }
-
   createOrder(){
     this.loading = true;
     const payload = {

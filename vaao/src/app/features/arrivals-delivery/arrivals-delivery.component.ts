@@ -31,6 +31,7 @@ export class ArrivalsDeliveryComponent implements OnInit {
   private ref: DynamicDialogRef = inject(DynamicDialogRef);
   private config: DynamicDialogConfig = inject(DynamicDialogConfig);
 
+  isAndroid = /Android/i.test(navigator.userAgent);
   file: File | undefined = undefined;
   base64: string = '';
   entrega: any = {};
@@ -47,6 +48,15 @@ export class ArrivalsDeliveryComponent implements OnInit {
     })
   }
 
+  onFileSelected(event: any) {
+    console.log(event)
+    this.file = event.currentFiles[0]
+    this.image.fileToBase64(this.file ?? new Blob()).then(result => {
+      this.base64 = result
+      console.log(result)
+    });
+  }
+  
   test(event: any){
     this.file = event.currentFiles[0]
     console.log(this.file)
