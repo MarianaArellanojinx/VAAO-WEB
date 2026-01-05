@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { FileUploadModule } from "primeng/fileupload";
 import { ImageService } from '../../core/services/image.service';
 import { DropdownModule } from "primeng/dropdown";
@@ -7,9 +7,10 @@ import { ResponseBackend } from '../../shared/interfaces/ResponseBackend';
 import { MetodoPago } from '../../shared/interfaces/MetodoPago';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../core/services/alert.service';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { environment } from '../../../environments/environment';
 import { Pedido } from '../../shared/interfaces/Pedido';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-finish-order',
@@ -18,19 +19,24 @@ import { Pedido } from '../../shared/interfaces/Pedido';
   templateUrl: './finish-order.component.html',
   styleUrl: './finish-order.component.scss'
 })
-export class FinishOrderComponent implements OnInit {
+export class FinishOrderComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.Entrega = this.config.data.Entrega;
     this.Pedido = this.config.data.Pedido;
   }
 
+  ngAfterViewInit(): void {
+    this.isAndroid = Capacitor.getPlatform() === 'android';
+    console.log(this.isAndroid);
+  }
   private readonly api: ApiService = inject(ApiService);
   private readonly image: ImageService = inject(ImageService);
   private readonly alert: AlertService = inject(AlertService);
+  private readonly ref: DynamicDialogRef = inject(DynamicDialogRef);
   private readonly config: DynamicDialogConfig = inject(DynamicDialogConfig);
 
-  isAndroid = /Android/i.test(navigator.userAgent);
+  isAndroid: boolean = false;
   file!: File;
   base64: string = '';
   Pedido!: Pedido;
@@ -63,6 +69,20 @@ export class FinishOrderComponent implements OnInit {
       this.base64 = result;
     });
   }
+  onFileSelectedAndroid(event: Event) {
+  const input = event.target as HTMLInputElement;
+
+  if (!input.files || input.files.length === 0) {
+    console.warn('No se seleccionó ningún archivo');
+    return;
+  }
+
+  this.file = input.files[0];
+
+  this.image.fileToBase64(this.file).then(result => {
+    this.base64 = result;
+  });
+}
 
   finishDelivery() {
     this.Entrega.estatusReparto = 3;
@@ -83,6 +103,7 @@ export class FinishOrderComponent implements OnInit {
     }
     this.api.post<ResponseBackend<any>>(`${environment.urlBackend}Ventas/InsertVenta`, payload).subscribe({
       next: response => {
+        this.ref.close(true);
         this.alert.dinamycMessage('Hecho!!', 'Se ha terminado y confirmado la venta', 'success');
       }
     })

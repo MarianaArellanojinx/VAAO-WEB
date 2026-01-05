@@ -14,6 +14,8 @@ import { DateService } from '../../../core/services/date.service';
 import { ReportDownloadCardComponent } from "../../../shared/components/report-download-card/report-download-card.component";
 import { CardDashboardComponent } from "../../../shared/components/card-dashboard/card-dashboard.component";
 import { AlertService } from '../../../core/services/alert.service';
+import { ReportVentaPerdida } from '../../../shared/interfaces/ReportVentaPerdida';
+import { ExportService } from '../../../core/services/export.service';
 interface ExportColumn {
     title: string;
     dataKey: string;
@@ -46,12 +48,15 @@ export class DashboardComponent implements OnInit {
   private api: ApiService = inject(ApiService);
   private date: DateService = inject(DateService);
   private alert: AlertService = inject(AlertService);
+  private export: ExportService = inject(ExportService);
 
   dates: Date[] = [this.date.getMonday(new Date()), this.date.addDays(this.date.getMonday(new Date()), 6)];
 
   snowflake: any = faSnowflake;
   download: any = faDownload;
 
+  private readonly META_VENTAS: number = 30;
+  downloadInProgress: boolean = false;
   ventas: any = undefined;
   statusChart: any = {};
   exportColumns!: ExportColumn[];
@@ -120,7 +125,20 @@ export class DashboardComponent implements OnInit {
     });
   }
   downloadReport(){
-    this.alert.dinamycMessage('Hecho!!', 'Se ha descargado el reporte solicitado', 'success');
+    this.downloadInProgress = true;
+    this.api.get<ResponseBackend<ReportVentaPerdida[]>>(`${environment.urlBackend}Report/GetVentasPerdidas`)
+    .subscribe({
+      next: response => {
+        this.downloadInProgress = false;
+        let data: ReportVentaPerdida[] = response.data;
+        data = data.map(item => ({
+          ...item,
+          faltanteCompra: this.META_VENTAS - item.totalbolsas
+        }));
+        this.downloadInProgress = false;
+        this.export.exportToExcel(data, 'Reporte_Ventas_Perdidas', 'Ventas_Perdidas');
+      }
+    });
   }
 
 }

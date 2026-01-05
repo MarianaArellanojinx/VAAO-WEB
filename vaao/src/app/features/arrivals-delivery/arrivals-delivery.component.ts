@@ -7,6 +7,7 @@ import { Pedido } from '../../shared/interfaces/Pedido';
 import { AlertService } from '../../core/services/alert.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { environment } from '../../../environments/environment';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-arrivals-delivery',
@@ -31,7 +32,7 @@ export class ArrivalsDeliveryComponent implements OnInit {
   private ref: DynamicDialogRef = inject(DynamicDialogRef);
   private config: DynamicDialogConfig = inject(DynamicDialogConfig);
 
-  isAndroid = /Android/i.test(navigator.userAgent);
+  isAndroid = Capacitor.getPlatform() === 'android';
   file: File | undefined = undefined;
   base64: string = '';
   entrega: any = {};
@@ -55,6 +56,14 @@ export class ArrivalsDeliveryComponent implements OnInit {
       this.base64 = result
       console.log(result)
     });
+  }
+  onFileSelectedAndroid(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      console.warn('No se seleccionó ningún archivo');
+      return;
+    }
   }
   
   test(event: any){

@@ -6,12 +6,27 @@
             severity="success" 
             (onClick)="open()" />
     </div>
-    <div class="field col-12 my-0">
+    <div class="field col-12 mt-0 mb-7">
         <app-card-dashboard
             title="Usuarios registrados"
             icon="pi pi-users">
             <p-table 
+                #dataTable
+                [scrollable]="true"
+                scrollHeight="40rem"
+                [columns]="cols"
+                [paginator]="true"
+                [rows]="25"
                 [value]="users">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-end">
+                        <p-button 
+                            label="Exportar" 
+                            icon="pi pi-file-excel" 
+                            severity="success" 
+                            (onClick)="dataTable.exportCSV()" />
+                    </div>
+                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Id del usuario</th>

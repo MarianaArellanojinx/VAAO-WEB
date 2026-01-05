@@ -22,7 +22,6 @@ import { CardDashboardComponent } from "../../../shared/components/card-dashboar
     FormsModule,
     Button,
     HttpClientModule,
-    CardComponent,
     CardDashboardComponent
 ],
   providers: [ApiService, DialogService],
@@ -38,7 +37,12 @@ export class UsersComponent implements OnInit {
   private dialog: DialogService = inject(DialogService);
 
   users: User[] = [];
-
+  cols: any[] = [
+    { field: 'idUser', header: 'ID' },
+    { field: 'userName', header: 'Nombre usuario' },
+    { field: 'isActive', header: '¿Esta activo?' },
+    { field: 'rolDescription', header: 'Rol' }
+  ]
   open(){
     const modal = this.dialog.open(AddUserComponent, {
       header: 'Agregar nuevo usuario',

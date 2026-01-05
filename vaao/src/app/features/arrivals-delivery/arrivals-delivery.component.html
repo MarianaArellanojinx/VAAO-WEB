@@ -1,31 +1,15 @@
 <div class="p-fluid p-formgrid grid">
     <div class="field col-12 my-0">
-        <label>Tomar foto del conservador (Vacio)</label>
-        @if (isAndroid) {
-            <label class="p-fileupload p-fileupload-basic p-component w-full">
-                <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    (change)="onFileSelected($event)"
-                    class="native-file-input"/>
+        <label>Tomar foto del conservador (Vacío)</label>
+        <label class="p-fileupload p-fileupload-basic p-component w-full">
+            <input type="file" accept="image/*" capture="environment" (change)="onFileSelectedAndroid($event)"
+                class="native-file-input" />
 
-                <span class="p-button p-component p-button-primary p-fileupload-choose">
-                    <span class="p-button-icon pi pi-camera"></span>
-                    <span class="p-button-label">Tomar foto</span>
-                </span>
-            </label>
-        }@else {
-            <p-fileUpload
-                accept="image/*"
-                mode="basic"
-                styleClass="w-full"
-                chooseLabel="Tomar foto"
-                chooseIcon="pi pi-camera"
-                maxFileSize="1000000"
-                [auto]="true" 
-                (onSelect)="onFileSelected($event)" />
-        }
+            <span class="p-button p-component p-button-primary p-fileupload-choose">
+                <span class="p-button-icon pi pi-camera"></span>
+                <span class="p-button-label">Tomar foto</span>
+            </span>
+        </label>
     </div>
     <div class="field col-12 my-0">
         <p-button severity="success" label="Guardar" (onClick)="saveImage()"></p-button>

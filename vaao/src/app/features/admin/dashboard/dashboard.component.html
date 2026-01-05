@@ -122,52 +122,22 @@
             <h1 class="my-0" style="color: white;">Reportes</h1>
         </div>
     </div>
-    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mb-0 sm:mb-0 md:mb-0 xl:mb-7 lg:mb-7">
-        <app-report-download-card
-            title="Reporte de ventas perdidas"
-            [startDate]="dates[0]"
-            [endDate]="dates[1]"
-            [fields]="[
-                'Nombre del cliente',
-                'Cantidad de conservadores',
-                'Último pedido',
-                'Fecha del último pedido',
-                'Bolsas compradas en el último pedido',
-                'Días sin hacer un pedido',
-                'Dinero perdido por el cliente'
-            ]"
-            (download)="downloadReport()"/>
-    </div>
-    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mb-0 sm:mb-0 md:mb-0 xl:mb-7 lg:mb-7">
-        <app-report-download-card
-            title="Reporte de ventas perdidas"
-            [startDate]="dates[0]"
-            [endDate]="dates[1]"
-            [fields]="[
-                'Nombre del cliente',
-                'Cantidad de conservadores',
-                'Último pedido',
-                'Fecha del último pedido',
-                'Bolsas compradas en el último pedido',
-                'Días sin hacer un pedido',
-                'Dinero perdido por el cliente'
-            ]"
-            (download)="downloadReport()"/>
-    </div>
-    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mb-7 sm:mb-7 md:mb-7 xl:mb-7 lg:mb-7">
-        <app-report-download-card
-            title="Reporte de ventas perdidas"
-            [startDate]="dates[0]"
-            [endDate]="dates[1]"
-            [fields]="[
-                'Nombre del cliente',
-                'Cantidad de conservadores',
-                'Último pedido',
-                'Fecha del último pedido',
-                'Bolsas compradas en el último pedido',
-                'Días sin hacer un pedido',
-                'Dinero perdido por el cliente'
-            ]"
-            (download)="downloadReport()"/>
+    <div class="field col-12 mb-7">
+        <div class="flex justify-content-center">
+            <app-report-download-card
+                title="Reporte de ventas perdidas"
+                [startDate]="dates[0]"
+                [endDate]="dates[1]"
+                [fields]="[
+                    'Nombre del cliente',
+                    'Cantidad de conservadores',
+                    'Último pedido',
+                    'Fecha del último pedido',
+                    'Bolsas compradas en el último pedido',
+                    'Días sin hacer un pedido',
+                    'Dinero perdido por el cliente'
+                ]"
+                (download)="downloadReport()"/>
+        </div>
     </div>
 </div>
