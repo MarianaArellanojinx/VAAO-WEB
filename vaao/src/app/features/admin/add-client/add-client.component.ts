@@ -29,6 +29,7 @@ export class AddClientComponent implements OnInit {
   private ref: DynamicDialogRef = inject(DynamicDialogRef);
   private alert: AlertService = inject(AlertService);
 
+  loading: boolean = false;
   bussinesName: string = '';
   clientName: string = '';
   clientLastName: string = '';
@@ -50,7 +51,23 @@ export class AddClientComponent implements OnInit {
       }
     });
   }
-  saveClient(){
+  createUser() {
+    this.loading = true;
+    const newUser: User = {
+      idUser: 0,
+      isActive: true,
+      rol: 4,
+      userName: this.clientName.substring(0,2) + this.clientLastName.substring(0,5),
+      userPassword: '1234'
+    }
+    this.api.post<ResponseBackend<number>>(`${environment.urlBackend}Users/InsertUsers`, newUser).subscribe({
+      next: response => {
+        const id = response.data;
+        this.saveClient(id);
+      }
+    });
+  }
+  saveClient(idUser: number){
     const payload = {
       idCliente: 0,
       nombreNegocio: this.bussinesName,
@@ -62,13 +79,14 @@ export class AddClientComponent implements OnInit {
       telefono: this.phone.toString(),
       conservadores: this.fridges,
       fechaBaja: this.downDate,
-      idUser: this.user
+      idUser: idUser
     }
     this.api.post<ResponseBackend<boolean>>(`${environment.urlBackend}Clientes/InsertClientes`, payload)
     .subscribe({
       next: response => {
+        this.loading = false;
         if(response.data === true){
-          this.alert.dinamycMessage('Hecho!!', 'Se ha registrado un nuevo cliente.', 'success');
+          this.alert.dinamycMessage('Hecho!!', `Se ha registrado un nuevo cliente (Usuario: ${this.clientName.substring(0,2) + this.clientLastName.substring(0,5)}, contraseña: 1234)`, 'success');
           this.ref.close();
         }else{
           this.alert.dinamycMessage('Ups...', 'Ocurrio un error inesperado, intente de nuevo más tarde', 'error');
