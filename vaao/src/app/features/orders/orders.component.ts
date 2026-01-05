@@ -270,7 +270,7 @@ export class OrdersComponent implements OnInit {
       header: 'Detalles del pedido',
       baseZIndex: 9999,
       data: order.idPedido,
-      width: '60%'
+      width: 'auto'
     })
   }
 }
