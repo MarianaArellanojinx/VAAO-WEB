@@ -13,7 +13,7 @@ import { CardDashboardComponent } from "../../shared/components/card-dashboard/c
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [Button, TableModule, CardComponent, HttpClientModule, CardDashboardComponent],
+  imports: [Button, TableModule, HttpClientModule, CardDashboardComponent],
   providers: [ApiService, DialogService],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'
