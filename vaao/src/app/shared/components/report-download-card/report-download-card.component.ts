@@ -10,6 +10,8 @@ import { Button } from "primeng/button";
   styleUrl: './report-download-card.component.scss'
 })
 export class ReportDownloadCardComponent {
+
+  @Input() downloadInProgress: boolean = false;
   @Input() title!: string;
   @Input() startDate!: Date;
   @Input() endDate!: Date;

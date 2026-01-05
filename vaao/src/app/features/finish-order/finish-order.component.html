@@ -1,6 +1,6 @@
 <div class="p-fluid p-formgrid grid">
-    <div class="field col-12 my-0">
-        <label>Tomar foto del conservador (Vacío)</label>
+    <div class="field col-12 mb-0">
+        <label>Tomar foto del conservador (Lleno)</label>
         <label class="p-fileupload p-fileupload-basic p-component w-full">
             <input type="file" accept="image/*" capture="environment" (change)="onFileSelectedAndroid($event)"
                 class="native-file-input" />
@@ -11,7 +11,12 @@
             </span>
         </label>
     </div>
-    <div class="field col-12 my-0">
-        <p-button severity="success" label="Guardar" (onClick)="saveImage()"></p-button>
+    <div class="field col-12">
+        <label>Seleccione el método de pago</label>
+        <p-dropdown [(ngModel)]="metodo" appendTo="body" [options]="metodos" optionLabel="descripcion"
+            optionValue="idMetodoPago" />
+    </div>
+    <div class="field col-12">
+        <p-button (onClick)="finishDelivery()" severity="success" icon="pi pi-dollar" label="Terminar pedido" />
     </div>
 </div>

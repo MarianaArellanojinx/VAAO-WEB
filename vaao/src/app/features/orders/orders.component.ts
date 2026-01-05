@@ -20,6 +20,8 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from "primeng/dropdown";
 import { DateService } from '../../core/services/date.service';
 import { CardDashboardComponent } from "../../shared/components/card-dashboard/card-dashboard.component";
+import { FinishOrderComponent } from '../finish-order/finish-order.component';
+import { ViewDetailsComponent } from '../view-details/view-details.component';
 
 @Component({
   selector: 'app-orders',
@@ -47,12 +49,6 @@ export class OrdersComponent implements OnInit {
     this.getClientes();
     this.getRepartidores();
   }
-  items: MenuItem[] = [
-    {
-      icon: 'pi pi-plus',
-      command: () => {}
-    }
-  ];
 
   private api: ApiService = inject(ApiService);
   private dialog: DialogService = inject(DialogService);
@@ -63,9 +59,13 @@ export class OrdersComponent implements OnInit {
   readonly PENDIENTE: number = 1;
   readonly APROBADO: number = 2;
   readonly CANCELADO: number = 3;
+
   readonly EN_CAMINO: number = 1;
   readonly LLEGADA: number = 2;
+  readonly FINALIZADO: number = 3;
 
+  orderAux: Pedido | undefined = undefined;
+  selectedDelivery: number = 0;
   modalRepartidor: boolean = false;
   orders: Pedido[] = [];
   delivery: any[] = [];
@@ -73,7 +73,6 @@ export class OrdersComponent implements OnInit {
   repartidores: any[] = [];
   idRepartidor: number = 0;
   idCliente: number = 0;
-
   dates: Date[] = [this.date.getMonday(new Date()), this.date.addDays(this.date.getMonday(new Date()), 6)]
   cols: {field: string, header: string, customExportHeader?: string}[] = [
     {
@@ -118,6 +117,7 @@ export class OrdersComponent implements OnInit {
     }
   ]
 
+  isValidDelivery: () => boolean = () => this.selectedDelivery > 0;
   getClientes() {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Clientes/GetClientes`).subscribe({
       next: response => {
@@ -192,7 +192,7 @@ export class OrdersComponent implements OnInit {
       horaInicio: new Date().toISOString(),
       horaRegreso: null,
       horaLlegada: null,
-      estatusReparto: 1,
+      estatusReparto: this.EN_CAMINO,
       observaciones: null,
       imagenConservadorLlegada: null,
       imagenConservadorSalida: null,
@@ -223,6 +223,27 @@ export class OrdersComponent implements OnInit {
   }
   acceptOrder(order: Pedido){
     this.modalRepartidor = true;
+    this.orderAux = order;
+  }
+  acceptOrderApi(): void {
+    if (this.orderAux !== undefined) {
+      this.orderAux.idRepartidor = this.selectedDelivery;
+      this.orderAux.estatusPedido = this.APROBADO;
+      this.api.patch<ResponseBackend<boolean>>(`${environment.urlBackend}Pedidos/UpdatePedido/${this.orderAux.idPedido}`, this.orderAux)
+        .subscribe({
+          next: response => {
+            this.modalRepartidor = false;
+            this.selectedDelivery = 0;
+            this.orderAux = undefined;
+            this.orders.filter(p => p.idPedido === this.orderAux?.idPedido)[0].estatusPedido = this.APROBADO;
+          }
+        });
+    }
+  }
+  hideModal() {
+    this.selectedDelivery = 0;
+    this.orderAux = undefined;
+    this.modalRepartidor = false;
   }
   cancelOrder(order: Pedido){
     order.estatusPedido = this.CANCELADO;
@@ -232,5 +253,24 @@ export class OrdersComponent implements OnInit {
         this.alert.dinamycMessage('Ok', 'Se ha rechazado el pedido', 'error');
       }
     });
+  }
+  openFinish(order: Pedido): void {
+    const e = this.delivery.filter((e: any) => e.idPedido === order.idPedido)[0];
+    this.dialog.open(FinishOrderComponent, {
+      header: 'Finalizar pedido',
+      baseZIndex: 9999,
+      data: {
+        Pedido: order,
+        Entrega: e
+      }
+    })
+  }
+  openDetail(order: Pedido): void {
+    this.dialog.open(ViewDetailsComponent, {
+      header: 'Detalles del pedido',
+      baseZIndex: 9999,
+      data: order.idPedido,
+      width: 'auto'
+    })
   }
 }

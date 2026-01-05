@@ -1,12 +1,32 @@
-<p-dialog [(visible)]="modalRepartidor" header="Seleccione repartidor">
-    <div class="p-fluid p-formgrid grid">
-        <div class="field col-12">
+<p-dialog 
+    style="width: 80%;"
+    [(visible)]="modalRepartidor" 
+    header="Seleccione repartidor"
+    (onHide)="hideModal()">
+    <div class="p-fluid p-formgrid grid my-0">
+        <div class="field col-12 my-0">
             <label>Seleccione repartidor para el pedido:</label>
             <p-dropdown
                 appendTo="body"
                 [options]="repartidores"
+                [(ngModel)]="selectedDelivery"
                 optionLabel="nombreRepartidor"
                 optionValue="idRepartidor"/>
+        </div>
+        <div class="field col-12 my-0">
+            <p-button
+                severity="success"
+                icon="pi pi-check"
+                label="Asignar y aprobar"
+                (onClick)="acceptOrderApi()"
+                [disabled]="!isValidDelivery()"/>
+        </div>
+        <div class="field col-12 my-0">
+            <p-button
+                severity="danger"
+                icon="pi pi-times"
+                label="Cancelar operación"
+                (onClick)="hideModal()"/>
         </div>
     </div>
 </p-dialog>
@@ -118,7 +138,14 @@
                                         <p-button 
                                             icon="pi pi-check" 
                                             label="Terminar"
+                                            (onClick)="openFinish(order)"
                                             severity="success"/>
+                                    }@else if(order.estatusPedido === APROBADO && hasDelivery(order) && getStatusDelivery(order) === FINALIZADO) {
+                                        <p-button 
+                                            icon="pi pi-eye" 
+                                            label="Ver detalles"
+                                            (onClick)="openDetail(order)"
+                                            severity="primary"/>
                                     }
                                 </div>
                             </td>

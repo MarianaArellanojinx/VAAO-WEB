@@ -37,6 +37,7 @@
         label="Descargar Excel"
         icon="pi pi-file-excel"
         severity="success"
+        [loading]="downloadInProgress"
         (onClick)="onDownload()">
       </p-button>
     </div>

@@ -1,0 +1,36 @@
+<div class="p-fluid p-formgrid grid mt-3">
+    <div class="field col-12">
+        <p-button 
+            label="Agregar conservador" 
+            icon="pi pi-plus" 
+            severity="success" />
+    </div>
+    <div class="field col-12 mb-7 mt-0">
+        <app-card-dashboard title="Conservadores" icon="pi pi-box">
+            <p-table [value]="conservadores" #dataTable>
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-end">
+                        <p-button label="Exportar" icon="pi pi-file-excel" severity="success"
+                            (onClick)="dataTable.exportCSV()" />
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Negocio</th>
+                        <th>Número de serie</th>
+                        <th>Estatus conservador</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-conservador>
+                    <tr>
+                        <td>{{ conservador.cliente }}</td>
+                        <td>{{ conservador.negocio }}</td>
+                        <td>{{ conservador.serial }}</td>
+                        <td>{{ conservador.estatus }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </app-card-dashboard>
+    </div>
+</div>

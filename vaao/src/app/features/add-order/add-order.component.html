@@ -2,25 +2,47 @@
 <div class="p-fluid p-formgrid grid ">
     <div class="field col-12">
         <label>Seleccione negocio:</label>
-        <p-dropdown [(ngModel)]="idCliente" placeholder="Seleccione negocio" optionLabel="nombreCliente"
-            optionValue="idCliente" [options]="clientes" />
+        <p-dropdown 
+            [(ngModel)]="idCliente" 
+            placeholder="Seleccione negocio" 
+            optionLabel="nombreCliente"
+            optionValue="idCliente" 
+            [options]="clientes" />
     </div>
     <div class="field col-12">
         <label>Ingrese la cantidad de bolsas a comprar:</label>
-        <input type="number" pInputText [(ngModel)]="bolsas" />
+        <input 
+            type="number" 
+            pInputText 
+            [(ngModel)]="bolsas" />
     </div>
     <div class="field col-12">
         <label>Seleccione una fecha para programar la entrega:</label>
-        <p-calendar [showIcon]="true" appendTo="body" [readonlyInput]="true" dateFormat="dd-mm-yy"
+        <p-calendar 
+            [showIcon]="true" 
+            appendTo="body"
+            [readonlyInput]="true" 
+            dateFormat="dd-mm-yy"
+            placeholder="Seleccione fecha"
+            [minDate]="minDate"
             [(ngModel)]="scheduledDate" />
     </div>
     <div class="field col-12">
         <label>Ingrese comentarios adicionales:</label>
-        <textarea rows="5" cols="30" [(ngModel)]="comments" pInputTextarea>
+        <textarea 
+            rows="5" 
+            cols="30" 
+            [(ngModel)]="comments" 
+            pInputTextarea>
         </textarea>
     </div>
     <div class="field col-12">
-        <p-button label="Hacer pedido" severity="success" [loading]="loading" icon="pi pi-cart-arrow-down"
+        <p-button 
+            label="Hacer pedido" 
+            severity="success" 
+            [loading]="loading" 
+            [disabled]="!isValid()"
+            icon="pi pi-cart-arrow-down"
             (onClick)="createOrder()" />
     </div>
 </div>
