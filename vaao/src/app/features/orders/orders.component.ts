@@ -21,6 +21,7 @@ import { DropdownModule } from "primeng/dropdown";
 import { DateService } from '../../core/services/date.service';
 import { CardDashboardComponent } from "../../shared/components/card-dashboard/card-dashboard.component";
 import { FinishOrderComponent } from '../finish-order/finish-order.component';
+import { ViewDetailsComponent } from '../view-details/view-details.component';
 
 @Component({
   selector: 'app-orders',
@@ -262,6 +263,14 @@ export class OrdersComponent implements OnInit {
         Pedido: order,
         Entrega: e
       }
+    })
+  }
+  openDetail(order: Pedido): void {
+    this.dialog.open(ViewDetailsComponent, {
+      header: 'Detalles del pedido',
+      baseZIndex: 9999,
+      data: order.idPedido,
+      width: '60%'
     })
   }
 }

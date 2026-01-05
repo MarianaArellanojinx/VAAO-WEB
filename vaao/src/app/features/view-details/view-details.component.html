@@ -1,30 +1,26 @@
 <div class="p-fluid p-formgrid grid mt-3">
     <div class="field col-12">
-        <label for="">Estatus: Entregado</label>
+        <label for=""><b>Estatus:</b> Entregado</label>
     </div>
     <div class="field col-12">
-        <label>Fecha de inicio reparto:</label>
+        <label><b>Fecha de inicio reparto:</b> {{data?.horaInicio | date:'dd/MM/yyyy HH:mm:ss'}}</label>
     </div>
     <div class="field col-12">
-        <label>Fecha de llegada:</label>
+        <label><b>Fecha de llegada:</b> {{data?.horaLlegada | date:'dd/MM/yyyy HH:mm:ss'}}</label>
     </div>
     <div class="field col-12">
-        <label>Fecha de finalización</label>
+        <label><b>Fecha de finalización:</b> {{data?.fechaEntrega | date:'dd/MM/yyyy HH:mm:ss'}}</label>
     </div>
     <div class="field col-12">
-        <p-image 
-            src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" 
-            alt="Image" 
-            width="300" 
-            [preview]="true" />
-
+        <div class="flex flex-column gap-2">
+            <label>Conservador vacío</label>
+            <p-image [src]="data?.imagenConservadorLlegada" alt="Image" width="300" [preview]="true" />
+        </div>
     </div>
     <div class="field col-12">
-        <p-image 
-            src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" 
-            alt="Image" 
-            width="300" 
-            [preview]="true" />
+        <div class="flex flex-column gap-2">
+            <label>Conservador lleno</label>
+            <p-image [src]="data?.imagenConservadorSalida" alt="Image" width="300" [preview]="true" />
+        </div>
     </div>
-    <div class="field col-12"></div>
 </div>
