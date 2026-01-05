@@ -61,6 +61,7 @@ export class OrdersComponent implements OnInit {
 
   readonly EN_CAMINO: number = 1;
   readonly LLEGADA: number = 2;
+  readonly FINALIZADO: number = 3;
 
   orderAux: Pedido | undefined = undefined;
   selectedDelivery: number = 0;
@@ -252,11 +253,15 @@ export class OrdersComponent implements OnInit {
       }
     });
   }
-  openFinish(): void {
+  openFinish(order: Pedido): void {
+    const e = this.delivery.filter((e: any) => e.idPedido === order.idPedido)[0];
     this.dialog.open(FinishOrderComponent, {
       header: 'Finalizar pedido',
       baseZIndex: 9999,
-      data: {}
+      data: {
+        Pedido: order,
+        Entrega: e
+      }
     })
   }
 }

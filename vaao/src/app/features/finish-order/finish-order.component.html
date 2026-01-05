@@ -2,30 +2,19 @@
     <div class="field col-12 mb-0">
         <label>Tomar foto del conservador (Lleno)</label>
         <label class="p-fileupload p-fileupload-basic p-component w-full">
-                <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    (change)="onFileSelected($event)"
-                    class="native-file-input"/>
-                <span class="p-button p-component p-button-primary p-fileupload-choose">
-                    <span class="p-button-icon pi pi-camera"></span>
-                    <span class="p-button-label">Tomar foto</span>
-                </span>
-            </label>
+            <input type="file" accept="image/*" capture="environment" (change)="onFileSelected($event)"
+                class="native-file-input" />
+            <span class="p-button p-component p-button-primary p-fileupload-choose">
+                <span class="p-button-icon pi pi-camera"></span>
+                <span class="p-button-label">Tomar foto</span>
+            </span>
+        </label>
     </div>
     <div class="field col-12">
         <label>Seleccione el método de pago</label>
-        <p-dropdown
-            appendTo="body"
-            [options]="metodos"
-            optionLabel="descripcion"
-            optionValue="idMetodoPago"/>
+        <p-dropdown [(ngModel)]="metodo" appendTo="body" [options]="metodos" optionLabel="descripcion" optionValue="idMetodoPago" />
     </div>
     <div class="field col-12">
-        <p-button
-            severity="success"
-            icon="pi pi-dollar"
-            label="Terminar pedido"/>
+        <p-button (onClick)="finishDelivery()" severity="success" icon="pi pi-dollar" label="Terminar pedido" />
     </div>
 </div>

@@ -138,8 +138,14 @@
                                         <p-button 
                                             icon="pi pi-check" 
                                             label="Terminar"
-                                            (onClick)="openFinish()"
+                                            (onClick)="openFinish(order)"
                                             severity="success"/>
+                                    }@else if(order.estatusPedido === APROBADO && hasDelivery(order) && getStatusDelivery(order) === FINALIZADO) {
+                                        <p-button 
+                                            icon="pi pi-eye" 
+                                            label="Ver detalles"
+                                            (onClick)="openFinish(order)"
+                                            severity="primary"/>
                                     }
                                 </div>
                             </td>
