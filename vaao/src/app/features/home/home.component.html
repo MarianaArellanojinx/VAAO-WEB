@@ -17,41 +17,73 @@
         <h2 class="section-title text-center mb-4" style="color: white;">
             ¿Qué puedes hacer en VAAO?
         </h2>
-        <div class="grid">
+        <div class="grid flex justify-content-center">
             <div class="col-12 md:col-4" style="cursor: pointer;">
                 <p-card class="info-card" (click)="navigate('/orders')">
-                    <i class="pi pi-shopping-cart info-icon"></i>
-                    <h3>Realizar pedidos</h3>
-                    <p>
+                    @if(user?.rol === roles.ADMIN || user?.rol === roles.ENCARGADO){
+                        <i class="pi pi-clipboard info-icon"></i>
+                        <h3>Administrar pedidos</h3>
+                        <p>
+                            Vea todos los pedidos pendientes realizado por sus clientes y gestione su estado.
+                        </p>
+                        <p-button 
+                            label="Gestionar pedidos" 
+                            icon="pi pi-clipboard" 
+                            (onClick)="navigate('/orders')"/>
+                    }@else if(user?.rol === roles.CLIENTE) {
+                        <i class="pi pi-shopping-cart info-icon"></i>
+                        <h3>Ver mis pedidos</h3>
+                        <p>
+                            Solicita hielo de forma rápida y segura,
+                            con seguimiento de entrega.
+                        </p>
+                        <p-button 
+                            label="Realizar pedido" 
+                            icon="pi pi-shopping-cart" 
+                            (onClick)="navigate('/orders')"/>
+                    }@else{
+                        <i class="pi pi-truck info-icon"></i>
+                        <h3>Ver mis pedidos asignados</h3>
+                        <p>
+                            Vea y gestione los pedidos de hielo que le han sido asignados a usted su para entrega.
+                        </p>
+                        <p-button 
+                            label="Realizar pedido" 
+                            icon="pi pi-truck" 
+                            (onClick)="navigate('/orders')"/>
+                    }
+                    <!-- <p>
                         Solicita hielo de forma rápida y segura,
                         con seguimiento de entrega.
                     </p>
-                    <p-button label="Realizar pedido" icon="pi pi-shopping-cart" (onClick)="navigate('/orders')"></p-button>
+                    <p-button label="Realizar pedido" icon="pi pi-shopping-cart" (onClick)="navigate('/orders')"></p-button> -->
                 </p-card>
             </div>
-            <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/clients')">
-                <p-card class="info-card">
-                    <i class="pi pi-users info-icon"></i>
-                    <h3>Gestionar clientes</h3>
-                    <p>
-                        Administra clientes, direcciones y pedidos asociados.
-                    </p>
-                    <p-button label="Crear cliente" icon="pi pi-users" ></p-button>
-                </p-card>
-            </div>
-            <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/orders')">
-                <p-card class="info-card">
-                    <i class="pi pi-truck info-icon"></i>
-                    <h3>Coordinar entregas</h3>
-                    <p>
-                        Asigna repartidores y controla la entrega del producto.
-                    </p>
-                    <p-button
-                        label="Ver pedidos"
-                        icon="pi pi-eye"
-                        (onClick)="navigate('/orders')"/>
-                </p-card>
-            </div>
+            @if(user?.rol === roles.ADMIN || user?.rol === roles.ENCARGADO){
+                    <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/clients')">
+                    <p-card class="info-card">
+                        <i class="pi pi-users info-icon"></i>
+                        <h3>Gestionar clientes</h3>
+                        <p>
+                            Administra clientes, direcciones y pedidos asociados.
+                        </p>
+                        <p-button label="Crear cliente" icon="pi pi-users" ></p-button>
+                    </p-card>
+                </div>
+                <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/dealers')">
+                    <p-card class="info-card">
+                        <i class="pi pi-truck info-icon"></i>
+                        <h3>Gestionar repartidores</h3>
+                        <p>
+                            Administra repartidores.
+                        </p>
+                        <p-button
+                            label="Crear repartidor"
+                            icon="pi pi-user-plus"
+                            (onClick)="navigate('/dealers')"/>
+                    </p-card>
+                </div>
+            }
         </div>
     </section>
     <section class="mb-6 section shadow-5">
