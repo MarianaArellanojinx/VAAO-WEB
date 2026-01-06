@@ -143,7 +143,7 @@ export class OrdersComponent implements OnInit {
     this.dialog.open(ArrivalsDeliveryComponent, {
       header: 'Tomar evidencia',
       baseZIndex: 9999,
-      width: '80%',
+      width: 'auto',
       data: entrega
     })
   }
@@ -232,6 +232,7 @@ export class OrdersComponent implements OnInit {
       this.api.patch<ResponseBackend<boolean>>(`${environment.urlBackend}Pedidos/UpdatePedido/${this.orderAux.idPedido}`, this.orderAux)
         .subscribe({
           next: response => {
+            this.alert.dinamycMessage('Hecho!!', 'Se ha aprobado el pedido', 'success');
             this.modalRepartidor = false;
             this.selectedDelivery = 0;
             this.orderAux = undefined;

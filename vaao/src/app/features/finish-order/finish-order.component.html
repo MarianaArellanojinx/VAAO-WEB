@@ -10,6 +10,16 @@
                 <span class="p-button-label">Tomar foto</span>
             </span>
         </label>
+        @if(base64 !== ''){
+            <div class="flex flex-column w-full align-items-center mt-3">
+                <p-image 
+                    [src]="base64" 
+                    alt="Imagen tomada" 
+                    width="300" 
+                    preview="true"/>
+                <h4 class="my-0">Imagen cargada</h4>
+            </div>
+        }
     </div>
     <div class="field col-12">
         <label>Seleccione el método de pago</label>
@@ -17,6 +27,12 @@
             optionValue="idMetodoPago" />
     </div>
     <div class="field col-12">
-        <p-button (onClick)="finishDelivery()" severity="success" icon="pi pi-dollar" label="Terminar pedido" />
+        <p-button 
+            (onClick)="finishDelivery()" 
+            severity="success" 
+            icon="pi pi-dollar" 
+            label="Terminar pedido"
+            [loading]="loading"
+            [disabled]="!isValid()" />
     </div>
 </div>

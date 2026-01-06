@@ -4,6 +4,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { MenuItem } from '../../shared/interfaces/MenuItem';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/interfaces/User';
+import { RoleConst } from '../../shared/const/RoleConst';
 declare var particlesJS: any;
 @Component({
   selector: 'app-layout',
@@ -25,9 +26,35 @@ export class LayoutComponent implements AfterViewInit, OnInit {
 
   router: Router = inject(Router);
   auth: AuthService = inject(AuthService);
+
+  roles: any = RoleConst;
   
   user: User | null = null;
   visible: boolean = false;
+  itemsDealer: MenuItem[] = [
+    {
+      path: '/',
+      icon: 'pi pi-home',
+      label: 'Inicio'
+    },
+    {
+      path: '/orders',
+      icon: 'pi pi-truck',
+      label: 'Ver pedidos asignados'
+    }
+  ];
+  itemsClient: MenuItem[] = [
+    {
+      path: '/',
+      icon: 'pi pi-home',
+      label: 'Inicio'
+    },
+    {
+      path: '/orders',
+      icon: 'pi pi-cart-arrow-down',
+      label: 'Hacer pedido'
+    }
+  ];
   items: MenuItem[] = [
     {
       path: '/',
@@ -40,24 +67,24 @@ export class LayoutComponent implements AfterViewInit, OnInit {
       label: 'Dashboard'
     },
     {
-      path: '/users',
-      icon: 'pi pi-users',
-      label: 'Usuarios'
-    },
-    {
       path: '/clients',
       icon: 'pi pi-users',
       label: 'Clientes'
     },
     {
       path: '/dealers',
-      icon: 'pi pi-box',
+      icon: 'pi pi-truck',
       label: 'Repartidores'
     },
     {
       path: '/orders',
-      icon: 'pi pi-cart-arrow-down',
-      label: 'Compras'
+      icon: 'pi pi-clipboard',
+      label: 'Gestionar pedidos pendientes'
+    },
+    {
+      path: '/orders',
+      icon: 'pi pi-times',
+      label: 'Pedidos cancelados'
     }
   ];
 
