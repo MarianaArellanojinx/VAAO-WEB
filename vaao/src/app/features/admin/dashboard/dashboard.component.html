@@ -123,9 +123,23 @@
         </div>
     </div>
     <div class="field col-12 mb-7">
-        <div class="flex justify-content-center">
+        <div class="flex justify-content-center gap-3">
             <app-report-download-card
                 title="Reporte de ventas perdidas"
+                [startDate]="dates[0]"
+                [endDate]="dates[1]"
+                [fields]="[
+                    'Nombre del cliente',
+                    'Cantidad de conservadores',
+                    'Último pedido',
+                    'Fecha del último pedido',
+                    'Bolsas compradas en el último pedido',
+                    'Días sin hacer un pedido',
+                    'Dinero perdido por el cliente'
+                ]"
+                (download)="downloadReport()"/>
+                <app-report-download-card
+                title="Reporte de ventas canceladas"
                 [startDate]="dates[0]"
                 [endDate]="dates[1]"
                 [fields]="[
