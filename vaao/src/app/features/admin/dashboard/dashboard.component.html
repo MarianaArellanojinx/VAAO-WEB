@@ -20,41 +20,71 @@
         <div class="p-fluid p-formgrid grid">
             <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
                 <app-card-dashboard 
+                    (click)="filterDataTable(1)"
+                    [loading]="loadingCards"
                     title="Venta diaria"
                     icon="pi pi-box">
                     <div 
                         class="flex align-items-center justify-content-center gap-2">
                         <h1 
-                            class="my-0">${{ventas?.cards.day}}
+                            class="my-0">${{dataCards.today}}
                         </h1>
                     </div>
                 </app-card-dashboard>
             </div>
             <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
                 <app-card-dashboard 
+                    (click)="filterDataTable(2)"
+                    [loading]="loadingCards"
                     title="Venta semanal"
                     icon="pi pi-box">
                     <div 
                         class="flex align-items-center justify-content-center gap-2">
                         <h1 
                             class="my-0">
-                            ${{ventas?.cards.week}}
+                            ${{dataCards.week}}
                         </h1>
                     </div>
                 </app-card-dashboard>
             </div>
             <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
                 <app-card-dashboard 
+                    (click)="filterDataTable(3)"
+                    [loading]="loadingCards"
                     title="Venta del mes"
                     icon="pi pi-box">
                     <div class="flex align-items-center justify-content-center gap-2">
                         <h1 
                             class="my-0">
-                            ${{ventas?.cards.month}}
+                            ${{dataCards.month}}
                         </h1>
                     </div>
                 </app-card-dashboard>
             </div>
+            @if(dataTableCards !== undefined){
+                <div class="field col-12">
+                    <app-card-dashboard
+                        icon="pi pi-dollar"
+                        [title]="'Información ventas por: ' + (idDataTableSelected === 1 ? 'Hoy' : (idDataTableSelected === 2 ? 'Esta semana' : 'Este mes'))">
+                        <p-table
+                            [value]="dataTableCards">
+                            <ng-template pTemplate="caption"></ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Total pagado</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-data>
+                                <tr>
+                                    <td>{{data.cliente}}</td>
+                                    <td>{{data.totalPagar}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </app-card-dashboard>
+                </div>
+            }
             <!-- <div class="field col-12 my-0">
                 <app-card-dashboard 
                     title="Venta diaria"

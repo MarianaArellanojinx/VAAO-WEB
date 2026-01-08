@@ -101,8 +101,39 @@ export class DashboardComponent implements OnInit {
       }
     }
   };
+  dataCards: any = {};
+  idDataTableSelected: number = 1;
+  dataTableCards: any[] | undefined = undefined;
+  loadingCards: boolean = false;
 
+  filterDataTable(id: number){
+    switch(id){
+      case 1:
+        this.dataTableCards = this.dataCards?.tableToday;
+        this.idDataTableSelected = 1;
+        break;
+      case 2:
+        this.dataTableCards = this.dataCards?.tableWeek;
+        this.idDataTableSelected = 2;
+        break;
+      case 3:
+        this.dataTableCards = this.dataCards?.tableMonth;
+        this.idDataTableSelected = 3;
+        break;
+    }
+  }
+
+  getDataCards(){
+    this.loadingCards = true;
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetDataCards`).subscribe({
+      next: response => {
+         this.dataCards = response.data;
+         this.loadingCards = false;
+      }
+    });
+  }
   getDataDashboard(){
+    this.getDataCards();
     this.getData()
     this.getStatusChart();
   }

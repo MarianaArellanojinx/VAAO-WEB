@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 import { Pedido } from '../../shared/interfaces/Pedido';
 import { Capacitor } from '@capacitor/core';
 import { ImageModule } from "primeng/image";
+import { ImageConfig } from '../../shared/interfaces/ImageConfig';
 
 @Component({
   selector: 'app-finish-order',
@@ -37,6 +38,13 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
   private readonly ref: DynamicDialogRef = inject(DynamicDialogRef);
   private readonly config: DynamicDialogConfig = inject(DynamicDialogConfig);
 
+  optionsImage: ImageConfig = {
+    maxWidth: 800,
+    maxHeight: 800,
+    quality: 0.6,
+    mimeType: 'image/jpeg',
+    removePrefix: false
+  }
   isAndroid: boolean = false;
   file!: File;
   base64: string = '';
@@ -71,7 +79,7 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
 
   onFileSelected(event: any) {
     this.file = event.currentFiles[0];
-    this.image.fileToBase64(this.file ?? new Blob()).then(result => {
+    this.image.fileToBase64(this.file ?? new Blob(), this.optionsImage).then((result: string) => {
       this.base64 = result;
     });
   }
@@ -94,7 +102,8 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
     this.loading = true;
     this.Entrega.estatusReparto = 3;
     this.Entrega.imagenConservadorSalida = this.base64;
-    this.api.patch<ResponseBackend<any>>(`${environment.urlBackend}Entregas/UpdateEntrega/${this.Entrega.idEntrega}`, this.Entrega)
+    this.Entrega.fechaEntrega = new Date().toISOString();
+    this.api.patch<ResponseBackend<any>>(`${environment.urlBackend}Entregas/UpdateEntrega/${this.Entrega.idEntrega}/true`, this.Entrega)
     .subscribe({
       next: response => {
         this.createSell();
