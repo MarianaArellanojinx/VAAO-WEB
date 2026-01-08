@@ -143,7 +143,7 @@ export class OrdersComponent implements OnInit {
     this.dialog.open(ArrivalsDeliveryComponent, {
       header: 'Tomar evidencia',
       baseZIndex: 9999,
-      width: '80%',
+      width: 'auto',
       data: entrega
     })
   }
@@ -154,14 +154,13 @@ export class OrdersComponent implements OnInit {
     .subscribe({
       next: response => {
         if(this.userRole === 1){
-          this.orders = response.data
+          this.orders = response.data.filter(p => p.estatusPedido === this.APROBADO || p.estatusPedido === this.PENDIENTE)
         }else if(this.userRole === 2){
-          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO || x.estatusPedido === this.PENDIENTE)
+          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
         }else if(this.userRole === 3){
           this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
         }else{
           this.orders = response.data.filter(x => x.idCliente === this.idCliente);
-          console.log(this.orders, this.idCliente)
         }
         this.orders = this.orders.map(p => ({
           ...p,
@@ -232,6 +231,7 @@ export class OrdersComponent implements OnInit {
       this.api.patch<ResponseBackend<boolean>>(`${environment.urlBackend}Pedidos/UpdatePedido/${this.orderAux.idPedido}`, this.orderAux)
         .subscribe({
           next: response => {
+            this.alert.dinamycMessage('Hecho!!', 'Se ha aprobado el pedido', 'success');
             this.modalRepartidor = false;
             this.selectedDelivery = 0;
             this.orderAux = undefined;

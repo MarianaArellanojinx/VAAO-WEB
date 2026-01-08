@@ -11,11 +11,13 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { environment } from '../../../environments/environment';
 import { Pedido } from '../../shared/interfaces/Pedido';
 import { Capacitor } from '@capacitor/core';
+import { ImageModule } from "primeng/image";
+import { ImageConfig } from '../../shared/interfaces/ImageConfig';
 
 @Component({
   selector: 'app-finish-order',
   standalone: true,
-  imports: [FileUploadModule, DropdownModule, FormsModule],
+  imports: [FileUploadModule, DropdownModule, FormsModule, ImageModule],
   templateUrl: './finish-order.component.html',
   styleUrl: './finish-order.component.scss'
 })
@@ -31,16 +33,24 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
     console.log(this.isAndroid);
   }
   private readonly api: ApiService = inject(ApiService);
-  private readonly image: ImageService = inject(ImageService);
   private readonly alert: AlertService = inject(AlertService);
+  private readonly image: ImageService = inject(ImageService);
   private readonly ref: DynamicDialogRef = inject(DynamicDialogRef);
   private readonly config: DynamicDialogConfig = inject(DynamicDialogConfig);
 
+  optionsImage: ImageConfig = {
+    maxWidth: 800,
+    maxHeight: 800,
+    quality: 0.6,
+    mimeType: 'image/jpeg',
+    removePrefix: false
+  }
   isAndroid: boolean = false;
   file!: File;
   base64: string = '';
   Pedido!: Pedido;
   Entrega!: any;
+  loading: boolean = false;
 
   metodos: MetodoPago[] = [
     {
@@ -59,13 +69,17 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
 
   metodo: number = 0;
 
+  isValid(): boolean {
+    return this.base64 !== '' && this.metodo !== 0;
+  }
+
   getPayments() {
     this.api.get<ResponseBackend<MetodoPago>>(``);
   }
 
   onFileSelected(event: any) {
     this.file = event.currentFiles[0];
-    this.image.fileToBase64(this.file ?? new Blob()).then(result => {
+    this.image.fileToBase64(this.file ?? new Blob(), this.optionsImage).then((result: string) => {
       this.base64 = result;
     });
   }
@@ -85,9 +99,11 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
 }
 
   finishDelivery() {
+    this.loading = true;
     this.Entrega.estatusReparto = 3;
     this.Entrega.imagenConservadorSalida = this.base64;
-    this.api.patch<ResponseBackend<any>>(`${environment.urlBackend}Entregas/UpdateEntrega/${this.Entrega.idEntrega}`, this.Entrega)
+    this.Entrega.fechaEntrega = new Date().toISOString();
+    this.api.patch<ResponseBackend<any>>(`${environment.urlBackend}Entregas/UpdateEntrega/${this.Entrega.idEntrega}/true`, this.Entrega)
     .subscribe({
       next: response => {
         this.createSell();
@@ -103,8 +119,9 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
     }
     this.api.post<ResponseBackend<any>>(`${environment.urlBackend}Ventas/InsertVenta`, payload).subscribe({
       next: response => {
-        this.ref.close(true);
+        this.loading = false;
         this.alert.dinamycMessage('Hecho!!', 'Se ha terminado y confirmado la venta', 'success');
+        this.ref.close(true);
       }
     })
   }

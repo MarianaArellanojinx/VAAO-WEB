@@ -12,6 +12,7 @@ import { OrdersComponent } from './features/orders/orders.component';
 import { ConservativeComponent } from './features/conservative/conservative.component';
 import { encargadoGuard } from './core/guards/encargado.guard';
 import { encargadoAdminGuard } from './core/guards/encargado-admin.guard';
+import { loginGuard } from './core/guards/login.guard';
 
 export const routes: Routes = [
     {
@@ -21,7 +22,8 @@ export const routes: Routes = [
         children: [
             {
                 path: "",
-                component: HomeComponent
+                component: HomeComponent,
+                canActivate: [loginGuard]
             },
             {
                 path: "dashboard",
@@ -49,7 +51,8 @@ export const routes: Routes = [
             },
             {
                 path: 'orders',
-                component: OrdersComponent
+                component: OrdersComponent,
+                canActivate: [loginGuard]
             },
             {
                 path: 'conservadores',

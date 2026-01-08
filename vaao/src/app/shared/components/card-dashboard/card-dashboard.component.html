@@ -20,7 +20,17 @@
 
   <!-- BODY DINÁMICO -->
   <div class="report-body">
-    <ng-content></ng-content>
+    @if(loading === true) {
+      <div class="flex justify-content-center align-items-center">
+        <p-progressSpinner 
+          styleClass="w-4rem h-4rem" 
+          strokeWidth="8" 
+          fill="var(--surface-ground)" 
+          animationDuration=".5s" />
+      </div>
+    }@else {
+      <ng-content></ng-content>
+    }
   </div>
 
 </div>

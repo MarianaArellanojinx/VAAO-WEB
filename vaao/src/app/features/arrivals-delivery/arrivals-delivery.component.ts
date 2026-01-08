@@ -7,13 +7,18 @@ import { AlertService } from '../../core/services/alert.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { environment } from '../../../environments/environment';
 import { Capacitor } from '@capacitor/core';
+import { ImageModule } from "primeng/image";
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ImageConfig } from '../../shared/interfaces/ImageConfig';
 
 @Component({
   selector: 'app-arrivals-delivery',
   standalone: true,
   imports: [
     FileUploadModule,
-    HttpClientModule
+    HttpClientModule,
+    ImageModule,
+    ProgressSpinnerModule
   ],
   providers: [],
   templateUrl: './arrivals-delivery.component.html',
@@ -35,26 +40,27 @@ export class ArrivalsDeliveryComponent implements OnInit {
   file: File | undefined = undefined;
   base64: string = '';
   entrega: any = {};
+  loading: boolean = false;
+  optionsImage: ImageConfig = {
+    maxWidth: 800,
+    maxHeight: 800,
+    quality: 0.6,
+    mimeType: 'image/jpeg',
+    removePrefix: false
+  }
 
   saveImage() {
+    this.loading = true;
     this.entrega.imagenConservadorLlegada = this.base64;
     this.entrega.horaLlegada = new Date().toISOString();
     this.entrega.estatusReparto = 2;
-    this.api.patch(`${environment.urlBackend}Entregas/UpdateEntrega/${this.entrega.idEntrega}`, this.entrega).subscribe({
+    this.api.patch(`${environment.urlBackend}Entregas/UpdateEntrega/${this.entrega.idEntrega}/false`, this.entrega).subscribe({
       next: response => {
+        this.loading = false;
         this.alert.dinamycMessage('Hecho!!', 'Se ha cargado la evidencia', 'success')
         this.ref.close();
       }
     })
-  }
-
-  onFileSelected(event: any) {
-    console.log(event)
-    this.file = event.currentFiles[0]
-    this.image.fileToBase64(this.file ?? new Blob()).then(result => {
-      this.base64 = result
-      console.log(result)
-    });
   }
   onFileSelectedAndroid(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -65,16 +71,8 @@ export class ArrivalsDeliveryComponent implements OnInit {
     }
     this.file = input.files[0];
 
-    this.image.fileToBase64(this.file).then(result => {
+    this.image.fileToBase64(this.file, this.optionsImage).then(result => {
       this.base64 = result;
-    });
-  }
-
-  test(event: any) {
-    this.file = event.currentFiles[0]
-    console.log(this.file)
-    this.image.fileToBase64(this.file ?? new Blob()).then(result => {
-      this.base64 = result
     });
   }
 }

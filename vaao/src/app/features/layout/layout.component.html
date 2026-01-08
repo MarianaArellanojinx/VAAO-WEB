@@ -3,7 +3,7 @@
     <img src="assets/imgs/VAAO_LOGO.png" width="200">
   </ng-template>
   <div class="w-full flex flex-column">
-    @for (item of items; track $index) {
+    @for (item of (user?.rol === roles.ADMIN || user?.rol === roles.ENCARGADO ? items : user?.rol === roles.CLIENTE ? itemsClient : itemsDealer); track $index) {
     <div class="flex gap-2 align-items-center item mt-1 cursor-pointer" (click)="navigate(item.path)">
       <i [class]="'pi ' + item.icon" style="color: #000;"></i>
       <label style="color: #000;">{{ item.label }}</label>
@@ -14,7 +14,9 @@
 <div class="app-layout flex flex-column">
   <header class="app-topbar flex align-items-center justify-content-between px-3 py-2">
     <div class="flex align-items-center gap-4">
-      <i class="pi pi-bars text-white cursor-pointer" (click)="open()"></i>
+      @if (user !== null) {
+        <i class="pi pi-bars text-white cursor-pointer" (click)="open()"></i>
+      }
       <img src="assets/imgs/VAAO_LOGO.png" width="100" alt="" (click)="navigate('')" style="cursor: pointer;">
     </div>
     <div class="flex flex-column align-items-center">
