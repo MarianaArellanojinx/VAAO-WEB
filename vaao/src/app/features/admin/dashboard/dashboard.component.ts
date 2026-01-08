@@ -1,152 +1,175 @@
-import { Component } from '@angular/core';
-import { CardComponent } from "../../../shared/components/card/card.component";
+import { Component, inject, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faSnowflake } from '@fortawesome/free-solid-svg-icons';
 import { ChartModule } from 'primeng/chart'
 import { TableModule } from 'primeng/table'
-
+import { ApiService } from '../../../infrastructure/api.service';
+import { HttpClientModule } from '@angular/common/http';
+import { ResponseBackend } from '../../../shared/interfaces/ResponseBackend';
+import { environment } from '../../../../environments/environment';
+import { CommonModule } from '@angular/common';
+import { CalendarModule } from "primeng/calendar";
+import { FormsModule } from '@angular/forms';
+import { DateService } from '../../../core/services/date.service';
+import { ReportDownloadCardComponent } from "../../../shared/components/report-download-card/report-download-card.component";
+import { CardDashboardComponent } from "../../../shared/components/card-dashboard/card-dashboard.component";
+import { AlertService } from '../../../core/services/alert.service';
+import { ReportVentaPerdida } from '../../../shared/interfaces/ReportVentaPerdida';
+import { ExportService } from '../../../core/services/export.service';
+interface ExportColumn {
+    title: string;
+    dataKey: string;
+}
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CardComponent,
     FontAwesomeModule,
     ChartModule,
-    TableModule
-  ],
+    TableModule,
+    HttpClientModule,
+    CommonModule,
+    CalendarModule,
+    FormsModule,
+    ReportDownloadCardComponent,
+    CardDashboardComponent
+],
+  providers: [ApiService],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+
+  ngOnInit(): void {
+    this.getDataDashboard();
+    this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+  }
+
+  private api: ApiService = inject(ApiService);
+  private date: DateService = inject(DateService);
+  private alert: AlertService = inject(AlertService);
+  private export: ExportService = inject(ExportService);
+
+  dates: Date[] = [this.date.getMonday(new Date()), this.date.addDays(this.date.getMonday(new Date()), 6)];
 
   snowflake: any = faSnowflake;
+  download: any = faDownload;
 
-  historicoVentas30DiasDataset = {
-    labels: [
-      'Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Día 7',
-      'Día 8', 'Día 9', 'Día 10', 'Día 11', 'Día 12', 'Día 13', 'Día 14',
-      'Día 15', 'Día 16', 'Día 17', 'Día 18', 'Día 19', 'Día 20', 'Día 21',
-      'Día 22', 'Día 23', 'Día 24', 'Día 25', 'Día 26', 'Día 27', 'Día 28',
-      'Día 29', 'Día 30'
-    ],
-    datasets: [
-      {
-        label: 'Bolsas de hielo vendidas',
-        data: [
-          280, 300, 260, 290, 310, 340, 360,
-          380, 400, 420, 390, 370, 360, 410,
-          450, 480, 500, 520, 490, 470, 460,
-          440, 430, 410, 420, 450, 480, 500,
-          520, 540
-        ],
-        fill: true,
-        tension: 0.35,
-        borderWidth: 2,
-        borderRadius: 6,
-        backgroundColor: 'rgba(147, 197, 253, 0.6)',
-        borderColor: '#2563eb',
-        pointBackgroundColor: '#2563eb'
-      }
-    ]
-  };
-  metaDiariaPorClienteDataset_10 = {
-    labels: [
-      'Cliente A', 'Cliente B', 'Cliente C', 'Cliente D', 'Cliente E',
-      'Cliente F', 'Cliente G', 'Cliente H', 'Cliente I', 'Cliente J'
-    ],
-    datasets: [
-      {
-        label: 'Meta diaria',
-        data: [100, 130, 80, 150, 110, 90, 160, 120, 70, 140],
-        borderColor: '#1e40af',
-        type: 'line',
-        tension: 0.4
-      },
-      {
-        label: 'Ventas reales (bolsas)',
-        data: [85, 120, 60, 140, 95, 70, 160, 110, 55, 130],
-        backgroundColor: '#93c5fd',
-        borderRadius: 8,
-        type: 'bar'
-      }
-    ]
-  };
-  estatusPedidosPorClienteDataset = {
-    labels: [
-      'Cliente A',
-      'Cliente B',
-      'Cliente C',
-      'Cliente D',
-      'Cliente E'
-    ],
-    datasets: [
-      {
-        label: 'Pendiente',
-        data: [3, 5, 2, 6, 1],
-        backgroundColor: '#fde047',
-        borderRadius: 8
-      },
-      {
-        label: 'En preparación',
-        data: [4, 3, 1, 5, 2],
-        backgroundColor: '#60a5fa',
-        borderRadius: 8
-      },
-      {
-        label: 'En reparto',
-        data: [2, 4, 0, 3, 1],
-        backgroundColor: '#38bdf8',
-        borderRadius: 8
-      },
-      {
-        label: 'Entregado',
-        data: [20, 18, 12, 22, 15],
-        backgroundColor: '#22c55e',
-        borderRadius: 8
-      },
-      {
-        label: 'Cancelado',
-        data: [1, 0, 0, 2, 0],
-        backgroundColor: '#ef4444',
-        borderRadius: 8
-      }
-    ]
-  };
+  private readonly META_VENTAS: number = 30;
+  downloadInProgress: boolean = false;
+  ventas: any = undefined;
+  statusChart: any = {};
+  exportColumns!: ExportColumn[];
+  cols: {field: string, header: string, customExportHeader?: string}[] = [
+    {
+      field: 'cliente',
+      header: 'Cliente'
+    },
+    {
+      field: 'bolsas',
+      header: 'Bolsas',
+      customExportHeader: 'Bolsas compradas'
+    },
+    {
+      field: 'total',
+      header: 'Total',
+      customExportHeader: 'Total pagado'
+    },
+    {
+      field: 'pedido',
+      header: 'Pedido',
+      customExportHeader: 'Fecha pedido'
+    }
+  ]
   options = {
     responsive: true,
+    plugins: {
+      legend: {
+        labels: {
+          color: '#000'
+        }
+      },
+    },
     scales: {
       x: {
         stacked: true,
-        ticks: { color: '#ffffff' }
+        ticks: { color: '#000' }
       },
       y: {
         stacked: true,
-        ticks: { color: '#ffffff' }
+        ticks: { color: '#000' }
       }
     }
   };
+  dataCards: any = {};
+  idDataTableSelected: number = 1;
+  dataTableCards: any[] | undefined = undefined;
+  loadingCards: boolean = false;
 
-  tableData: any[] = [
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-    {a: 'Hola'},
-  ];
+  filterDataTable(id: number){
+    switch(id){
+      case 1:
+        this.dataTableCards = this.dataCards?.tableToday;
+        this.idDataTableSelected = 1;
+        break;
+      case 2:
+        this.dataTableCards = this.dataCards?.tableWeek;
+        this.idDataTableSelected = 2;
+        break;
+      case 3:
+        this.dataTableCards = this.dataCards?.tableMonth;
+        this.idDataTableSelected = 3;
+        break;
+    }
+  }
+
+  getDataCards(){
+    this.loadingCards = true;
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetDataCards`).subscribe({
+      next: response => {
+         this.dataCards = response.data;
+         this.loadingCards = false;
+      }
+    });
+  }
+  getDataDashboard(){
+    this.getDataCards();
+    this.getData()
+    this.getStatusChart();
+  }
+  getStatusChart() {
+    const end = this.dates[1].toISOString();
+    const start = this.dates[0].toISOString();
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetEstatusPedidos?start=${start}&end=${end}`).subscribe({
+      next: response => {
+        this.statusChart = response.data;
+      }
+    });
+  }
+  getData() {
+    const end = this.dates[1].toISOString();
+    const start = this.dates[0].toISOString();
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetHistoricoVentas?start=${start}&end=${end}`).subscribe({
+      next: response => {
+        this.ventas = response.data;
+      }
+    });
+  }
+  downloadReport(){
+    this.downloadInProgress = true;
+    this.api.get<ResponseBackend<ReportVentaPerdida[]>>(`${environment.urlBackend}Report/GetVentasPerdidas`)
+    .subscribe({
+      next: response => {
+        this.downloadInProgress = false;
+        let data: ReportVentaPerdida[] = response.data;
+        data = data.map(item => ({
+          ...item,
+          faltanteCompra: this.META_VENTAS - item.totalbolsas
+        }));
+        this.downloadInProgress = false;
+        this.export.exportToExcel(data, 'Reporte_Ventas_Perdidas', 'Ventas_Perdidas');
+      }
+    });
+  }
+
 }

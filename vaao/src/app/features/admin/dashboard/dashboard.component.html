@@ -1,80 +1,187 @@
 <div class="p-fluid p-formgrid grid">
-    <div class="field col-12 sm:col-12 md:col-12 lg:col-6 xl:col-6 mb-0">
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mt-3 mb-0">
+        <label style="color: white;">Seleccione un rango de fechas:</label>
+        <p-calendar 
+            [(ngModel)]="dates" 
+            [showIcon]="true" 
+            dateFormat="dd/mm/yy" 
+            selectionMode="range"/>
+    </div>
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 sm:mt-0 md:mt-0 lg:mt-3 xl:mt-3 mt-0 mb-0">
+        <p-button 
+            severity="success" 
+            label="Buscar" 
+            [style]="{'margin-top': '1.59rem'}" 
+            icon="pi pi-search"
+            [raised]="true"
+            (onClick)="getDataDashboard()" />
+    </div>
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-6 xl:col-6 my-0">
         <div class="p-fluid p-formgrid grid">
-            <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4">
-                <app-card header="Venta diaria">
-                    <div class="flex flex-column">
-                        <h3 class="my-0 text-center">Venta diaria</h3>
-                        <div class="flex align-items-center justify-content-center gap-2 mt-1">
-                            <fa-icon [icon]="snowflake" style="padding: 0.8rem; background-color: blue; color: white; border-radius: 0.7rem; font-size: 1.5rem;"></fa-icon>
-                            <h1 class="my-0">$100</h1>
-                        </div>
+            <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+                <app-card-dashboard 
+                    (click)="filterDataTable(1)"
+                    [loading]="loadingCards"
+                    title="Venta diaria"
+                    icon="pi pi-box">
+                    <div 
+                        class="flex align-items-center justify-content-center gap-2">
+                        <h1 
+                            class="my-0">${{dataCards.today}}
+                        </h1>
                     </div>
-                </app-card>
+                </app-card-dashboard>
             </div>
-            <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4">
-                <app-card header="Venta semanal">
-                    <div class="flex flex-column">
-                        <h3 class="my-0 text-center">Venta diaria</h3>
-                        <div class="flex align-items-center justify-content-center gap-2 mt-1">
-                            <fa-icon [icon]="snowflake" style="padding: 0.8rem; background-color: blue; color: white; border-radius: 0.7rem; font-size: 1.5rem;"></fa-icon>
-                            <h1 class="my-0">$100</h1>
-                        </div>
+            <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+                <app-card-dashboard 
+                    (click)="filterDataTable(2)"
+                    [loading]="loadingCards"
+                    title="Venta semanal"
+                    icon="pi pi-box">
+                    <div 
+                        class="flex align-items-center justify-content-center gap-2">
+                        <h1 
+                            class="my-0">
+                            ${{dataCards.week}}
+                        </h1>
                     </div>
-                </app-card>
+                </app-card-dashboard>
             </div>
-            <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4">
-                <app-card header="Venta mensual">
-                    <div class="flex flex-column">
-                        <h3 class="my-0 text-center">Venta diaria</h3>
-                        <div class="flex align-items-center justify-content-center gap-2 mt-1">
-                            <fa-icon [icon]="snowflake" style="padding: 0.8rem; background-color: blue; color: white; border-radius: 0.7rem; font-size: 1.5rem;"></fa-icon>
-                            <h1 class="my-0">$100</h1>
-                        </div>
+            <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+                <app-card-dashboard 
+                    (click)="filterDataTable(3)"
+                    [loading]="loadingCards"
+                    title="Venta del mes"
+                    icon="pi pi-box">
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        <h1 
+                            class="my-0">
+                            ${{dataCards.month}}
+                        </h1>
                     </div>
-                </app-card>
+                </app-card-dashboard>
             </div>
-            <div class="field col-12">
-                <p-table [value]="tableData" [scrollable]="true" scrollHeight="22.3rem">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Bolsas compradas</th>
-                            <th>$ generado</th>
-                            <th>Fecha de compra</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-body>
-                        <tr>
-                            <td>{{body.a}}</td>
-                            <td>{{body.a}}</td>
-                            <td>{{body.a}}</td>
-                            <td>{{body.a}}</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </div>
+            @if(dataTableCards !== undefined){
+                <div class="field col-12">
+                    <app-card-dashboard
+                        icon="pi pi-dollar"
+                        [title]="'Información ventas por: ' + (idDataTableSelected === 1 ? 'Hoy' : (idDataTableSelected === 2 ? 'Esta semana' : 'Este mes'))">
+                        <p-table
+                            [value]="dataTableCards">
+                            <ng-template pTemplate="caption"></ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Total pagado</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-data>
+                                <tr>
+                                    <td>{{data.cliente}}</td>
+                                    <td>{{data.totalPagar}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </app-card-dashboard>
+                </div>
+            }
+            <!-- <div class="field col-12 my-0">
+                <app-card-dashboard 
+                    title="Venta diaria"
+                    icon="pi pi-dollar">
+                    <p-table 
+                        #dataTable 
+                        [columns]="cols" 
+                        [value]="ventas?.table" 
+                        [scrollable]="true"
+                        scrollHeight="22.3rem">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-end my-0 align-items-center">
+                                <p-button 
+                                    icon="pi pi-file-excel" 
+                                    severity="success" 
+                                    label="Exportar"
+                                    (onClick)="dataTable.exportCSV()" />
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Bolsas compradas</th>
+                                <th>$ generado</th>
+                                <th>Fecha de compra</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-body>
+                            <tr>
+                                <td>{{body.cliente}}</td>
+                                <td>{{body.bolsas}}</td>
+                                <td>{{body.total}}</td>
+                                <td>{{body.pedido | date:'dd/MM/yyyy HH:mm:SS'}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </app-card-dashboard>
+            </div> -->
         </div>
     </div>
-    <div class="field col-12 sm:col-12 md:col-12 lg:col-6 xl:col-6 mb-0">
-        <app-card header="Historico ventas">
-            <div class="mt-3">
-                <p-chart type="bar" [data]="historicoVentas30DiasDataset" height="28.4rem"></p-chart>
-            </div>
-        </app-card>
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-6 xl:col-6 my-0">
+        <app-card-dashboard 
+            title="Venta diaria"
+            icon="pi pi-box">
+            <p-chart 
+                type="bar" 
+                [data]="ventas?.chart" 
+                height="32.7rem"/>
+        </app-card-dashboard>
     </div>
-    <div class="field col-12">
-        <app-card header="Meta diaria de ventas">
-            <div class="mt-3">
-                <p-chart height="20rem" type="bar" [data]="metaDiariaPorClienteDataset_10" [options]="options"></p-chart>
-            </div>
-        </app-card>
+    <div class="field col-12 my-0">
+        <app-card-dashboard 
+            title="Venta diaria"
+            icon="pi pi-box">
+            <p-chart 
+                height="20rem" 
+                type="bar" 
+                [data]="statusChart" 
+                [options]="options"/>
+        </app-card-dashboard>
+    </div>
+    <div class="field col-12 my-0">
+        <div class="section flex align-items-center justify-content-center gap-2">
+            <i class="pi pi-file-excel" style="font-size: 1.7rem; color: white;"></i>
+            <h1 class="my-0" style="color: white;">Reportes</h1>
+        </div>
     </div>
     <div class="field col-12 mb-7">
-        <app-card header="Estatus de pedidos">
-            <div class="mt-3">
-                <p-chart height="20rem" type="bar" [data]="estatusPedidosPorClienteDataset" [options]="options"></p-chart>
-            </div>
-        </app-card>
+        <div class="flex justify-content-center gap-3">
+            <app-report-download-card
+                title="Reporte de ventas perdidas"
+                [startDate]="dates[0]"
+                [endDate]="dates[1]"
+                [fields]="[
+                    'Nombre del cliente',
+                    'Cantidad de conservadores',
+                    'Último pedido',
+                    'Fecha del último pedido',
+                    'Bolsas compradas en el último pedido',
+                    'Días sin hacer un pedido',
+                    'Dinero perdido por el cliente'
+                ]"
+                (download)="downloadReport()"/>
+                <app-report-download-card
+                title="Reporte de ventas canceladas"
+                [startDate]="dates[0]"
+                [endDate]="dates[1]"
+                [fields]="[
+                    'Nombre del cliente',
+                    'Cantidad de conservadores',
+                    'Último pedido',
+                    'Fecha del último pedido',
+                    'Bolsas compradas en el último pedido',
+                    'Días sin hacer un pedido',
+                    'Dinero perdido por el cliente'
+                ]"
+                (download)="downloadReport()"/>
+        </div>
     </div>
 </div>

@@ -7,6 +7,12 @@ import { AddClientComponent } from './features/admin/add-client/add-client.compo
 import { UsersComponent } from './features/admin/users/users.component';
 import { DealersComponent } from './features/dealers/dealers.component';
 import { adminGuard } from './core/guards/admin.guard';
+import { ClientsComponent } from './features/clients/clients.component';
+import { OrdersComponent } from './features/orders/orders.component';
+import { ConservativeComponent } from './features/conservative/conservative.component';
+import { encargadoGuard } from './core/guards/encargado.guard';
+import { encargadoAdminGuard } from './core/guards/encargado-admin.guard';
+import { loginGuard } from './core/guards/login.guard';
 
 export const routes: Routes = [
     {
@@ -16,7 +22,8 @@ export const routes: Routes = [
         children: [
             {
                 path: "",
-                component: HomeComponent
+                component: HomeComponent,
+                canActivate: [loginGuard]
             },
             {
                 path: "dashboard",
@@ -29,15 +36,28 @@ export const routes: Routes = [
             },
             {
                 path: 'clients',
-                component: AddClientComponent
+                component: ClientsComponent,
+                canActivate: [encargadoAdminGuard]
             },
             {
                 path: 'users',
-                component: UsersComponent
+                component: UsersComponent,
+                canActivate: [encargadoAdminGuard]
             },
             {
                 path: 'dealers',
-                component: DealersComponent
+                component: DealersComponent,
+                canActivate: [encargadoAdminGuard]
+            },
+            {
+                path: 'orders',
+                component: OrdersComponent,
+                canActivate: [loginGuard]
+            },
+            {
+                path: 'conservadores',
+                component: ConservativeComponent,
+                canActivate: [encargadoAdminGuard]
             }
         ]
     }

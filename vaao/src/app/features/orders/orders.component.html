@@ -1,0 +1,117 @@
+<p-dialog style="width: 80%;" [(visible)]="modalRepartidor" header="Seleccione repartidor" (onHide)="hideModal()">
+    <div class="p-fluid p-formgrid grid my-0">
+        <div class="field col-12 my-0">
+            <label>Seleccione repartidor para el pedido:</label>
+            <p-dropdown appendTo="body" [options]="repartidores" [(ngModel)]="selectedDelivery"
+                optionLabel="nombreRepartidor" optionValue="idRepartidor" />
+        </div>
+        <div class="field col-12 my-0">
+            <p-button severity="success" icon="pi pi-check" label="Asignar y aprobar" (onClick)="acceptOrderApi()"
+                [disabled]="!isValidDelivery()" />
+        </div>
+        <div class="field col-12 my-0">
+            <p-button severity="danger" icon="pi pi-times" label="Cancelar operación" (onClick)="hideModal()" />
+        </div>
+    </div>
+</p-dialog>
+<div class="p-fluid p-formgrid grid mt-3">
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+        <label style="color: #FFF;">Seleccione un rango de fechas para filtrar</label>
+        <p-calendar [showIcon]="true" [(ngModel)]="dates" [readonlyInput]="true" selectionMode="range"
+            dateFormat="dd/mm/yy" />
+    </div>
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+        <p-button severity="success" styleClass="mt-4" icon="pi pi-search" (onClick)="getOrders()" label="Filtrar" />
+    </div>
+    @if(userRole === 2 || userRole === 4){
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
+        <p-button label="Hacer pedido" styleClass="mt-4" icon="pi pi-cart-arrow-down" severity="success"
+            (onClick)="openModal()" />
+    </div>
+    }
+    <div class="field col-12 mb-7">
+        <app-card-dashboard title="Pedidos activos" icon="pi pi-box">
+            <p-table #dataTable [value]="orders" [scrollable]="true" scrollHeight="38rem" [columns]="cols">
+                <ng-template pTemplate="caption">
+                    <div class="flex my-0 justify-content-end">
+                        <p-button severity="success" label="Exportar" icon="pi pi-file-excel"
+                            (onClick)="dataTable.exportCSV()" />
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Id pedido</th>
+                        <th>Cliente</th>
+                        <th>Fecha de pedido</th>
+                        <th>Fecha de entrega</th>
+                        <th>Total de bolsas</th>
+                        <th>Precio unitario</th>
+                        <th>Precio total</th>
+                        <th>Estatus del pedido</th>
+                        <th>Observaciones</th>
+                        @if (userRole === 1 || userRole === 2) {
+                        <th>Editar</th>
+                        }@else if (userRole === 3) {
+                        <th>Acciones</th>
+                        }@else if(userRole === 4) {
+
+                        }
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+                    <tr>
+                        <td>{{order.idPedido}}</td>
+                        <td>{{order.nombreCliente}}</td>
+                        <td>{{order.fechaPedido | date:'dd-MM-yyyy hh:mm:ss'}}</td>
+                        <td>{{order.fechaProgramada | date:'dd-MM-yyyy'}}</td>
+                        <td>{{order.totalBolsas}}</td>
+                        <td>${{order.precioUnitario}}</td>
+                        <td>${{order.totalPagar}}</td>
+                        <td>{{order.estatusTexto}}</td>
+                        <td>{{order.observaciones}}</td>
+                        @if (userRole === 1 || userRole === 2) {
+                        <td>
+                            @if (order.estatusPedido === PENDIENTE) {
+                            <div class="flex flex-column align-items-center gap-2">
+                                <p-button severity="success" icon="pi pi-check" label="Aprobar"
+                                    (onClick)="acceptOrder(order)" />
+                                <p-button icon="pi pi-times" label="Rechazar" (onClick)="cancelOrder(order)"
+                                    severity="danger" />
+                            </div>
+                            }@else if (order.estatusPedido === APROBADO) {
+                            <h3>Pedido aprobado</h3>
+                            }@else {
+                            <h3>Pedido rechazado</h3>
+                            }
+                        </td>
+                        }@else if (userRole === 3) {
+                        <td>
+                            <div class="flex align-items-center gap-2">
+                                @if(order.estatusPedido === APROBADO && !hasDelivery(order)){
+                                <p-button icon="pi pi-play" label="Comenzar" (onClick)="createDelivery(order)" />
+                                }@else if (order.estatusPedido === APROBADO && hasDelivery(order) &&
+                                getStatusDelivery(order) === EN_CAMINO) {
+                                <p-button icon="pi pi-truck" label="Llegada" (onClick)="openArrivals(order)" />
+                                }@else if(order.estatusPedido === APROBADO && hasDelivery(order) &&
+                                getStatusDelivery(order) === LLEGADA) {
+                                <p-button icon="pi pi-check" label="Terminar" (onClick)="openFinish(order)"
+                                    severity="success" />
+                                }@else if(order.estatusPedido === APROBADO && hasDelivery(order) &&
+                                getStatusDelivery(order) === FINALIZADO) {
+                                <p-button icon="pi pi-eye" label="Ver detalles" (onClick)="openDetail(order)"
+                                    severity="primary" />
+                                }
+                            </div>
+                        </td>
+                        }@else if(userRole === 4) {
+                            @if(order.estatusPedido === APROBADO && hasDelivery(order) && getStatusDelivery(order) === FINALIZADO) {
+                            <p-button icon="pi pi-eye" label="Ver detalles" (onClick)="openDetail(order)"
+                                severity="primary" />
+                            }
+                        }
+                    </tr>
+                </ng-template>
+            </p-table>
+        </app-card-dashboard>
+    </div>
+</div>

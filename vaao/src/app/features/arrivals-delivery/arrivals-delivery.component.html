@@ -1,0 +1,32 @@
+<div class="p-fluid p-formgrid grid">
+    <div class="field col-12 my-0">
+        <label>Tomar foto del conservador (Vacío)</label>
+        <label class="p-fileupload p-fileupload-basic p-component w-full">
+            <input type="file" accept="image/*" capture="environment" (change)="onFileSelectedAndroid($event)"
+                class="native-file-input" />
+
+            <span class="p-button p-component p-button-primary p-fileupload-choose">
+                <span [class]="'p-button-icon pi ' + (base64 === '' ? ' pi-camera' : ' pi-refresh')"></span>
+                <span class="p-button-label">{{(base64 === '' ? 'Tomar foto' : 'Cambiar foto')}}</span>
+            </span>
+        </label>
+        @if(base64 !== ''){
+            <div class="flex flex-column w-full align-items-center mt-3">
+                <p-image 
+                    [src]="base64" 
+                    alt="Imagen tomada" 
+                    width="300" 
+                    preview="true"/>
+                <h4 class="my-0">Imagen cargada</h4>
+            </div>
+        }
+    </div>
+    <div class="field col-12 my-0">
+        <p-button  
+            severity="success" 
+            label="Guardar"
+            icon="pi pi-save"
+            [disabled]="base64 === ''" 
+            (onClick)="saveImage()"></p-button>
+    </div>
+</div>

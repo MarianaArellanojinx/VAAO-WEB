@@ -1,87 +1,96 @@
 <div class="home-welcome p-4">
-
-    <!-- HERO -->
     <section class="welcome-hero mb-6">
         <div class="grid align-items-center mb-0">
-
             <div class="col-12 md:col-7 mb-0">
                 <h1 class="welcome-title">Bienvenido a VAAO</h1>
                 <p class="welcome-subtitle">
                     Sistema web para la venta, gestión y distribución de hielo,
                     diseñado para facilitar pedidos, entregas y control operativo.
                 </p>
-
-                <div class="flex gap-3 mt-4">
-                    <p-button
-                        severity="success"
-                        label="Iniciar pedido" 
-                        icon="pi pi-shopping-cart"/>
-                    <p-button
-                        severity="contrast"
-                        label="Conocer el sistema" 
-                        icon="pi pi-info-circle"
-                        [text]="true"
-                        [outlined]="true"/>
-                </div>
             </div>
-
             <div class="col-12 md:col-5 text-center mb-0">
                 <i class="pi pi-box welcome-icon"></i>
             </div>
-
         </div>
     </section>
-
-    <!-- QUE PUEDES HACER -->
-    <section class="mb-6">
-        <h2 class="section-title text-center mb-4">
+    <section class="section mb-6 shadow-5">
+        <h2 class="section-title text-center mb-4" style="color: white;">
             ¿Qué puedes hacer en VAAO?
         </h2>
-
-        <div class="grid">
-
-            <div class="col-12 md:col-4">
-                <p-card class="info-card">
-                    <i class="pi pi-shopping-cart info-icon"></i>
-                    <h3>Realizar pedidos</h3>
-                    <p>
+        <div class="grid flex justify-content-center">
+            <div class="col-12 md:col-4" style="cursor: pointer;">
+                <p-card class="info-card" (click)="navigate('/orders')">
+                    @if(user?.rol === roles.ADMIN || user?.rol === roles.ENCARGADO){
+                        <i class="pi pi-clipboard info-icon"></i>
+                        <h3>Administrar pedidos</h3>
+                        <p>
+                            Vea todos los pedidos pendientes realizado por sus clientes y gestione su estado.
+                        </p>
+                        <p-button 
+                            label="Gestionar pedidos" 
+                            icon="pi pi-clipboard" 
+                            (onClick)="navigate('/orders')"/>
+                    }@else if(user?.rol === roles.CLIENTE) {
+                        <i class="pi pi-shopping-cart info-icon"></i>
+                        <h3>Ver mis pedidos</h3>
+                        <p>
+                            Solicita hielo de forma rápida y segura,
+                            con seguimiento de entrega.
+                        </p>
+                        <p-button 
+                            label="Realizar pedido" 
+                            icon="pi pi-shopping-cart" 
+                            (onClick)="navigate('/orders')"/>
+                    }@else{
+                        <i class="pi pi-truck info-icon"></i>
+                        <h3>Ver mis pedidos asignados</h3>
+                        <p>
+                            Vea y gestione los pedidos de hielo que le han sido asignados a usted su para entrega.
+                        </p>
+                        <p-button 
+                            label="Gestionar entregas" 
+                            icon="pi pi-truck" 
+                            (onClick)="navigate('/orders')"/>
+                    }
+                    <!-- <p>
                         Solicita hielo de forma rápida y segura,
                         con seguimiento de entrega.
                     </p>
+                    <p-button label="Realizar pedido" icon="pi pi-shopping-cart" (onClick)="navigate('/orders')"></p-button> -->
                 </p-card>
             </div>
-
-            <div class="col-12 md:col-4">
-                <p-card class="info-card">
-                    <i class="pi pi-users info-icon"></i>
-                    <h3>Gestionar clientes</h3>
-                    <p>
-                        Administra clientes, direcciones y pedidos asociados.
-                    </p>
-                </p-card>
-            </div>
-
-            <div class="col-12 md:col-4">
-                <p-card class="info-card">
-                    <i class="pi pi-truck info-icon"></i>
-                    <h3>Coordinar entregas</h3>
-                    <p>
-                        Asigna repartidores y controla la entrega del producto.
-                    </p>
-                </p-card>
-            </div>
-
+            @if(user?.rol === roles.ADMIN || user?.rol === roles.ENCARGADO){
+                    <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/clients')">
+                    <p-card class="info-card">
+                        <i class="pi pi-users info-icon"></i>
+                        <h3>Gestionar clientes</h3>
+                        <p>
+                            Administra clientes, direcciones y pedidos asociados.
+                        </p>
+                        <p-button label="Crear cliente" icon="pi pi-users" ></p-button>
+                    </p-card>
+                </div>
+                <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/dealers')">
+                    <p-card class="info-card">
+                        <i class="pi pi-truck info-icon"></i>
+                        <h3>Gestionar repartidores</h3>
+                        <p>
+                            Administra repartidores.
+                        </p>
+                        <p-button
+                            label="Crear repartidor"
+                            icon="pi pi-user-plus"
+                            (onClick)="navigate('/dealers')"/>
+                    </p-card>
+                </div>
+            }
         </div>
     </section>
-
-    <!-- FLUJO -->
-    <section class="mb-6">
-        <h2 class="section-title text-center mb-4">
+    <section class="mb-6 section shadow-5">
+        <h2 class="section-title text-center mb-4" style="color: white">
             ¿Cómo funciona?
         </h2>
-
         <div class="grid text-center">
-
             <div class="col-12 md:col-3">
                 <p-card>
                     <i class="pi pi-file step-icon"></i>
@@ -89,7 +98,6 @@
                     <p>El cliente registra su pedido</p>
                 </p-card>
             </div>
-
             <div class="col-12 md:col-3">
                 <p-card>
                     <i class="pi pi-box step-icon"></i>
@@ -97,7 +105,6 @@
                     <p>Se prepara el hielo solicitado</p>
                 </p-card>
             </div>
-
             <div class="col-12 md:col-3">
                 <p-card>
                     <i class="pi pi-truck step-icon"></i>
@@ -105,7 +112,6 @@
                     <p>Asignación y salida a entrega</p>
                 </p-card>
             </div>
-
             <div class="col-12 md:col-3">
                 <p-card>
                     <i class="pi pi-check-circle step-icon"></i>
@@ -113,8 +119,6 @@
                     <p>Pedido entregado al cliente</p>
                 </p-card>
             </div>
-
         </div>
     </section>
-
 </div>

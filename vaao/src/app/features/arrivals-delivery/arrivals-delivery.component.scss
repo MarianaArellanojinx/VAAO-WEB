@@ -1,0 +1,54 @@
+/* Oculta el input real */
+.native-file-input {
+  display: none;
+}
+
+/* Contenedor */
+.p-fileupload-basic {
+  display: inline-block;
+  position: relative;
+}
+
+/* Botón estilo PrimeNG */
+.p-fileupload-choose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+/* Icono */
+.p-button-icon {
+  font-size: 1.1rem;
+}
+
+/* Hover */
+.p-button-primary:hover {
+  background-color: #2563eb; /* PrimeNG blue hover */
+}
+
+/* Active */
+.p-button-primary:active {
+  background-color: #1e40af;
+}
+
+/* Focus */
+.p-fileupload-choose:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+/* Disabled (si luego lo necesitas) */
+.p-fileupload-choose.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

@@ -34,9 +34,9 @@ export class ApiService {
       .post<T>(url, body, { headers })
       .pipe(catchError(this.handleError));
   }
-  put<T>(url: string, body: any, headers?: HttpHeaders) {
+  patch<T>(url: string, body: any, headers?: HttpHeaders) {
     return this.http
-      .put<T>(url, body, { headers })
+      .patch<T>(url, body, { headers })
       .pipe(catchError(this.handleError));
   }
   delete<T>(url: string, headers?: HttpHeaders): Observable<T> {

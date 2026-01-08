@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">vaao</string>
+    <string name="title_activity_main">vaao</string>
+    <string name="package_name">com.vaao.app</string>
+    <string name="custom_url_scheme">com.vaao.app</string>
+</resources>

@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from "@angular/router";
 import { SidebarModule } from 'primeng/sidebar';
 import { MenuItem } from '../../shared/interfaces/MenuItem';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../shared/interfaces/User';
+import { RoleConst } from '../../shared/const/RoleConst';
 declare var particlesJS: any;
 @Component({
   selector: 'app-layout',
@@ -15,13 +16,45 @@ declare var particlesJS: any;
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
-export class LayoutComponent implements AfterViewInit{
+export class LayoutComponent implements AfterViewInit, OnInit {
+
+  ngOnInit(): void {
+    this.auth.user$.subscribe(user => {
+      this.user = user;
+    });
+  }
 
   router: Router = inject(Router);
   auth: AuthService = inject(AuthService);
+
+  roles: any = RoleConst;
   
-  user: User = this.auth.getUser();
+  user: User | null = null;
   visible: boolean = false;
+  itemsDealer: MenuItem[] = [
+    {
+      path: '/',
+      icon: 'pi pi-home',
+      label: 'Inicio'
+    },
+    {
+      path: '/orders',
+      icon: 'pi pi-truck',
+      label: 'Ver pedidos asignados'
+    }
+  ];
+  itemsClient: MenuItem[] = [
+    {
+      path: '/',
+      icon: 'pi pi-home',
+      label: 'Inicio'
+    },
+    {
+      path: '/orders',
+      icon: 'pi pi-cart-arrow-down',
+      label: 'Hacer pedido'
+    }
+  ];
   items: MenuItem[] = [
     {
       path: '/',
@@ -34,19 +67,24 @@ export class LayoutComponent implements AfterViewInit{
       label: 'Dashboard'
     },
     {
-      path: '/users',
-      icon: 'pi pi-users',
-      label: 'Usuarios'
-    },
-    {
-      path: '/client',
+      path: '/clients',
       icon: 'pi pi-users',
       label: 'Clientes'
     },
     {
       path: '/dealers',
-      icon: 'pi pi-box',
+      icon: 'pi pi-truck',
       label: 'Repartidores'
+    },
+    {
+      path: '/orders',
+      icon: 'pi pi-clipboard',
+      label: 'Gestionar pedidos pendientes'
+    },
+    {
+      path: '/orders',
+      icon: 'pi pi-times',
+      label: 'Pedidos cancelados'
     }
   ];
 
@@ -104,5 +142,10 @@ export class LayoutComponent implements AfterViewInit{
   }
   open(){
     this.visible = true;
+  }
+  endSession() {
+    this.auth.deleteUser();
+    this.user = null;
+    this.navigate('/auth')
   }
 }

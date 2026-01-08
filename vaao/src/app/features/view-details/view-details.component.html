@@ -1,0 +1,26 @@
+<div class="p-fluid p-formgrid grid mt-3">
+    <div class="field col-12">
+        <label for=""><b>Estatus:</b> Entregado</label>
+    </div>
+    <div class="field col-12">
+        <label><b>Fecha de inicio reparto:</b> {{data?.horaInicio | date:'dd/MM/yyyy HH:mm:ss'}}</label>
+    </div>
+    <div class="field col-12">
+        <label><b>Fecha de llegada:</b> {{data?.horaLlegada | date:'dd/MM/yyyy HH:mm:ss'}}</label>
+    </div>
+    <div class="field col-12">
+        <label><b>Fecha de finalización:</b> {{data?.fechaEntrega | date:'dd/MM/yyyy HH:mm:ss'}}</label>
+    </div>
+    <div class="field col-12">
+        <div class="flex flex-column gap-2">
+            <label>Conservador vacío</label>
+            <p-image [src]="data?.imagenConservadorLlegada" alt="Image" width="300" [preview]="true" />
+        </div>
+    </div>
+    <div class="field col-12">
+        <div class="flex flex-column gap-2">
+            <label>Conservador lleno</label>
+            <p-image [src]="data?.imagenConservadorSalida" alt="Image" width="300" [preview]="true" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="report-card shadow-5">
+
+  <!-- Header -->
+  <div class="report-header">
+    <div class="report-icon">
+      <i class="pi pi-download" style="font-size: 1.2rem;"></i>
+    </div>
+
+    <div class="report-title">
+      <h2>{{ title }}</h2>
+      <small>
+        Periodo:
+        {{ startDate | date:'dd/MM/yyyy' }} –
+        {{ endDate | date:'dd/MM/yyyy' }}
+      </small>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="report-body">
+
+    <p class="report-description">
+      Descargue un archivo <b>Excel</b> con la información agrupada y lista para análisis.
+    </p>
+
+    <ul class="report-list">
+      @for (item of fields; track $index) {
+        <li>
+          <i class="pi pi-check-circle"></i>
+          {{ item }}
+        </li>
+      }
+    </ul>
+
+    <div class="report-actions">
+      <p-button
+        label="Descargar Excel"
+        icon="pi pi-file-excel"
+        severity="success"
+        [loading]="downloadInProgress"
+        (onClick)="onDownload()">
+      </p-button>
+    </div>
+
+  </div>
+</div>

@@ -1,4 +1,13 @@
 <div class="p-fluid p-formgrid grid mt-2">
+    <div class="field col-12">
+        <label>Seleccione usuario para registrarlo como cliente</label>
+        <p-dropdown
+            [options]="users"
+            [(ngModel)]="user"
+            placeholder="Seleccione usuario"
+            optionLabel="userName"
+            optionValue="idUser"/>
+    </div>
     <div class="field col-12 mb-0">
         <label>Nombre del negocio:</label>
         <input type="text" pInputText [(ngModel)]="bussinesName"/>
@@ -14,6 +23,10 @@
     <div class="field col-12 mb-0">
         <label>Colonia:</label>
         <input type="text" pInputText [(ngModel)]="colony"/>
+    </div>
+    <div class="field col-12 mb-0">
+        <label>Calle:</label>
+        <input type="text" pInputText [(ngModel)]="street"/>
     </div>
     <div class="field col-12 mb-0">
         <label>Número exterior</label>
@@ -36,6 +49,6 @@
             severity="success"
             icon="pi pi-save"
             label="Guardar"
-            (onClick)="saveClient()"/>
+            (onClick)="createUser()"/>
     </div>
 </div>

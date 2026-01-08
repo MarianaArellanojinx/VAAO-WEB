@@ -9,6 +9,7 @@ import { User } from '../../shared/interfaces/User';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/services/auth.service';
+import { AlertService } from '../../core/services/alert.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -24,9 +25,10 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class LoginComponent {
 
-  api: ApiService = inject(ApiService);
-  router: Router = inject(Router);
-  auth: AuthService = inject(AuthService);
+  private api: ApiService = inject(ApiService);
+  private router: Router = inject(Router);
+  private auth: AuthService = inject(AuthService);
+  private alert: AlertService = inject(AlertService);
 
   username: string = '';
   password: string = '';
@@ -39,8 +41,17 @@ export class LoginComponent {
     }
     this.api.post<ResponseBackend<User>>(`${environment.urlBackend}Users/Login/login`, payload).subscribe({
       next: response => {
+        this.alert.dinamycMessage('Bienvenido!!', `Bienvenido de nuevo ${this.username}`, 'success');
         this.auth.addUser(response.data);
-        this.router.navigate([''])
+        if(response.data.rol === 1){
+          this.router.navigate(['/dashboard']);
+        }else if(response.data.rol === 2) {
+          this.router.navigate(['']);
+        }else if(response.data.rol === 3) {
+          this.router.navigate(['/orders']);
+        }else {
+          this.router.navigate(['/orders']);
+        }
       },
       error: error => {
 

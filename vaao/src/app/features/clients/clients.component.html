@@ -1,0 +1,33 @@
+<div class="p-fluid p-formgrid grid mt-3">
+    <div class="field col-12 my-0">
+        <p-button label="Agregar nuevo cliente" severity="success" (onClick)="openModal()" icon="pi pi-user-plus" />
+    </div>
+    <div class="field col-12 mb-7 mt-0">
+        <app-card-dashboard title="Clientes registrados" icon="pi pi-users">
+            <p-table [value]="clients" styleClass="mt-5 mb-3 px-3">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Id cliente</th>
+                        <th>Nombre del negocio</th>
+                        <th>Nombre del cliente</th>
+                        <th>Dirección</th>
+                        <th>Código postal</th>
+                        <th>Telefono</th>
+                        <th># de conservadores</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-client>
+                    <tr>
+                        <td>{{client.idCliente}}</td>
+                        <td>{{client.nombreNegocio}}</td>
+                        <td>{{client.nombreCliente}}</td>
+                        <td>{{client.calle}} #{{client.numeroExterior}}, {{client.colonia}}</td>
+                        <td>{{client.cp}}</td>
+                        <td>{{client.telefono}}</td>
+                        <td>{{client.conservadores}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </app-card-dashboard>
+    </div>
+</div>

@@ -3,7 +3,7 @@
     <img src="assets/imgs/VAAO_LOGO.png" width="200">
   </ng-template>
   <div class="w-full flex flex-column">
-    @for (item of items; track $index) {
+    @for (item of (user?.rol === roles.ADMIN || user?.rol === roles.ENCARGADO ? items : user?.rol === roles.CLIENTE ? itemsClient : itemsDealer); track $index) {
     <div class="flex gap-2 align-items-center item mt-1 cursor-pointer" (click)="navigate(item.path)">
       <i [class]="'pi ' + item.icon" style="color: #000;"></i>
       <label style="color: #000;">{{ item.label }}</label>
@@ -14,26 +14,37 @@
 <div class="app-layout flex flex-column">
   <header class="app-topbar flex align-items-center justify-content-between px-3 py-2">
     <div class="flex align-items-center gap-4">
-      <i class="pi pi-bars text-white cursor-pointer" (click)="open()"></i>
+      @if (user !== null) {
+        <i class="pi pi-bars text-white cursor-pointer" (click)="open()"></i>
+      }
       <img src="assets/imgs/VAAO_LOGO.png" width="100" alt="" (click)="navigate('')" style="cursor: pointer;">
     </div>
     <div class="flex flex-column align-items-center">
-      @if(user.userName !== ''){
+      @if(user?.userName !== '' && user !== null){
         <label>Bienvenido de nuevo,</label>
         <label><b>{{user.userName}}</b></label>
       }
 
     </div>
     <div class="flex flex-column gap-1">
-      <div class="flex align-items-center justify-content-end gap-2 cursor-pointer text-white"
-        (click)="navigate('auth')">
-        <i class="pi pi-sign-in"></i>
-        <label class="cursor-pointer">Iniciar sesión</label>
-      </div>
+      @if (user?.idUser) {
+        <div class="flex align-items-center justify-content-end gap-2 cursor-pointer text-white"
+          (click)="endSession()">
+          <i class="pi pi-sign-out"></i>
+          <label class="cursor-pointer">Cerrar sesión</label>
+        </div>
+      }@else {
+        <div class="flex align-items-center justify-content-end gap-2 cursor-pointer text-white"
+          (click)="navigate('auth')">
+          <i class="pi pi-sign-in"></i>
+          <label class="cursor-pointer">Iniciar sesión</label>
+        </div>
+      }
+      
     </div>
   </header>
   <main class="app-main relative flex-1 mt-5">
-    <div id="particles-js" class="absolute top-0 left-0 w-full h-full z-0"></div>
+    <div id="particles-js" class="particles-bg"></div>
     <div class="relative z-1 p-3" style="height: 93vh;">
       <router-outlet></router-outlet>
     </div>
@@ -41,7 +52,7 @@
   <footer class="app-footer-fixed">
     <div class="flex align-items-center justify-content-between px-4 h-full">
       <span>© 2025 VAAO</span>
-      <span>Developed by Mariana A. & Gerardo C.</span>
+      <span>Developed ARECH Solutions.</span>
     </div>
   </footer>
 </div>

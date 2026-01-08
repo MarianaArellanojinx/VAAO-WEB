@@ -8,6 +8,8 @@ import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from "primeng/dropdown";
 import { Button } from "primeng/button";
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AlertService } from '../../core/services/alert.service';
 
 @Component({
   selector: 'app-add-dealer',
@@ -24,7 +26,10 @@ export class AddDealerComponent implements OnInit {
   }
 
   api: ApiService = inject(ApiService);
+  ref: DynamicDialogRef = inject(DynamicDialogRef);
+  alert: AlertService = inject(AlertService);
 
+  loading: boolean = false;
   name: string = '';
   lastName: string = '';
   idUser: number | undefined = undefined;
@@ -42,7 +47,23 @@ export class AddDealerComponent implements OnInit {
   }
 
   saveDealer(): void {
-    this.api.post<ResponseBackend<boolean>>(``, {});
+    this.loading = true;
+    const payload = {
+      idUser: this.idUser,
+      nombreRepartidor: this.name,
+      apellidoRepartidor: this.lastName,
+      altaRepartidor: new Date().toISOString(),
+      bajaRepartidor: null
+    }
+    this.api.post<ResponseBackend<boolean>>(`${environment.urlBackend}Repartidores/InsertRepartidores`, payload).subscribe({
+      next: response => {
+        this.loading = false;
+        if(response.data === true){
+          this.alert.dinamycMessage('Hecho!!', 'Se agregó un nuevo repartidor.', 'success')
+          this.ref.close();
+        }
+      }
+    })
   }
 
 }

@@ -19,6 +19,8 @@
         <p-button
             label="Guardar repartidor"
             severity="success"
+            [loading]="loading"
+            (onClick)="saveDealer()"
             icon="pi pi-save"/>
     </div>
 </div>

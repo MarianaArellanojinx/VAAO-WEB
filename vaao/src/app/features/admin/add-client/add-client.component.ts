@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { InputTextModule } from "primeng/inputtext";
 import { Button } from "primeng/button";
 import { ApiService } from '../../../infrastructure/api.service';
@@ -6,18 +6,30 @@ import { HttpClientModule } from '@angular/common/http';
 import { ResponseBackend } from '../../../shared/interfaces/ResponseBackend';
 import { environment } from '../../../../environments/environment';
 import { FormsModule } from '@angular/forms';
+import { DropdownModule } from "primeng/dropdown";
+import { User } from '../../../shared/interfaces/User';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AlertService } from '../../../core/services/alert.service';
 
 @Component({
   selector: 'app-add-client',
   standalone: true,
-  imports: [InputTextModule, Button, HttpClientModule, FormsModule],
+  imports: [InputTextModule, Button, HttpClientModule, FormsModule, DropdownModule],
   providers: [ApiService],
   templateUrl: './add-client.component.html',
   styleUrl: './add-client.component.scss'
 })
-export class AddClientComponent {
+export class AddClientComponent implements OnInit {
 
-  api: ApiService = inject(ApiService);
+  ngOnInit(): void {
+    this.getUsers();
+  }
+
+  private api: ApiService = inject(ApiService);
+  private ref: DynamicDialogRef = inject(DynamicDialogRef);
+  private alert: AlertService = inject(AlertService);
+
+  loading: boolean = false;
   bussinesName: string = '';
   clientName: string = '';
   clientLastName: string = '';
@@ -28,8 +40,34 @@ export class AddClientComponent {
   phone: string = '';
   fridges: number = 0;
   downDate: null = null;
+  user: number = 0;
 
-  saveClient(){
+  users: User[] = [];
+
+  getUsers() {
+    this.api.get<ResponseBackend<User[]>>(`${environment.urlBackend}Users/GetUsers`).subscribe({
+      next: response => {
+        this.users = response.data.filter(x => x.rol === 4);
+      }
+    });
+  }
+  createUser() {
+    this.loading = true;
+    const newUser: User = {
+      idUser: 0,
+      isActive: true,
+      rol: 4,
+      userName: this.clientName.substring(0,2) + this.clientLastName.substring(0,5),
+      userPassword: '1234'
+    }
+    this.api.post<ResponseBackend<number>>(`${environment.urlBackend}Users/InsertUsers`, newUser).subscribe({
+      next: response => {
+        const id = response.data;
+        this.saveClient(id);
+      }
+    });
+  }
+  saveClient(idUser: number){
     const payload = {
       idCliente: 0,
       nombreNegocio: this.bussinesName,
@@ -40,14 +78,19 @@ export class AddClientComponent {
       cp: this.cp,
       telefono: this.phone.toString(),
       conservadores: this.fridges,
-      fechaBaja: this.downDate
+      fechaBaja: this.downDate,
+      idUser: idUser
     }
-    this.api.post<ResponseBackend<boolean>>(`${environment.urlBackend}Clientes/InsertClientes`, payload).subscribe({
+    this.api.post<ResponseBackend<boolean>>(`${environment.urlBackend}Clientes/InsertClientes`, payload)
+    .subscribe({
       next: response => {
+        this.loading = false;
         if(response.data === true){
-          console.log('Ok');
+          this.alert.dinamycMessage('Hecho!!', `Se ha registrado un nuevo cliente (Usuario: ${this.clientName.substring(0,2) + this.clientLastName.substring(0,5)}, contraseña: 1234)`, 'success');
+          this.ref.close();
         }else{
-          console.error('error');
+          this.alert.dinamycMessage('Ups...', 'Ocurrio un error inesperado, intente de nuevo más tarde', 'error');
+          this.ref.close();
         }
       }
     });

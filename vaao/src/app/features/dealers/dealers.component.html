@@ -3,25 +3,23 @@
         <p-button label="Agregar repartidor" icon="pi pi-user-plus" (onClick)="openModal()" severity="success" />
     </div>
     <div class="field col-12">
-        <app-card header="Repartidores registrados">
-            <div class="px-3">
-                <p-table styleClass="mt-5">
+        <app-card-dashboard title="Repartidores registrados" icon="pi pi-users">
+            <p-table [value]="dealers" styleClass="mt-5">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Id usuario</th>
+                            <th>Id repartidor</th>
                             <th>Nombre repartidor</th>
                             <th>Apellido repartidor</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-dealer>
                         <tr>
-                            <td>{{dealer}}</td>
-                            <td>{{dealer}}</td>
-                            <td>{{dealer}}</td>
+                            <td>{{dealer.idRepartidor}}</td>
+                            <td>{{dealer.nombreRepartidor}}</td>
+                            <td>{{dealer.apellidoRepartidor}}</td>
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </app-card>
+        </app-card-dashboard>
     </div>
 </div>
