@@ -105,6 +105,7 @@ export class DashboardComponent implements OnInit {
   idDataTableSelected: number = 1;
   dataTableCards: any[] | undefined = undefined;
   loadingCards: boolean = false;
+  downloadRechazado: boolean = false;
 
   filterDataTable(id: number){
     switch(id){
@@ -155,9 +156,23 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+  downloadReportPedidoRechazado(){
+    const start = this.dates[0].toISOString();
+    const end = this.dates[1].toISOString();
+    this.downloadRechazado = true;
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Report/GetPedidosRechazados?startDate=${start}&endDate=${end}`)
+    .subscribe({
+      next: response => {
+        this.downloadRechazado = false;
+        this.export.exportToExcel(response.data, 'Reporte_Venta_Rechazada', 'Ventas_Rechazadas')
+      }
+    })
+  }
   downloadReport(){
+    const start = this.dates[0].toISOString();
+    const end = this.dates[1].toISOString();
     this.downloadInProgress = true;
-    this.api.get<ResponseBackend<ReportVentaPerdida[]>>(`${environment.urlBackend}Report/GetVentasPerdidas`)
+    this.api.get<ResponseBackend<ReportVentaPerdida[]>>(`${environment.urlBackend}Report/GetVentasPerdidas?start=${start}&end=${end}`)
     .subscribe({
       next: response => {
         this.downloadInProgress = false;

@@ -71,13 +71,19 @@
                             <ng-template pTemplate="caption"></ng-template>
                             <ng-template pTemplate="header">
                                 <tr>
+                                    <th>Semana del año</th>
+                                    <th>Negocio</th>
                                     <th>Cliente</th>
+                                    <th>Bolsas compradas</th>
                                     <th>Total pagado</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-data>
                                 <tr>
+                                    <td>{{data.semana}}</td>
+                                    <td>{{data.negocio}}</td>
                                     <td>{{data.cliente}}</td>
+                                    <td>{{data.totalBolsas}}</td>
                                     <td>{{data.totalPagar}}</td>
                                 </tr>
                             </ng-template>
@@ -160,12 +166,9 @@
                 [endDate]="dates[1]"
                 [fields]="[
                     'Nombre del cliente',
-                    'Cantidad de conservadores',
-                    'Último pedido',
-                    'Fecha del último pedido',
-                    'Bolsas compradas en el último pedido',
-                    'Días sin hacer un pedido',
-                    'Dinero perdido por el cliente'
+                    'Nombre del negocio',
+                    'Número de semana',
+                    'Bolsas restantes'
                 ]"
                 (download)="downloadReport()"/>
                 <app-report-download-card
@@ -173,15 +176,13 @@
                 [startDate]="dates[0]"
                 [endDate]="dates[1]"
                 [fields]="[
-                    'Nombre del cliente',
-                    'Cantidad de conservadores',
-                    'Último pedido',
-                    'Fecha del último pedido',
-                    'Bolsas compradas en el último pedido',
-                    'Días sin hacer un pedido',
-                    'Dinero perdido por el cliente'
+                    'Fecha pedido',
+                    'Cliente',
+                    'Negocio',
+                    'Bolsas solicitadas',
+                    'Dinero perdido'
                 ]"
-                (download)="downloadReport()"/>
+                (download)="downloadReportPedidoRechazado()"/>
         </div>
     </div>
 </div>
