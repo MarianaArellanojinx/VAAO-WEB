@@ -41,7 +41,7 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
   optionsImage: ImageConfig = {
     maxWidth: 800,
     maxHeight: 800,
-    quality: 0.6,
+    quality: 0.4,
     mimeType: 'image/jpeg',
     removePrefix: false
   }
@@ -76,13 +76,6 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
   getPayments() {
     this.api.get<ResponseBackend<MetodoPago>>(``);
   }
-
-  onFileSelected(event: any) {
-    this.file = event.currentFiles[0];
-    this.image.fileToBase64(this.file ?? new Blob(), this.optionsImage).then((result: string) => {
-      this.base64 = result;
-    });
-  }
   onFileSelectedAndroid(event: Event) {
   const input = event.target as HTMLInputElement;
 
@@ -93,7 +86,7 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
 
   this.file = input.files[0];
 
-  this.image.fileToBase64(this.file).then(result => {
+  this.image.fileToBase64(this.file, this.optionsImage).then(result => {
     this.base64 = result;
   });
 }
@@ -108,7 +101,10 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
       next: response => {
         this.createSell();
       }, 
-      error: error => this.alert.dinamycMessage('Ups...', 'Ocurrio un error, intente de nuevo más tarde', 'error')
+      error: error => {
+        this.ref.close();
+        this.alert.dinamycMessage('Ups...', `Ocurrio un error, intente de nuevo más tarde - ${environment.urlBackend}Entregas/UpdateEntrega/${this.Entrega.idEntrega}/true`, 'error')
+      }
     });
   }
   createSell() {
