@@ -44,7 +44,7 @@ export class ArrivalsDeliveryComponent implements OnInit {
   optionsImage: ImageConfig = {
     maxWidth: 800,
     maxHeight: 800,
-    quality: 0.6,
+    quality: 0.4,
     mimeType: 'image/jpeg',
     removePrefix: false
   }

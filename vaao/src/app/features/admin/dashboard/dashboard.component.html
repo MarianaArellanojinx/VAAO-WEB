@@ -71,20 +71,22 @@
                             <ng-template pTemplate="caption"></ng-template>
                             <ng-template pTemplate="header">
                                 <tr>
-                                    <th>Semana del año</th>
                                     <th>Negocio</th>
                                     <th>Cliente</th>
                                     <th>Bolsas compradas</th>
                                     <th>Total pagado</th>
+                                    <th>Datelles</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-data>
                                 <tr>
-                                    <td>{{data.semana}}</td>
                                     <td>{{data.negocio}}</td>
                                     <td>{{data.cliente}}</td>
                                     <td>{{data.totalBolsas}}</td>
                                     <td>{{data.totalPagar}}</td>
+                                    <td>
+                                        <p-button label="Ver detalles" icon="pi pi-eye" (onClick)="openModalDetails(dataCards)"/>
+                                    </td>
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -158,11 +160,20 @@
             <h1 class="my-0" style="color: white;">Reportes</h1>
         </div>
     </div>
+    <div class="field col-12" style="color: #FFF;">
+        <label>Seleccione rango de fechas para los reportes</label>
+        <p-calendar
+            [showIcon]="true"
+            selectionMode="range"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            [(ngModel)]="datesReports"/>
+    </div>
     <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mb-0 lg:mb-7 xl:mb-7">
         <app-report-download-card
             title="Reporte de ventas perdidas"
-            [startDate]="dates[0]"
-            [endDate]="dates[1]"
+            [startDate]="datesReports[0]"
+            [endDate]="datesReports[1]"
             [fields]="[
                 'Nombre del cliente',
                 'Nombre del negocio',
@@ -174,8 +185,8 @@
     <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mb-7">
         <app-report-download-card
             title="Reporte de ventas canceladas"
-            [startDate]="dates[0]"
-            [endDate]="dates[1]"
+            [startDate]="datesReports[0]"
+            [endDate]="datesReports[1]"
             [fields]="[
                 'Fecha pedido',
                 'Cliente',

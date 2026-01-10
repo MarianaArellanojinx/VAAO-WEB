@@ -16,6 +16,8 @@ import { CardDashboardComponent } from "../../../shared/components/card-dashboar
 import { AlertService } from '../../../core/services/alert.service';
 import { ReportVentaPerdida } from '../../../shared/interfaces/ReportVentaPerdida';
 import { ExportService } from '../../../core/services/export.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { DetailSellsComponent } from '../detail-sells/detail-sells.component';
 interface ExportColumn {
     title: string;
     dataKey: string;
@@ -34,7 +36,7 @@ interface ExportColumn {
     ReportDownloadCardComponent,
     CardDashboardComponent
 ],
-  providers: [ApiService],
+  providers: [ApiService, DialogService],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -49,8 +51,10 @@ export class DashboardComponent implements OnInit {
   private date: DateService = inject(DateService);
   private alert: AlertService = inject(AlertService);
   private export: ExportService = inject(ExportService);
+  private readonly dialog: DialogService = inject(DialogService);
 
   dates: Date[] = [this.date.getMonday(new Date()), this.date.addDays(this.date.getMonday(new Date()), 6)];
+  datesReports: Date[] = [new Date(), new Date()];
 
   snowflake: any = faSnowflake;
   download: any = faDownload;
@@ -123,7 +127,6 @@ export class DashboardComponent implements OnInit {
         break;
     }
   }
-
   getDataCards(){
     this.loadingCards = true;
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetDataCards`).subscribe({
@@ -157,6 +160,11 @@ export class DashboardComponent implements OnInit {
     });
   }
   downloadReportPedidoRechazado(){
+    if(
+        (this.datesReports[0] !== undefined || this.datesReports[1] !== null) && 
+        (this.datesReports[1] === undefined || this.datesReports[1] === null)
+      ) 
+      this.datesReports[1] === this.datesReports[0]
     const start = this.dates[0].toISOString();
     const end = this.dates[1].toISOString();
     this.downloadRechazado = true;
@@ -168,7 +176,22 @@ export class DashboardComponent implements OnInit {
       }
     })
   }
+  openModalDetails(data: any){
+    const info = {id: this.idDataTableSelected, data: data}
+    console.log(info)
+    this.dialog.open(DetailSellsComponent, {
+      header: 'Detalle de ventas',
+      baseZIndex: 9999,
+      data: {id: this.idDataTableSelected, data: data},
+      width: 'auto'
+    })
+  }
   downloadReport(){
+    if(
+        (this.datesReports[0] !== undefined || this.datesReports[1] !== null) && 
+        (this.datesReports[1] === undefined || this.datesReports[1] === null)
+      ) 
+      this.datesReports[1] === this.datesReports[0]
     const start = this.dates[0].toISOString();
     const end = this.dates[1].toISOString();
     this.downloadInProgress = true;

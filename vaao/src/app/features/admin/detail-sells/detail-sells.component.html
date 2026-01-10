@@ -1,0 +1,26 @@
+<div class="p-fluid p-formgrid grid">
+    <div class="field col-12">
+        <p-table [value]="dataTable">
+            <ng-template pTemplate="header" styleClass="p-datatable-striped" >
+                <tr>
+                    <th>Negocio</th>
+                    <th>Cliente</th>
+                    <th>Bolsas compradas</th>
+                    <th>Total pagado</th>
+                    <th>Método de pago</th>
+                    <th>Fecha de compra</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sell>
+                <tr>
+                    <td>{{sell.negocio}}</td>
+                    <td>{{sell.cliente}}</td>
+                    <td>{{sell.totalBolsas}}</td>
+                    <td>{{sell.totalPagar}}</td>
+                    <td>{{sell.metodo}}</td>
+                    <td>{{sell.dia | date:'dd/MM/yyyy HH:mm:SS'}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

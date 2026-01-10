@@ -23,6 +23,7 @@
     "@capacitor/android": "^8.0.0",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
+    "@capacitor/filesystem": "^8.0.0",
     "@capacitor/status-bar": "^8.0.0",
     "@fortawesome/angular-fontawesome": "^0.14.1",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
