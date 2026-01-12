@@ -156,7 +156,7 @@ export class OrdersComponent implements OnInit {
         if(this.userRole === 1){
           this.orders = response.data.filter(p => p.estatusPedido === this.APROBADO || p.estatusPedido === this.PENDIENTE)
         }else if(this.userRole === 2){
-          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
+          this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO || x.estatusPedido === this.PENDIENTE)
         }else if(this.userRole === 3){
           this.orders = response.data.filter(x => x.estatusPedido === this.APROBADO)
         }else{
