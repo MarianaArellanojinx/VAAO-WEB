@@ -1,13 +1,5 @@
 <div class="p-fluid p-formgrid grid">
     <div class="field col-12">
-        <label>Seleccione usuario:</label>
-        <p-dropdown
-            [options]="users"
-            optionLabel="userName"
-            optionValue="idUser"
-            [(ngModel)]="idUser"/>
-    </div>
-    <div class="field col-12">
         <label for="">Ingrese el nombre del repartidor:</label>
         <input type="text" pInputText [(ngModel)]="name" />
     </div>
@@ -20,7 +12,8 @@
             label="Guardar repartidor"
             severity="success"
             [loading]="loading"
-            (onClick)="saveDealer()"
+            [disabled]="!checkForms()"
+            (onClick)="createUser()"
             icon="pi pi-save"/>
     </div>
 </div>

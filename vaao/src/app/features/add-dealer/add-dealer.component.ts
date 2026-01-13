@@ -34,6 +34,7 @@ export class AddDealerComponent implements OnInit {
   lastName: string = '';
   idUser: number | undefined = undefined;
   users: User[] = [];
+  userName: string = '';
 
   getAllUsers(): void {
     this.api.get<ResponseBackend<User[]>>(`${environment.urlBackend}Users/GetUsers`).subscribe({
@@ -45,11 +46,30 @@ export class AddDealerComponent implements OnInit {
       }
     })
   }
-
-  saveDealer(): void {
+  checkForms(): boolean {
+    return (this.lastName.trim() !== '' && this.name.trim() !== '')
+  }
+  createUser() {
     this.loading = true;
+    this.userName = this.name.substring(0,2) + this.lastName.substring(0,5);
+    this.loading = true;
+    const newUser: User = {
+      idUser: 0,
+      isActive: true,
+      rol: 3,
+      userName: this.name.substring(0,2) + this.lastName.substring(0,5),
+      userPassword: '1234'
+    }
+    this.api.post<ResponseBackend<number>>(`${environment.urlBackend}Users/InsertUsers`, newUser).subscribe({
+      next: response => {
+        const id = response.data;
+        this.saveDealer(id);
+      }
+    });
+  }
+  saveDealer(id: number): void {
     const payload = {
-      idUser: this.idUser,
+      idUser: id,
       nombreRepartidor: this.name,
       apellidoRepartidor: this.lastName,
       altaRepartidor: new Date().toISOString(),
@@ -59,7 +79,7 @@ export class AddDealerComponent implements OnInit {
       next: response => {
         this.loading = false;
         if(response.data === true){
-          this.alert.dinamycMessage('Hecho!!', 'Se agregó un nuevo repartidor.', 'success')
+          this.alert.dinamycMessage('Hecho!!', `Se agregó un nuevo repartidor, su usuario es: ${this.userName}, contraseña: 1234.`, 'success')
           this.ref.close();
         }
       }
