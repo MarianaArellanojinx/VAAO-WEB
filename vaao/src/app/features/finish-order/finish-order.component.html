@@ -25,6 +25,9 @@
         <label>Seleccione el método de pago</label>
         <p-dropdown [(ngModel)]="metodo" appendTo="body" [options]="metodos" optionLabel="descripcion"
             optionValue="idMetodoPago" />
+        @if (metodo === 3) {
+            <label>Número de cuenta CLABE para transferir: <b>638180000162064056</b></label>
+        }
     </div>
     <div class="field col-12">
         <p-button 
