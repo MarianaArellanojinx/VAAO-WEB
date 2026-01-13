@@ -31,7 +31,13 @@
     }
     <div class="field col-12 mb-7">
         <app-card-dashboard title="Pedidos activos" icon="pi pi-box">
-            <p-table #dataTable [value]="orders" [scrollable]="true" scrollHeight="38rem" [columns]="cols">
+            <p-table 
+                [styleClass]="isAndroid === true ? 'p-datatable-sm' : ''"
+                #dataTable 
+                [value]="orders" 
+                [scrollable]="true" 
+                scrollHeight="38rem" 
+                [columns]="cols">
                 <ng-template pTemplate="caption">
                     <div class="flex my-0 justify-content-end">
                         <p-button severity="success" label="Exportar" icon="pi pi-file-excel"
@@ -71,6 +77,10 @@
                         <td>{{order.observaciones}}</td>
                         @if (userRole === 1 || userRole === 2) {
                         <td>
+                            @if(order.estatusPedido === APROBADO && hasDelivery(order) && getStatusDelivery(order) === FINALIZADO) {
+                                <p-button icon="pi pi-eye" label="Ver detalles" (onClick)="openDetail(order)"
+                                    severity="primary" />
+                            }
                             @if (order.estatusPedido === PENDIENTE) {
                             <div class="flex flex-column align-items-center gap-2">
                                 <p-button severity="success" icon="pi pi-check" label="Aprobar"

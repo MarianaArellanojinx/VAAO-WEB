@@ -4,27 +4,127 @@
     </div>
     <div class="field col-12 mb-7 mt-0">
         <app-card-dashboard title="Clientes registrados" icon="pi pi-users">
-            <p-table [value]="clients" styleClass="mt-5 mb-3 px-3">
+            <p-table 
+                [scrollable]="true"
+                scrollHeight="38rem"
+                dataKey="userName" 
+                editMode="row" 
+                [value]="clients" 
+                styleClass="">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Id cliente</th>
+                        <th>Nombre de usuario</th>
+                        <th>Contraseña del usuario</th>
                         <th>Nombre del negocio</th>
                         <th>Nombre del cliente</th>
                         <th>Dirección</th>
                         <th>Código postal</th>
                         <th>Telefono</th>
                         <th># de conservadores</th>
+                        <th>Ubicación</th>
+                        <th>Editar</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-client>
-                    <tr>
-                        <td>{{client.idCliente}}</td>
-                        <td>{{client.nombreNegocio}}</td>
+                <ng-template pTemplate="body" let-client let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="client">
+                        <td>{{client.userName}}</td>
+                        <td>{{client.userPassowrd}}</td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="text" pInputText [(ngModel)]="client.nombreNegocio">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{client.nombreNegocio}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
                         <td>{{client.nombreCliente}}</td>
-                        <td>{{client.calle}} #{{client.numeroExterior}}, {{client.colonia}}</td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <div class="flex flex-column gap-2">
+                                        <div>
+                                            <label>Colonia:</label>
+                                            <input pInputText class="w-full" type="text" [(ngModel)]="client.colonia">
+                                        </div>
+                                        <div>
+                                            <label>Calle:</label>
+                                            <input pInputText class="w-full" type="text" [(ngModel)]="client.calle">
+                                        </div>
+                                        <div>
+                                            <label>Núm. exterior</label>
+                                            <input pInputText class="w-full" type="number" [(ngModel)]="client.numeroExterior" >
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{client.calle}} #{{client.numeroExterior}}, {{client.colonia}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
                         <td>{{client.cp}}</td>
-                        <td>{{client.telefono}}</td>
-                        <td>{{client.conservadores}}</td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="number" maxlength="10" pInputText [(ngModel)]="client.telefono">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{client.telefono}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="number" pInputText [(ngModel)]="client.conservadores" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{client.conservadores}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input type="text" pInputText [(ngModel)]="client.ubicacion">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    @if (client.ubicacion !== null) {
+                                        <a style="text-decoration: none; color: blue" [href]="client.ubicacion">{{client.ubicacion}}</a>
+                                    }@else {
+                                        <label>Sin ubicación</label>
+                                    }
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            @if (!editing) {
+                                <p-button
+                                    icon="pi pi-pencil"
+                                    [rounded]="true"
+                                    pInitEditableRow 
+                                    (onClick)="onRowEditInit(client)" 
+                                    [text]="true"/>
+                            }@else {
+                                <div class="flex justify-content-center gap-2">
+                                    <p-button
+                                    pSaveEditableRow 
+                                    icon="pi pi-check" 
+                                    (onClick)="onRowEditSave(client)" 
+                                    [rounded]="true"
+                                    severity="success"
+                                    [text]="true"></p-button>
+                                <p-button
+                                    severity="danger"
+                                    icon="pi pi-times"
+                                    pCancelEditableRow 
+                                    (onClick)="onRowEditCancel(client, ri)" 
+                                    [rounded]="true"
+                                    [text]="true"></p-button>
+                                </div>
+                            }
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>

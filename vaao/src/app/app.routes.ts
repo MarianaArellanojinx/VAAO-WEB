@@ -13,6 +13,7 @@ import { ConservativeComponent } from './features/conservative/conservative.comp
 import { encargadoGuard } from './core/guards/encargado.guard';
 import { encargadoAdminGuard } from './core/guards/encargado-admin.guard';
 import { loginGuard } from './core/guards/login.guard';
+import { CorteComponent } from './features/admin/corte/corte.component';
 
 export const routes: Routes = [
     {
@@ -58,6 +59,10 @@ export const routes: Routes = [
                 path: 'conservadores',
                 component: ConservativeComponent,
                 canActivate: [encargadoAdminGuard]
+            },
+            {
+                path: 'corte',
+                component: CorteComponent
             }
         ]
     }
