@@ -31,7 +31,13 @@
     }
     <div class="field col-12 mb-7">
         <app-card-dashboard title="Pedidos activos" icon="pi pi-box">
-            <p-table #dataTable [value]="orders" [scrollable]="true" scrollHeight="38rem" [columns]="cols">
+            <p-table 
+                [styleClass]="isAndroid === true ? 'p-datatable-sm' : ''"
+                #dataTable 
+                [value]="orders" 
+                [scrollable]="true" 
+                scrollHeight="38rem" 
+                [columns]="cols">
                 <ng-template pTemplate="caption">
                     <div class="flex my-0 justify-content-end">
                         <p-button severity="success" label="Exportar" icon="pi pi-file-excel"

@@ -22,6 +22,8 @@ import { DateService } from '../../core/services/date.service';
 import { CardDashboardComponent } from "../../shared/components/card-dashboard/card-dashboard.component";
 import { FinishOrderComponent } from '../finish-order/finish-order.component';
 import { ViewDetailsComponent } from '../view-details/view-details.component';
+import { MapsService } from '../../core/services/maps.service';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-orders',
@@ -49,12 +51,17 @@ export class OrdersComponent implements OnInit {
     this.getClientes();
     this.getRepartidores();
   }
+  ngAfterViewInit(): void {
+    this.isAndroid = Capacitor.getPlatform() === 'android';
+    console.log(this.isAndroid);
+  }
 
   private api: ApiService = inject(ApiService);
   private dialog: DialogService = inject(DialogService);
   private auth: AuthService = inject(AuthService);
   private alert: AlertService = inject(AlertService);
   private date: DateService = inject(DateService);
+  private maps: MapsService = inject(MapsService);
 
   readonly PENDIENTE: number = 1;
   readonly APROBADO: number = 2;
@@ -64,6 +71,7 @@ export class OrdersComponent implements OnInit {
   readonly LLEGADA: number = 2;
   readonly FINALIZADO: number = 3;
 
+  isAndroid: boolean = false;
   orderAux: Pedido | undefined = undefined;
   selectedDelivery: number = 0;
   modalRepartidor: boolean = false;
@@ -176,14 +184,14 @@ export class OrdersComponent implements OnInit {
   getRepartidores() {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Repartidores/GetRepartidores`).subscribe({
       next: response => {
-        this.repartidores = response.data;
+        console.log(this.repartidores)
         if(this.userRole === 3){
           this.idRepartidor = this.repartidores.filter(x => x.idUser === this.auth.getUser()?.idUser)[0].idRepartidor
         }
       }
     });
   }
-  createDelivery(order: Pedido){
+  createDelivery(order: any){
     const payload = {
       idRepartidor: this.idRepartidor,
       idPedido: order.idPedido,
@@ -201,7 +209,8 @@ export class OrdersComponent implements OnInit {
       next: response => {
         if(response.data === true){
           this.alert.dinamycMessage('Hecho!!', 'Se ha iniciado la entrega del pedido.', 'success')
-          this.getOrders()
+          this.getOrders();
+          this.maps.openMaps(order.ubicacion)
         }
       }
     });
