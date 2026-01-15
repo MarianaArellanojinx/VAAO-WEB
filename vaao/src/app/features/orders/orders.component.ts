@@ -185,6 +185,7 @@ export class OrdersComponent implements OnInit {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Repartidores/GetRepartidores`).subscribe({
       next: response => {
         console.log(this.repartidores)
+        this.repartidores = response.data;
         if(this.userRole === 3){
           this.idRepartidor = this.repartidores.filter(x => x.idUser === this.auth.getUser()?.idUser)[0].idRepartidor
         }
