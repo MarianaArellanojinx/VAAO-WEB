@@ -106,6 +106,12 @@
                                     pInitEditableRow 
                                     (onClick)="onRowEditInit(client)" 
                                     [text]="true"/>
+                                <p-button
+                                    icon="pi pi-trash"
+                                    severity="danger"
+                                    [rounded]="true"
+                                    (onClick)="confirmDelete(client.idCliente)"
+                                    [text]="true"/>
                             }@else {
                                 <div class="flex justify-content-center gap-2">
                                     <p-button

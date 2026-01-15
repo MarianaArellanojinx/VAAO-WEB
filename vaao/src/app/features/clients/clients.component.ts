@@ -65,5 +65,17 @@ export class ClientsComponent implements OnInit {
       }
     })
   }
-
+  confirmDelete(id: number) {
+    this.alert.confirmMessage(() => this.deleteClient(id))
+  }
+  deleteClient(id: number) {
+    this.api.delete<ResponseBackend<any>>(`${environment.urlBackend}Clientes/DeleteCientes/${id}`).subscribe({
+      next: response => {
+        this.alert.dinamycMessage('Hecho!!', 'Se ha eliminado el cliente', 'success')
+      },
+      error: error => {
+        this.alert.dinamycMessage('Ups...', 'Se ha producido un error.', 'error')
+      }
+    });
+  }
 }
