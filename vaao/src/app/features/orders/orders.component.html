@@ -23,7 +23,7 @@
     <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
         <p-button severity="success" styleClass="mt-4" icon="pi pi-search" (onClick)="getOrders()" label="Filtrar" />
     </div>
-    @if(userRole === 2 || userRole === 4){
+    @if(userRole === 2 || userRole === 1 || userRole === 4){
     <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
         <p-button label="Hacer pedido" styleClass="mt-4" icon="pi pi-cart-arrow-down" severity="success"
             (onClick)="openModal()" />
