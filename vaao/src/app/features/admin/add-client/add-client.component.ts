@@ -10,11 +10,12 @@ import { DropdownModule } from "primeng/dropdown";
 import { User } from '../../../shared/interfaces/User';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AlertService } from '../../../core/services/alert.service';
+import { CheckboxModule } from "primeng/checkbox";
 
 @Component({
   selector: 'app-add-client',
   standalone: true,
-  imports: [InputTextModule, Button, HttpClientModule, FormsModule, DropdownModule],
+  imports: [InputTextModule, Button, HttpClientModule, FormsModule, DropdownModule, CheckboxModule],
   providers: [ApiService],
   templateUrl: './add-client.component.html',
   styleUrl: './add-client.component.scss'
@@ -29,6 +30,8 @@ export class AddClientComponent implements OnInit {
   private ref: DynamicDialogRef = inject(DynamicDialogRef);
   private alert: AlertService = inject(AlertService);
 
+  isPlant: boolean = false;
+  icePrice: number = 0
   loading: boolean = false;
   bussinesName: string = '';
   clientName: string = '';
@@ -69,6 +72,8 @@ export class AddClientComponent implements OnInit {
   }
   saveClient(idUser: number){
     const payload = {
+      esPlanta: this.isPlant,
+      precioHielo: this.icePrice,
       idCliente: 0,
       nombreNegocio: this.bussinesName,
       nombreCliente: this.clientName + ' ' + this.clientLastName,

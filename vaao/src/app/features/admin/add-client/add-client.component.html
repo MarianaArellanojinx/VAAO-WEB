@@ -1,5 +1,20 @@
 <div class="p-fluid p-formgrid grid mt-2">
     <div class="field col-12 mb-0">
+        <div class="flex my-0 gap-2">
+            <p-checkbox
+                [(ngModel)]="isPlant"
+                [binary]="true"/>
+            <label>¿Es planta?</label>
+        </div>
+    </div>
+    <div class="field col-12 mb-0">
+        <label>Precio del hielo para el cliente/planta</label>
+        <input 
+            type="number" 
+            [(ngModel)]="icePrice"
+            pInputText />
+    </div>
+    <div class="field col-12 mb-0">
         <label>Nombre del negocio:</label>
         <input type="text" pInputText [(ngModel)]="bussinesName"/>
     </div>

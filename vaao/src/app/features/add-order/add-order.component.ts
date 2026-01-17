@@ -12,6 +12,7 @@ import { CalendarModule } from "primeng/calendar";
 import { DropdownModule } from "primeng/dropdown";
 import { SpeedDialModule } from 'primeng/speeddial';
 import { AlertService } from '../../core/services/alert.service';
+import { User } from '../../shared/interfaces/User';
 
 @Component({
   selector: 'app-add-order',
@@ -27,6 +28,7 @@ export class AddOrderComponent implements OnInit {
     yesterday.setDate(yesterday.getDate());
     this.minDate = yesterday;
     this.getClients();
+    this.user = this.auth.getUser();
   }
 
   private api: ApiService = inject(ApiService);
@@ -41,6 +43,7 @@ export class AddOrderComponent implements OnInit {
   idCliente: number = 0;
   clientes: any[] = [];
   scheduledDate: Date = new Date();
+  user: User | null = null;
 
   isValid(): boolean {
     return (this.idCliente > 0 && this.bolsas > 0 && this.comments.trim() !== '')
@@ -49,9 +52,13 @@ export class AddOrderComponent implements OnInit {
   getClients() {
     this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Clientes/GetClientes`).subscribe({
       next: response => {
-        this.clientes = response.data.filter((c: any) => c.idUser === this.auth.getUser()?.idUser);
-        if(this.clientes.length > 0){
-          this.idCliente = this.clientes[0].idCliente;
+        if(this.user?.rol == 1){
+          this.clientes = response.data.filter((x: any) => x.esPlanta === true);
+        }else{
+          this.clientes = response.data.filter((c: any) => c.idUser === this.auth.getUser()?.idUser);
+          if(this.clientes.length > 0){
+            this.idCliente = this.clientes[0].idCliente;
+          }
         }
       }
     })
