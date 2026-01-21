@@ -82,9 +82,9 @@ export class LayoutComponent implements AfterViewInit, OnInit {
       label: 'Gestionar pedidos pendientes'
     },
     {
-      path: '/orders',
-      icon: 'pi pi-times',
-      label: 'Pedidos cancelados'
+      path: '/visitas',
+      icon: 'pi pi-truck',
+      label: 'Registro de visitas'
     }
   ];
 

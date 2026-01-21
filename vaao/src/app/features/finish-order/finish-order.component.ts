@@ -77,19 +77,19 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
     this.api.get<ResponseBackend<MetodoPago>>(``);
   }
   onFileSelectedAndroid(event: Event) {
-  const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
 
-  if (!input.files || input.files.length === 0) {
-    console.warn('No se seleccionó ningún archivo');
-    return;
+    if (!input.files || input.files.length === 0) {
+      console.warn('No se seleccionó ningún archivo');
+      return;
+    }
+
+    this.file = input.files[0];
+
+    this.image.fileToBase64(this.file, this.optionsImage).then(result => {
+      this.base64 = result;
+    });
   }
-
-  this.file = input.files[0];
-
-  this.image.fileToBase64(this.file, this.optionsImage).then(result => {
-    this.base64 = result;
-  });
-}
 
   finishDelivery() {
     this.loading = true;

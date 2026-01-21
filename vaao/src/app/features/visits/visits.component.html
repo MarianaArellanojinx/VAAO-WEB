@@ -1,0 +1,61 @@
+<div class="p-fluid p-formgrid grid mt-3">
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4">
+        <label for="">Seleccione fecha de visita:</label>
+        <p-calendar
+            [showIcon]="true"
+            selectionMode="single"
+            dateFormat="dd/mm/yy"
+            [(ngModel)]="date"
+            [readonlyInput]="true"/>
+    </div>
+    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4">
+        <p-button
+            styleClass="mt-4"
+            severity="success"
+            icon="pi pi-search"
+            label="Buscar"
+            (onClick)="getVisitas()"/>
+    </div>
+    <div class="field col-12 mb-7">
+        <app-card-dashboard icon="pi pi-user" title="Visitas realizadas">
+            <p-table [value]="visitas" [scrollable]="true" scrollHeight="37rem">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Visitado por</th>
+                        <th>Fecha de visita</th>
+                        <th>Evidencia</th>
+                        <th>Registro</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-visit>
+                    <tr>
+                        <td>{{visit.cliente}}</td>
+                        <td>{{visit.encargado === null ? 'Pendiente' : visit.encargado}}</td>
+                        <td>{{visit.fecha === null ? 'Pendiente' : visit.fecha | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td>
+                            <!-- {{visit.evidencia === null ? 'Pendiente' : visit.evidencia}} -->
+                            @if(visit.evidencia === null){
+                                <label>Pendiente</label>
+                            }@else {
+                                <p-image
+                                    [preview]="true"
+                                    [src]="visit.evidencia"
+                                    width="130"/>
+                            }
+                        </td>
+                        <td>
+                            @if (visit.encargado === null) {
+                                <p-button
+                                [text]="true"
+                                [rounded]="true"
+                                icon="pi pi-plus"
+                                (onClick)="open(visit)" />
+                            }
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </app-card-dashboard>
+    </div>
+</div>
