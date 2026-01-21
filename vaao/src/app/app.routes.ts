@@ -14,6 +14,8 @@ import { encargadoGuard } from './core/guards/encargado.guard';
 import { encargadoAdminGuard } from './core/guards/encargado-admin.guard';
 import { loginGuard } from './core/guards/login.guard';
 import { CorteComponent } from './features/admin/corte/corte.component';
+import { AddVisitComponent } from './features/add-visit/add-visit.component';
+import { VisitsComponent } from './features/visits/visits.component';
 
 export const routes: Routes = [
     {
@@ -63,6 +65,11 @@ export const routes: Routes = [
             {
                 path: 'corte',
                 component: CorteComponent
+            },
+            {
+                path: 'visitas',
+                component: VisitsComponent,
+                canActivate: [encargadoAdminGuard]
             }
         ]
     }

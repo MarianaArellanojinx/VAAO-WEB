@@ -1,0 +1,46 @@
+<div class="p-fluid p-formgrid grid">
+    <div class="field col-12">
+        <label>Seleccione cliente</label>
+        <p-dropdown
+            [options]="clients"
+            appendTo="body"
+            [(ngModel)]="selectedClient"
+            optionLabel="nombreNegocio"
+            optionValue="idCliente"/>
+    </div>
+    <div class="field col-12">
+        <label>Tomar foto de evidencia</label>
+        <label class="p-fileupload p-fileupload-basic p-component w-full">
+            <input 
+                type="file" 
+                accept="image/*" 
+                capture="environment" 
+                (change)="onFileSelectedAndroid($event)"
+                class="native-file-input" />
+
+            <span class="p-button p-component p-button-primary p-fileupload-choose">
+                <span class="p-button-icon pi pi-camera"></span>
+                <span class="p-button-label">Tomar foto</span>
+            </span>
+        </label>
+        @if(base64 !== ''){
+            <div class="flex flex-column w-full align-items-center mt-3">
+                <p-image
+                    [src]="base64" 
+                    alt="Imagen tomada" 
+                    width="300" 
+                    preview="true"/>
+                <h4 class="my-0">Imagen cargada</h4>
+            </div>
+        }
+    </div>
+    <div class="field col-12">
+        <p-button
+            severity="success"
+            [disabled]="disabled()"
+            icon="pi pi-save"
+            (onClick)="saveVisit()"
+            [loading]="loading"
+            label="Registrar visita"/>
+    </div>
+</div>
