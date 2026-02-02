@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           cd vaao
-          npm install --legacy-peer-deps
+          npm install
           npm run build
           rm -rf /var/www/app
           cp -r dist/vaao/browser /var/www/app
