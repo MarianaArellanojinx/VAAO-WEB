@@ -7,14 +7,15 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            /home/deploy/deploy-vaao-front.sh
+      - uses: actions/checkout@v4
+      - run: |
+          cd vaao
+          npm install --legacy-peer-deps
+          npm run build
+          rm -rf /var/www/app
+          cp -r dist/vaao/browser /var/www/app
+          sudo systemctl reload nginx
+
