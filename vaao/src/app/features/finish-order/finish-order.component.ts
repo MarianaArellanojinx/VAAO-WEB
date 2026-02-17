@@ -13,11 +13,12 @@ import { Pedido } from '../../shared/interfaces/Pedido';
 import { Capacitor } from '@capacitor/core';
 import { ImageModule } from "primeng/image";
 import { ImageConfig } from '../../shared/interfaces/ImageConfig';
+import { InputTextareaModule } from "primeng/inputtextarea";
 
 @Component({
   selector: 'app-finish-order',
   standalone: true,
-  imports: [FileUploadModule, DropdownModule, FormsModule, ImageModule],
+  imports: [FileUploadModule, DropdownModule, FormsModule, ImageModule, InputTextareaModule],
   templateUrl: './finish-order.component.html',
   styleUrl: './finish-order.component.scss'
 })
@@ -51,6 +52,7 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
   Pedido!: Pedido;
   Entrega!: any;
   loading: boolean = false;
+  observaciones: string = '';
 
   metodos: MetodoPago[] = [
     {
@@ -96,6 +98,7 @@ export class FinishOrderComponent implements OnInit, AfterViewInit {
     this.Entrega.estatusReparto = 3;
     this.Entrega.imagenConservadorSalida = this.base64;
     this.Entrega.fechaEntrega = new Date().toISOString();
+    this.Entrega.observaciones = this.observaciones;
     this.api.patch<ResponseBackend<any>>(`${environment.urlBackend}Entregas/UpdateEntrega/${this.Entrega.idEntrega}/true`, this.Entrega)
     .subscribe({
       next: response => {
