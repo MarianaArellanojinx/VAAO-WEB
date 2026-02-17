@@ -30,6 +30,10 @@
         }
     </div>
     <div class="field col-12">
+        <label>Ingrese observaciones del pedido:</label>
+        <textarea rows="5" pInputTextarea [(ngModel)]="observaciones"></textarea>
+    </div>
+    <div class="field col-12">
         <p-button 
             (onClick)="finishDelivery()" 
             severity="success" 
