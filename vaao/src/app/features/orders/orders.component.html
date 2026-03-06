@@ -55,6 +55,7 @@
                         <th>Precio total</th>
                         <th>Estatus del pedido</th>
                         <th>Comentarios</th>
+                        <th>Observaciones Repartidor</th>
                         @if (userRole === 1 || userRole === 2) {
                         <th>Editar</th>
                         }@else if (userRole === 3) {
@@ -75,6 +76,7 @@
                         <td>${{order.totalPagar}}</td>
                         <td>{{order.estatusTexto}}</td>
                         <td>{{order.observaciones}}</td>
+                        <td>{{order.observacionRepartidor !== "" ? order.observacionRepartidor : ""}}</td>
                         @if (userRole === 1 || userRole === 2) {
                         <td>
                             @if(order.estatusPedido === APROBADO && hasDelivery(order) && getStatusDelivery(order) === FINALIZADO) {
