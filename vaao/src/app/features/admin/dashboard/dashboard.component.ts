@@ -129,7 +129,11 @@ export class DashboardComponent implements OnInit {
   }
   getDataCards(){
     this.loadingCards = true;
-    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetDataCards`).subscribe({
+    const startDate = this.dates[0];
+    const endDate = this.dates[1] ?? this.dates[0];
+    const start = startDate.toISOString();
+    const end = endDate.toISOString();
+    this.api.get<ResponseBackend<any>>(`${environment.urlBackend}Dashboard/GetDataCards?start=${start}&end=${end}`).subscribe({
       next: response => {
          this.dataCards = response.data;
          this.loadingCards = false;
