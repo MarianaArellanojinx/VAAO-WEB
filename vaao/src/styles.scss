@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
+
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 
@@ -6,15 +8,308 @@
 
 :root {
     --safe-top: env(safe-area-inset-top);
+    --font-body: "Manrope", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --font-heading: "Space Grotesk", "Trebuchet MS", "Segoe UI", sans-serif;
+
+    --snow-0: #f6fbff;
+    --snow-1: #e8f4ff;
+    --snow-2: #d6ebff;
+
+    --ice-300: #86c9ee;
+    --ice-500: #3aa8dd;
+    --ice-700: #0e73b4;
+    --ice-900: #094a81;
+
+    --ink-900: #0f2131;
+    --ink-800: #1d3549;
+    --ink-700: #355068;
+    --ink-500: #5a738a;
+
+    --line: rgba(13, 101, 157, 0.22);
+    --line-strong: rgba(13, 101, 157, 0.32);
+    --panel: rgba(255, 255, 255, 0.76);
+    --panel-strong: rgba(255, 255, 255, 0.9);
+    --shadow-soft: 0 20px 40px rgba(16, 71, 109, 0.14);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
 }
 
 body {
     padding-top: var(--safe-top);
-    background-color: #5482c8;
+    color: var(--ink-900);
+    font-family: var(--font-body);
+    background:
+        radial-gradient(circle at 8% 14%, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0) 32%),
+        radial-gradient(circle at 86% 7%, rgba(189, 225, 255, 0.75), rgba(189, 225, 255, 0) 34%),
+        radial-gradient(circle at 22% 88%, rgba(161, 210, 245, 0.35), rgba(161, 210, 245, 0) 30%),
+        linear-gradient(148deg, #e7f4ff 0%, #cae5ff 46%, #bbd9fb 100%);
+    background-attachment: fixed;
 }
 
 .app-topbar,
 .p-toolbar {
     padding-top: var(--safe-top);
-    min-height: calc(56px + var(--safe-top));
+    min-height: calc(66px + var(--safe-top));
+}
+
+app-root {
+    display: block;
+    min-height: 100vh;
+    position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 0;
+    color: var(--ink-900);
+    font-family: var(--font-heading);
+    letter-spacing: -0.015em;
+}
+
+p,
+label,
+span,
+small {
+    color: var(--ink-700);
+}
+
+a {
+    color: var(--ice-700);
+}
+
+::selection {
+    background-color: rgba(58, 168, 221, 0.28);
+}
+
+.p-component {
+    font-family: var(--font-body);
+}
+
+.p-sidebar {
+    background: linear-gradient(180deg, rgba(236, 247, 255, 0.96), rgba(222, 240, 255, 0.96));
+    border-right: 1px solid var(--line-strong);
+}
+
+.p-sidebar .p-sidebar-header {
+    padding-bottom: 0.3rem;
+}
+
+.p-dialog {
+    border-radius: 1.1rem;
+    border: 1px solid var(--line-strong);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+.p-dialog .p-dialog-header {
+    border: 0;
+    color: #f5fcff;
+    padding: 0.85rem 1.15rem;
+    background: linear-gradient(132deg, var(--ice-900), var(--ice-700));
+}
+
+.p-dialog .p-dialog-header .p-dialog-title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  color: #FFF;
+}
+
+.p-dialog .p-dialog-content {
+    padding: 1rem 1.1rem 1.2rem;
+    background: rgba(245, 252, 255, 0.95);
+}
+
+.p-inputtext,
+.p-inputtextarea,
+.p-dropdown,
+.p-calendar .p-inputtext,
+.p-multiselect {
+    width: 100%;
+    color: var(--ink-900);
+    border-radius: 0.78rem;
+    border: 1px solid var(--line);
+    background: var(--panel-strong);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.p-inputtext:hover,
+.p-inputtextarea:hover,
+.p-dropdown:hover,
+.p-calendar .p-inputtext:hover,
+.p-multiselect:hover {
+    border-color: var(--line-strong);
+}
+
+.p-inputtext:enabled:focus,
+.p-inputtextarea:enabled:focus,
+.p-dropdown:not(.p-disabled).p-focus,
+.p-calendar .p-inputtext:enabled:focus,
+.p-multiselect:not(.p-disabled).p-focus {
+    border-color: rgba(58, 168, 221, 0.65);
+    box-shadow: 0 0 0 0.2rem rgba(58, 168, 221, 0.2);
+}
+
+.p-dropdown-panel,
+.p-datepicker,
+.p-datepicker table td > span,
+.p-multiselect-panel {
+    border-radius: 0.85rem;
+}
+
+.p-dropdown-panel,
+.p-datepicker,
+.p-multiselect-panel {
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 14px 28px rgba(20, 86, 126, 0.16);
+    background: rgba(245, 252, 255, 0.98);
+}
+
+.p-card {
+    border-radius: 1rem;
+    border: 1px solid var(--line-strong);
+    background: var(--panel);
+    box-shadow: 0 14px 28px rgba(13, 66, 102, 0.12);
+    backdrop-filter: blur(10px);
+}
+
+.p-button {
+    gap: 0.45rem;
+    border-radius: 0.78rem;
+    border: 1px solid transparent;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.2s ease;
+}
+
+.p-button:not(.p-button-text):not(.p-button-link) {
+    color: #f3fbff;
+    background: linear-gradient(135deg, #0e73b4, #28a9df);
+}
+
+.p-button.p-button-success {
+    background: linear-gradient(135deg, #1f8abf, #3ab4e8);
+    border-color: rgba(9, 104, 153, 0.55);
+}
+
+.p-button.p-button-danger {
+    background: linear-gradient(135deg, #db4b6b, #f56a86);
+    border-color: rgba(165, 31, 60, 0.45);
+}
+
+.p-button.p-button-secondary {
+    background: linear-gradient(135deg, #3c6f8f, #6d95af);
+    border-color: rgba(37, 67, 86, 0.45);
+}
+
+.p-button.p-button-text {
+    color: var(--ice-700);
+}
+
+.p-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(25, 111, 162, 0.24);
+    filter: saturate(1.05);
+}
+
+.p-datatable {
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    background: rgba(255, 255, 255, 0.58);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.p-datatable .p-datatable-header {
+    border: 0;
+    padding: 0.7rem 0.9rem;
+    background: rgba(236, 248, 255, 0.96);
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    border: 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #f4fbff;
+    background: linear-gradient(135deg, rgba(12, 77, 125, 0.95), rgba(16, 125, 178, 0.9));
+    padding: 0.75rem 0.7rem;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    font-size: 0.9rem;
+    color: var(--ink-800);
+    border-color: rgba(16, 112, 168, 0.11);
+    background: rgba(255, 255, 255, 0.84);
+    padding: 0.72rem 0.7rem;
+}
+
+.p-datatable .p-datatable-tbody > tr:nth-child(even) > td {
+    background: rgba(247, 252, 255, 0.94);
+}
+
+.p-datatable .p-datatable-tbody > tr:hover > td {
+    background: rgba(229, 244, 255, 0.96);
+}
+
+.p-paginator {
+    border: 0;
+    background: rgba(236, 248, 255, 0.9);
+}
+
+.p-checkbox .p-checkbox-box {
+    border-radius: 0.42rem;
+    border-color: var(--line-strong);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.p-checkbox .p-checkbox-box.p-highlight {
+    border-color: rgba(22, 115, 170, 0.95);
+    background: linear-gradient(135deg, rgba(13, 108, 165, 0.95), rgba(32, 151, 212, 0.95));
+}
+
+.p-tag,
+.badge {
+    border-radius: 0.55rem;
+}
+
+@keyframes frost-rise {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content-shell > * {
+    animation: frost-rise 0.5s ease both;
+}
+
+@media (max-width: 768px) {
+    body {
+        background:
+            radial-gradient(circle at 10% 12%, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0) 42%),
+            radial-gradient(circle at 84% 8%, rgba(189, 225, 255, 0.58), rgba(189, 225, 255, 0) 36%),
+            linear-gradient(160deg, #e9f6ff 0%, #cee7ff 55%, #c5e0ff 100%);
+    }
+}
+label {
+  color: #000 !important;
 }

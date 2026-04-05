@@ -1,0 +1,21 @@
+.simple-card {
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(13, 101, 157, 0.26);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 14px 28px rgba(15, 74, 113, 0.14);
+}
+
+.simple-card-header {
+  padding: 0.68rem 0.9rem;
+  color: #f4fbff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.01em;
+  background: linear-gradient(132deg, rgba(9, 68, 109, 0.94), rgba(20, 126, 181, 0.82));
+}
+
+.simple-card-body {
+  padding: 0.88rem 0.85rem;
+}
