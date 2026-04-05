@@ -5,7 +5,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
 import { HttpClientModule } from '@angular/common/http';
 import { ApiService } from '../../infrastructure/api.service';
 import { DateService } from '../../core/services/date.service';
@@ -13,11 +13,20 @@ import { ResponseBackend } from '../../shared/interfaces/ResponseBackend';
 import { Pedido } from '../../shared/interfaces/Pedido';
 import { environment } from '../../../environments/environment';
 import { CardDashboardComponent } from '../../shared/components/card-dashboard/card-dashboard.component';
+import { catchError, forkJoin, map, of } from 'rxjs';
+
+interface ClientDto {
+  idCliente: number;
+  nombreCliente?: string;
+  nombreNegocio?: string;
+}
 
 interface ClientOrdersGroup {
   key: string;
   idCliente: number;
+  displayName: string;
   nombreCliente: string;
+  nombreNegocio: string;
   pedidos: Pedido[];
   totalPedidos: number;
   totalBolsas: number;
@@ -25,6 +34,11 @@ interface ClientOrdersGroup {
   pendientes: number;
   aprobados: number;
   cancelados: number;
+}
+
+interface FilterOption {
+  label: string;
+  value: string | number | null;
 }
 
 @Component({
@@ -37,7 +51,7 @@ interface ClientOrdersGroup {
     Button,
     TableModule,
     TagModule,
-    InputTextModule,
+    DropdownModule,
     HttpClientModule,
     CardDashboardComponent
   ],
@@ -53,11 +67,21 @@ export class OrdersByClientComponent implements OnInit {
   readonly PENDIENTE: number = 1;
   readonly APROBADO: number = 2;
   readonly CANCELADO: number = 3;
+  readonly FILTER_ALL = 'all';
+  readonly FILTER_WITH_PURCHASES = 'withPurchases';
+  readonly FILTER_WITHOUT_PURCHASES = 'withoutPurchases';
 
   dates: Date[] = [this.date.getMonday(new Date()), this.date.addDays(this.date.getMonday(new Date()), 6)];
-  query: string = '';
   loading: boolean = false;
   groups: ClientOrdersGroup[] = [];
+  selectedClientId: number | null = null;
+  selectedPurchaseFilter: string = this.FILTER_ALL;
+
+  purchaseFilterOptions: FilterOption[] = [
+    { label: 'Todos', value: this.FILTER_ALL },
+    { label: 'Con compras', value: this.FILTER_WITH_PURCHASES },
+    { label: 'Sin compras', value: this.FILTER_WITHOUT_PURCHASES }
+  ];
 
   get startDateForCard(): Date {
     return this.dates[0] ?? new Date();
@@ -67,19 +91,30 @@ export class OrdersByClientComponent implements OnInit {
     return this.dates[1] ?? this.startDateForCard;
   }
 
+  get clientOptions(): FilterOption[] {
+    return [
+      { label: 'Todos los clientes', value: null },
+      ...this.groups.map(group => ({
+        label: `${group.displayName} (ID ${group.idCliente})`,
+        value: group.idCliente
+      }))
+    ];
+  }
+
   ngOnInit(): void {
     this.getOrdersByClient();
   }
 
   get filteredGroups(): ClientOrdersGroup[] {
-    const value = this.query.trim().toLowerCase();
-    if (value === '') return this.groups;
+    return this.groups.filter(group => {
+      const byClient = this.selectedClientId == null || group.idCliente === this.selectedClientId;
+      const byPurchaseState =
+        this.selectedPurchaseFilter === this.FILTER_ALL ||
+        (this.selectedPurchaseFilter === this.FILTER_WITH_PURCHASES && group.totalPedidos > 0) ||
+        (this.selectedPurchaseFilter === this.FILTER_WITHOUT_PURCHASES && group.totalPedidos === 0);
 
-    return this.groups.filter(group =>
-      group.nombreCliente.toLowerCase().includes(value) ||
-      group.idCliente.toString().includes(value) ||
-      group.pedidos.some(order => order.idPedido.toString().includes(value))
-    );
+      return byClient && byPurchaseState;
+    });
   }
 
   getOrdersByClient(): void {
@@ -89,21 +124,34 @@ export class OrdersByClientComponent implements OnInit {
     const end = endDate.toISOString().split('T')[0];
 
     this.loading = true;
-    this.api.get<ResponseBackend<Pedido[]>>(`${environment.urlBackend}Pedidos/GetPedidosFiltrados?start=${start}&end=${end}`)
-      .subscribe({
-        next: response => {
-          const orders = (response.data ?? []).map(order => ({
-            ...order,
-            estatusTexto: this.getStatusText(order.estatusPedido)
-          }));
-          this.groups = this.groupOrdersByClient(orders);
-          this.loading = false;
-        },
-        error: () => {
-          this.groups = [];
-          this.loading = false;
-        }
-      });
+
+    const ordersRequest$ = this.api
+      .get<ResponseBackend<Pedido[]>>(`${environment.urlBackend}Pedidos/GetPedidosFiltrados?start=${start}&end=${end}`)
+      .pipe(
+        map(response => (response.data ?? []).map(order => ({
+          ...order,
+          estatusTexto: this.getStatusText(order.estatusPedido)
+        }))),
+        catchError(() => of([] as Pedido[]))
+      );
+
+    const clientsRequest$ = this.api
+      .get<ResponseBackend<ClientDto[]>>(`${environment.urlBackend}Clientes/GetClientes`)
+      .pipe(
+        map(response => response.data ?? []),
+        catchError(() => of([] as ClientDto[]))
+      );
+
+    forkJoin([ordersRequest$, clientsRequest$]).subscribe({
+      next: ([orders, clients]) => {
+        this.groups = this.groupOrdersByClient(clients, orders);
+        this.loading = false;
+      },
+      error: () => {
+        this.groups = [];
+        this.loading = false;
+      }
+    });
   }
 
   getStatusSeverity(status: number): 'warning' | 'success' | 'danger' | 'info' {
@@ -120,17 +168,17 @@ export class OrdersByClientComponent implements OnInit {
     return 'Sin estatus';
   }
 
-  private groupOrdersByClient(orders: Pedido[]): ClientOrdersGroup[] {
-    const grouped = new Map<string, ClientOrdersGroup>();
+  private groupOrdersByClient(clients: ClientDto[], orders: Pedido[]): ClientOrdersGroup[] {
+    const grouped = new Map<number, ClientOrdersGroup>();
 
     for (const order of orders) {
-      const key = `${order.idCliente}-${order.nombreCliente}`;
-
-      if (!grouped.has(key)) {
-        grouped.set(key, {
-          key,
+      if (!grouped.has(order.idCliente)) {
+        grouped.set(order.idCliente, {
+          key: `${order.idCliente}`,
           idCliente: order.idCliente,
+          displayName: order.nombreCliente,
           nombreCliente: order.nombreCliente,
+          nombreNegocio: order.nombreCliente,
           pedidos: [],
           totalPedidos: 0,
           totalBolsas: 0,
@@ -141,7 +189,7 @@ export class OrdersByClientComponent implements OnInit {
         });
       }
 
-      const group = grouped.get(key)!;
+      const group = grouped.get(order.idCliente)!;
       group.pedidos.push(order);
       group.totalPedidos += 1;
       group.totalBolsas += order.totalBolsas;
@@ -152,6 +200,31 @@ export class OrdersByClientComponent implements OnInit {
       else group.cancelados += 1;
     }
 
+    for (const client of clients) {
+      if (grouped.has(client.idCliente)) {
+        const existing = grouped.get(client.idCliente)!;
+        existing.nombreCliente = client.nombreCliente ?? existing.nombreCliente;
+        existing.nombreNegocio = client.nombreNegocio ?? existing.nombreNegocio;
+        existing.displayName = client.nombreNegocio || client.nombreCliente || existing.displayName;
+        continue;
+      }
+
+      grouped.set(client.idCliente, {
+        key: `${client.idCliente}`,
+        idCliente: client.idCliente,
+        displayName: client.nombreNegocio || client.nombreCliente || `Cliente ${client.idCliente}`,
+        nombreCliente: client.nombreCliente ?? 'Sin nombre de cliente',
+        nombreNegocio: client.nombreNegocio ?? 'Sin nombre de negocio',
+        pedidos: [],
+        totalPedidos: 0,
+        totalBolsas: 0,
+        totalPagar: 0,
+        pendientes: 0,
+        aprobados: 0,
+        cancelados: 0
+      });
+    }
+
     return Array.from(grouped.values())
       .map(group => ({
         ...group,
@@ -159,6 +232,23 @@ export class OrdersByClientComponent implements OnInit {
           new Date(b.fechaPedido).getTime() - new Date(a.fechaPedido).getTime()
         )
       }))
-      .sort((a, b) => a.nombreCliente.localeCompare(b.nombreCliente));
+      .sort((a, b) => {
+        const aHasPurchases = a.totalPedidos > 0;
+        const bHasPurchases = b.totalPedidos > 0;
+
+        // 1) Siempre primero clientes con compras, al final sin compras.
+        if (aHasPurchases && !bHasPurchases) return -1;
+        if (!aHasPurchases && bHasPurchases) return 1;
+
+        // 2) Entre clientes con compras: mayor a menor por monto total.
+        if (aHasPurchases && bHasPurchases) {
+          if (b.totalPagar !== a.totalPagar) return b.totalPagar - a.totalPagar;
+          if (b.totalPedidos !== a.totalPedidos) return b.totalPedidos - a.totalPedidos;
+          if (b.totalBolsas !== a.totalBolsas) return b.totalBolsas - a.totalBolsas;
+        }
+
+        // 3) Empate o ambos sin compras: orden alfabético estable.
+        return a.displayName.localeCompare(b.displayName);
+      });
   }
 }

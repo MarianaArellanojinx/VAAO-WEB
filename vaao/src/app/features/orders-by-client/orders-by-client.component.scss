@@ -42,6 +42,24 @@
   color: #113851;
 }
 
+.group-title-main {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.no-sales-chip {
+  padding: 0.22rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(186, 77, 45, 0.33);
+  background: rgba(255, 235, 229, 0.72);
+  color: #9f3f25;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 .group-title small {
   color: #55748d;
   font-size: 0.74rem;
@@ -50,7 +68,7 @@
 
 .group-resume {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.45rem;
 }
 
@@ -74,6 +92,29 @@
   color: #0f5d8b;
   font-size: 0.9rem;
   font-family: var(--font-heading);
+}
+
+.group-empty {
+  min-height: 7rem;
+  border-radius: 0.84rem;
+  border: 1px dashed rgba(13, 101, 157, 0.3);
+  background: rgba(244, 251, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.group-empty i {
+  color: #4b8aac;
+  font-size: 1.15rem;
+}
+
+.group-empty p {
+  margin: 0;
+  color: #4f7087;
+  font-size: 0.8rem;
 }
 
 .empty-state {

@@ -1,5 +1,5 @@
 <div class="p-fluid p-formgrid grid mt-3 orders-client-page">
-    <div class="field col-12 lg:col-4">
+    <div class="field col-12 lg:col-3">
         <label>Rango de fechas</label>
         <p-calendar
             [showIcon]="true"
@@ -8,15 +8,27 @@
             [readonlyInput]="true"
             [(ngModel)]="dates" />
     </div>
-    <div class="field col-12 lg:col-4">
-        <label>Buscar cliente o pedido</label>
-        <input
-            type="text"
-            pInputText
-            placeholder="Ej. Tecate Six o #1204"
-            [(ngModel)]="query" />
+    <div class="field col-12 lg:col-3">
+        <label>Filtrar por cliente</label>
+        <p-dropdown
+            [options]="clientOptions"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body"
+            [showClear]="true"
+            placeholder="Todos los clientes"
+            [(ngModel)]="selectedClientId" />
     </div>
-    <div class="field col-12 lg:col-4 actions-col">
+    <div class="field col-12 lg:col-3">
+        <label>Filtrar por compras</label>
+        <p-dropdown
+            [options]="purchaseFilterOptions"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body"
+            [(ngModel)]="selectedPurchaseFilter" />
+    </div>
+    <div class="field col-12 lg:col-3 actions-col">
         <p-button
             styleClass="w-full lg:w-auto"
             label="Actualizar"
@@ -36,8 +48,8 @@
             @if (filteredGroups.length === 0) {
                 <div class="empty-state">
                     <i class="pi pi-inbox"></i>
-                    <h3>Sin pedidos en este rango</h3>
-                    <p>Ajusta el rango de fechas o revisa el texto de busqueda.</p>
+                    <h3>Sin resultados con los filtros seleccionados</h3>
+                    <p>Ajusta cliente o estado de compra para continuar el analisis.</p>
                 </div>
             } @else {
                 <div class="groups-list">
@@ -45,8 +57,15 @@
                         <section class="client-group">
                             <div class="group-header">
                                 <div class="group-title">
-                                    <h3>{{ group.nombreCliente }}</h3>
-                                    <small>ID cliente: {{ group.idCliente }} · {{ group.totalPedidos }} pedidos</small>
+                                    <div class="group-title-main">
+                                        <h3>{{ group.displayName }}</h3>
+                                        @if (group.totalPedidos === 0) {
+                                            <span class="no-sales-chip">Sin compras en el periodo</span>
+                                        }
+                                    </div>
+                                    <small>
+                                        ID cliente: {{ group.idCliente }} · Responsable: {{ group.nombreCliente }}
+                                    </small>
                                 </div>
                                 <div class="group-resume">
                                     <article class="resume-item">
@@ -65,42 +84,53 @@
                                         <small>Aprobados</small>
                                         <strong>{{ group.aprobados }}</strong>
                                     </article>
+                                    <article class="resume-item">
+                                        <small>Cancelados</small>
+                                        <strong>{{ group.cancelados }}</strong>
+                                    </article>
                                 </div>
                             </div>
 
-                            <p-table
-                                [value]="group.pedidos"
-                                [scrollable]="true"
-                                scrollHeight="16rem"
-                                styleClass="p-datatable-sm">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>Pedido</th>
-                                        <th>Fecha pedido</th>
-                                        <th>Programada</th>
-                                        <th>Bolsas</th>
-                                        <th>Precio bolsa</th>
-                                        <th>Total</th>
-                                        <th>Estatus</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-order>
-                                    <tr>
-                                        <td>#{{ order.idPedido }}</td>
-                                        <td>{{ order.fechaPedido | date:'dd/MM/yyyy HH:mm' }}</td>
-                                        <td>{{ order.fechaProgramada | date:'dd/MM/yyyy' }}</td>
-                                        <td>{{ order.totalBolsas }}</td>
-                                        <td>{{ order.precioUnitario | currency:'MXN' }}</td>
-                                        <td>{{ order.totalPagar | currency:'MXN' }}</td>
-                                        <td>
-                                            <p-tag
-                                                [value]="order.estatusTexto"
-                                                [severity]="getStatusSeverity(order.estatusPedido)">
-                                            </p-tag>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
+                            @if (group.pedidos.length === 0) {
+                                <div class="group-empty">
+                                    <i class="pi pi-chart-line"></i>
+                                    <p>Este cliente no realizo pedidos en el periodo seleccionado.</p>
+                                </div>
+                            } @else {
+                                <p-table
+                                    [value]="group.pedidos"
+                                    [scrollable]="true"
+                                    scrollHeight="16rem"
+                                    styleClass="p-datatable-sm">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Pedido</th>
+                                            <th>Fecha pedido</th>
+                                            <th>Programada</th>
+                                            <th>Bolsas</th>
+                                            <th>Precio bolsa</th>
+                                            <th>Total</th>
+                                            <th>Estatus</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-order>
+                                        <tr>
+                                            <td>#{{ order.idPedido }}</td>
+                                            <td>{{ order.fechaPedido | date:'dd/MM/yyyy HH:mm' }}</td>
+                                            <td>{{ order.fechaProgramada | date:'dd/MM/yyyy' }}</td>
+                                            <td>{{ order.totalBolsas }}</td>
+                                            <td>{{ order.precioUnitario | currency:'MXN' }}</td>
+                                            <td>{{ order.totalPagar | currency:'MXN' }}</td>
+                                            <td>
+                                                <p-tag
+                                                    [value]="order.estatusTexto"
+                                                    [severity]="getStatusSeverity(order.estatusPedido)">
+                                                </p-tag>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            }
                         </section>
                     }
                 </div>
