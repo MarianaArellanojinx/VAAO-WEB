@@ -1,0 +1,87 @@
+:host {
+  display: block;
+}
+
+.login-shell {
+  min-height: calc(100vh - 11rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.snow-orb {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+.orb-left {
+  width: 270px;
+  height: 270px;
+  top: 6%;
+  left: -90px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0));
+}
+
+.orb-right {
+  width: 310px;
+  height: 310px;
+  right: -130px;
+  bottom: -110px;
+  background: radial-gradient(circle, rgba(132, 200, 239, 0.58), rgba(132, 200, 239, 0));
+}
+
+.login-card {
+  width: min(450px, 100%);
+  border-radius: 1.35rem;
+  border: 1px solid rgba(215, 238, 255, 0.62);
+  backdrop-filter: blur(10px);
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.89), rgba(244, 252, 255, 0.8));
+  padding: 1.35rem 1.2rem 1.15rem;
+}
+
+.brand-block {
+  text-align: center;
+}
+
+.brand-block img {
+  width: clamp(120px, 26vw, 178px);
+  height: auto;
+}
+
+.brand-block h1 {
+  margin-top: 0.72rem;
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.4rem, 3.8vw, 1.85rem);
+  color: #123955;
+}
+
+.brand-block p {
+  margin: 0 auto;
+  max-width: 24rem;
+  color: #45657f;
+  font-size: 0.95rem;
+}
+
+label {
+  color: #244962;
+  font-weight: 700;
+  font-size: 0.84rem;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 768px) {
+  .login-shell {
+    min-height: calc(100vh - 9rem);
+    padding: 0.4rem;
+  }
+
+  .login-card {
+    padding: 1rem 0.85rem 0.9rem;
+  }
+}

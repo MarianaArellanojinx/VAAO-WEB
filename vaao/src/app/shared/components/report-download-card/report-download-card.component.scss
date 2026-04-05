@@ -1,56 +1,60 @@
 .report-card {
-  background: #ffffff;
-  border-radius: 1rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border-radius: 1.1rem;
+  border: 1px solid rgba(13, 101, 157, 0.3);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 16px 30px rgba(15, 74, 113, 0.14);
   overflow: hidden;
   max-width: 100%;
+  backdrop-filter: blur(10px);
 }
 
-/* Header */
 .report-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #0f2ddf, #0b3fb3);
-  color: #ffffff;
+  gap: 0.78rem;
+  padding: 0.76rem 0.95rem;
+  background: linear-gradient(132deg, rgba(9, 68, 109, 0.94), rgba(20, 126, 181, 0.82));
+  color: #f2fbff;
 }
 
 .report-icon {
-  width: 3.2rem;
-  height: 3.2rem;
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.18);
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 0.72rem;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
+  font-size: 1rem;
 }
 
-/* Title */
 .report-title h2 {
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 600;
+  color: #f2fbff;
+  font-size: clamp(0.95rem, 2vw, 1.04rem);
+  font-weight: 700;
 }
 
 .report-title small {
-  font-size: 0.8rem;
-  opacity: 0.85;
+  color: rgba(234, 248, 255, 0.86);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-/* Body */
 .report-body {
-  padding: 1.25rem;
+  padding: 0.92rem 0.94rem;
+  background: rgba(255, 255, 255, 0.66);
 }
 
 .report-description {
-  margin: 0 0 0.75rem;
-  color: #374151;
+  margin: 0 0 0.72rem;
+  color: #29445a;
   line-height: 1.5;
+  font-size: 0.92rem;
 }
 
-/* List */
 .report-list {
   list-style: none;
   padding: 0;
@@ -60,19 +64,28 @@
 .report-list li {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0;
-  color: #1f2937;
-  font-size: 0.95rem;
+  gap: 0.44rem;
+  padding: 0.28rem 0;
+  color: #1b3c54;
+  font-size: 0.9rem;
 }
 
 .report-list i {
-  color: #2563eb;
+  color: #127fbf;
 }
 
-/* Actions */
 .report-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 1rem;
+  margin-top: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .report-header {
+    padding: 0.65rem 0.72rem;
+  }
+
+  .report-body {
+    padding: 0.78rem 0.72rem;
+  }
 }

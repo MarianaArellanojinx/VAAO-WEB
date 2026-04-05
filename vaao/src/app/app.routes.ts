@@ -16,6 +16,7 @@ import { loginGuard } from './core/guards/login.guard';
 import { CorteComponent } from './features/admin/corte/corte.component';
 import { AddVisitComponent } from './features/add-visit/add-visit.component';
 import { VisitsComponent } from './features/visits/visits.component';
+import { OrdersByClientComponent } from './features/orders-by-client/orders-by-client.component';
 
 export const routes: Routes = [
     {
@@ -56,6 +57,11 @@ export const routes: Routes = [
                 path: 'orders',
                 component: OrdersComponent,
                 canActivate: [loginGuard]
+            },
+            {
+                path: 'orders-by-client',
+                component: OrdersByClientComponent,
+                canActivate: [encargadoAdminGuard]
             },
             {
                 path: 'conservadores',

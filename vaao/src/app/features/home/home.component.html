@@ -1,5 +1,5 @@
 <div class="home-welcome p-4">
-    <section class="welcome-hero mb-6">
+    <section class="welcome-hero mb-4 shadow-5">
         <div class="grid align-items-center mb-0">
             <div class="col-12 md:col-7 mb-0">
                 <h1 class="welcome-title">Bienvenido a VAAO</h1>
@@ -13,13 +13,13 @@
             </div>
         </div>
     </section>
-    <section class="section mb-6 shadow-5">
-        <h2 class="section-title text-center mb-4" style="color: white;">
+    <section class="section feature-section mb-4 shadow-5">
+        <h2 class="section-title text-center mb-4">
             ¿Qué puedes hacer en VAAO?
         </h2>
         <div class="grid flex justify-content-center">
-            <div class="col-12 md:col-4" style="cursor: pointer;">
-                <p-card class="info-card" (click)="navigate('/orders')">
+            <div class="col-12 md:col-4">
+                <p-card class="info-card">
                     @if(user?.rol === roles.ADMIN || user?.rol === roles.ENCARGADO){
                         <i class="pi pi-clipboard info-icon"></i>
                         <h3>Administrar pedidos</h3>
@@ -27,6 +27,7 @@
                             Vea todos los pedidos pendientes realizado por sus clientes y gestione su estado.
                         </p>
                         <p-button 
+                            styleClass="w-full mt-3"
                             label="Gestionar pedidos" 
                             icon="pi pi-clipboard" 
                             (onClick)="navigate('/orders')"/>
@@ -38,6 +39,7 @@
                             con seguimiento de entrega.
                         </p>
                         <p-button 
+                            styleClass="w-full mt-3"
                             label="Realizar pedido" 
                             icon="pi pi-shopping-cart" 
                             (onClick)="navigate('/orders')"/>
@@ -48,29 +50,29 @@
                             Vea y gestione los pedidos de hielo que le han sido asignados a usted su para entrega.
                         </p>
                         <p-button 
+                            styleClass="w-full mt-3"
                             label="Gestionar entregas" 
                             icon="pi pi-truck" 
                             (onClick)="navigate('/orders')"/>
                     }
-                    <!-- <p>
-                        Solicita hielo de forma rápida y segura,
-                        con seguimiento de entrega.
-                    </p>
-                    <p-button label="Realizar pedido" icon="pi pi-shopping-cart" (onClick)="navigate('/orders')"></p-button> -->
                 </p-card>
             </div>
             @if(user?.rol === roles.ADMIN || user?.rol === roles.ENCARGADO){
-                    <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/clients')">
+                    <div class="col-12 md:col-4">
                     <p-card class="info-card">
                         <i class="pi pi-users info-icon"></i>
                         <h3>Gestionar clientes</h3>
                         <p>
                             Administra clientes, direcciones y pedidos asociados.
                         </p>
-                        <p-button label="Crear cliente" icon="pi pi-users" ></p-button>
+                        <p-button
+                            styleClass="w-full mt-3"
+                            label="Gestionar clientes"
+                            icon="pi pi-users"
+                            (onClick)="navigate('/clients')"/>
                     </p-card>
                 </div>
-                <div class="col-12 md:col-4" style="cursor: pointer;" (click)="navigate('/dealers')">
+                <div class="col-12 md:col-4">
                     <p-card class="info-card">
                         <i class="pi pi-truck info-icon"></i>
                         <h3>Gestionar repartidores</h3>
@@ -78,6 +80,7 @@
                             Administra repartidores.
                         </p>
                         <p-button
+                            styleClass="w-full mt-3"
                             label="Crear repartidor"
                             icon="pi pi-user-plus"
                             (onClick)="navigate('/dealers')"/>
@@ -86,34 +89,34 @@
             }
         </div>
     </section>
-    <section class="mb-6 section shadow-5">
-        <h2 class="section-title text-center mb-4" style="color: white">
+    <section class="section flow-section mb-2 shadow-5">
+        <h2 class="section-title text-center mb-4">
             ¿Cómo funciona?
         </h2>
         <div class="grid text-center">
             <div class="col-12 md:col-3">
-                <p-card>
+                <p-card class="step-card">
                     <i class="pi pi-file step-icon"></i>
                     <h4>Pedido</h4>
                     <p>El cliente registra su pedido</p>
                 </p-card>
             </div>
             <div class="col-12 md:col-3">
-                <p-card>
+                <p-card class="step-card">
                     <i class="pi pi-box step-icon"></i>
                     <h4>Preparación</h4>
                     <p>Se prepara el hielo solicitado</p>
                 </p-card>
             </div>
             <div class="col-12 md:col-3">
-                <p-card>
+                <p-card class="step-card">
                     <i class="pi pi-truck step-icon"></i>
                     <h4>Reparto</h4>
                     <p>Asignación y salida a entrega</p>
                 </p-card>
             </div>
             <div class="col-12 md:col-3">
-                <p-card>
+                <p-card class="step-card">
                     <i class="pi pi-check-circle step-icon"></i>
                     <h4>Entrega</h4>
                     <p>Pedido entregado al cliente</p>

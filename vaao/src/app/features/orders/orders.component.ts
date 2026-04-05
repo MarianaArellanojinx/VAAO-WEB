@@ -279,8 +279,15 @@ export class OrdersComponent implements OnInit {
     this.dialog.open(ViewDetailsComponent, {
       header: 'Detalles del pedido',
       baseZIndex: 9999,
-      data: order.idPedido,
-      width: 'auto'
+      data: {
+        idPedido: order.idPedido,
+        pedido: order
+      },
+      width: '56rem',
+      breakpoints: {
+        '960px': '92vw',
+        '640px': '96vw'
+      }
     })
   }
 }

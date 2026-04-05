@@ -1,26 +1,84 @@
-<div class="p-fluid p-formgrid grid mt-3">
-    <div class="field col-12">
-        <label for=""><b>Estatus:</b> Entregado</label>
-    </div>
-    <div class="field col-12">
-        <label><b>Fecha de inicio reparto:</b> {{data?.horaInicio | date:'dd/MM/yyyy HH:mm:ss'}}</label>
-    </div>
-    <div class="field col-12">
-        <label><b>Fecha de llegada:</b> {{data?.horaLlegada | date:'dd/MM/yyyy HH:mm:ss'}}</label>
-    </div>
-    <div class="field col-12">
-        <label><b>Fecha de finalización:</b> {{data?.fechaEntrega | date:'dd/MM/yyyy HH:mm:ss'}}</label>
-    </div>
-    <div class="field col-12">
-        <div class="flex flex-column gap-2">
-            <label>Conservador vacío</label>
-            <p-image [src]="data?.imagenConservadorLlegada" alt="Image" width="300" [preview]="true" />
+<div class="detail-modal">
+    <section class="detail-hero">
+        <div class="hero-main">
+            <div class="hero-icon">
+                <i class="pi pi-receipt"></i>
+            </div>
+            <div class="hero-copy">
+                <h3>Pedido #{{ pedido?.idPedido ?? id }}</h3>
+                <p>{{ pedido?.nombreCliente ?? 'Cliente no identificado' }}</p>
+            </div>
         </div>
-    </div>
-    <div class="field col-12">
-        <div class="flex flex-column gap-2">
-            <label>Conservador lleno</label>
-            <p-image [src]="data?.imagenConservadorSalida" alt="Image" width="300" [preview]="true" />
+        <span class="status-chip">{{ getDeliveryStatusText() }}</span>
+    </section>
+
+    @if (loading) {
+        <div class="loading-wrapper">
+            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="7" fill="var(--surface-ground)" />
         </div>
-    </div>
+    } @else {
+        <section class="summary-grid">
+            <article class="summary-card">
+                <small>Bolsas</small>
+                <strong>{{ pedido?.totalBolsas ?? 0 }}</strong>
+            </article>
+            <article class="summary-card">
+                <small>Precio por bolsa</small>
+                <strong>{{ (pedido?.precioUnitario ?? 0) | currency:'MXN' }}</strong>
+            </article>
+            <article class="summary-card">
+                <small>Total pedido</small>
+                <strong>{{ (pedido?.totalPagar ?? 0) | currency:'MXN' }}</strong>
+            </article>
+            <article class="summary-card">
+                <small>Entrega programada</small>
+                <strong>{{ pedido?.fechaProgramada | date:'dd/MM/yyyy' }}</strong>
+            </article>
+        </section>
+
+        <section class="timeline-card">
+            <h4>Seguimiento de entrega</h4>
+            <div class="timeline-row">
+                <span class="timeline-label">Inicio de reparto</span>
+                <span>{{ data?.horaInicio ? (data?.horaInicio | date:'dd/MM/yyyy HH:mm:ss') : 'Pendiente' }}</span>
+            </div>
+            <div class="timeline-row">
+                <span class="timeline-label">Llegada</span>
+                <span>{{ data?.horaLlegada ? (data?.horaLlegada | date:'dd/MM/yyyy HH:mm:ss') : 'Pendiente' }}</span>
+            </div>
+            <div class="timeline-row">
+                <span class="timeline-label">Finalizacion</span>
+                <span>{{ data?.fechaEntrega ? (data?.fechaEntrega | date:'dd/MM/yyyy HH:mm:ss') : 'Pendiente' }}</span>
+            </div>
+            <div class="timeline-row">
+                <span class="timeline-label">Observaciones</span>
+                <span>{{ data?.observaciones && data?.observaciones !== '' ? data?.observaciones : 'Sin observaciones' }}</span>
+            </div>
+        </section>
+
+        <section class="evidence-grid">
+            <article class="evidence-card">
+                <header>Conservador vacio (llegada)</header>
+                @if (hasImage(data?.imagenConservadorLlegada)) {
+                    <p-image [src]="data?.imagenConservadorLlegada" alt="Evidencia de llegada" width="100%" [preview]="true" />
+                } @else {
+                    <div class="empty-evidence">
+                        <i class="pi pi-image"></i>
+                        <span>Sin evidencia registrada</span>
+                    </div>
+                }
+            </article>
+            <article class="evidence-card">
+                <header>Conservador lleno (salida)</header>
+                @if (hasImage(data?.imagenConservadorSalida)) {
+                    <p-image [src]="data?.imagenConservadorSalida" alt="Evidencia de entrega final" width="100%" [preview]="true" />
+                } @else {
+                    <div class="empty-evidence">
+                        <i class="pi pi-image"></i>
+                        <span>Sin evidencia registrada</span>
+                    </div>
+                }
+            </article>
+        </section>
+    }
 </div>

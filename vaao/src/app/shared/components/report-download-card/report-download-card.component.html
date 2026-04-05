@@ -1,24 +1,17 @@
-<div class="report-card shadow-5">
+<div class="report-card">
 
-  <!-- Header -->
   <div class="report-header">
     <div class="report-icon">
-      <i class="pi pi-download" style="font-size: 1.2rem;"></i>
+      <i class="pi pi-download"></i>
     </div>
 
     <div class="report-title">
       <h2>{{ title }}</h2>
-      <small>
-        Periodo:
-        {{ startDate | date:'dd/MM/yyyy' }} –
-        {{ endDate | date:'dd/MM/yyyy' }}
-      </small>
+      <small>Periodo: {{ startDate | date:'dd/MM/yyyy' }} - {{ endDate | date:'dd/MM/yyyy' }}</small>
     </div>
   </div>
 
-  <!-- Body -->
   <div class="report-body">
-
     <p class="report-description">
       Descargue un archivo <b>Excel</b> con la información agrupada y lista para análisis.
     </p>
@@ -41,6 +34,5 @@
         (onClick)="onDownload()">
       </p-button>
     </div>
-
   </div>
 </div>

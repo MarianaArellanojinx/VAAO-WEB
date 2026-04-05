@@ -1,71 +1,261 @@
+:host {
+  display: block;
+}
+
+.app-layout {
+  position: relative;
+  min-height: 100vh;
+}
+
 .app-topbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3.7rem;
-    background: #1B4F72dd;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: calc(66px + var(--safe-top));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: calc(var(--safe-top) + 0.55rem) 0.95rem 0.58rem;
+  background: linear-gradient(125deg, rgba(8, 61, 101, 0.88), rgba(20, 105, 157, 0.74));
+  border-bottom: 1px solid rgba(229, 244, 255, 0.32);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
-label,
-p,
-span,
-small,
-i {
-    color: white;
+.topbar-left,
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.62rem;
 }
 
-.item {
-    border-radius: 0.7rem;
-    transition: all 0.25s ease-out;
-    cursor: pointer;
-    padding: 0.7rem;
+.menu-trigger,
+.logo-chip,
+.session-action,
+.menu-item {
+  border: 0;
+  cursor: pointer;
 }
 
-.item:hover {
-    border: solid 1px #0685b7dd;
-    background-color: #53c1ecdd;
-    transition: all 0.25s ease-in;
+.menu-trigger {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.8rem;
+  color: #f5fcff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-/* FOOTER FIXED */
-.app-footer-fixed {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 48px;
-    z-index: 9999;
-    background-color: #1B4F72dd;
-    color: #ffffff;
-    font-size: 0.85rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+.menu-trigger:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.22);
 }
 
-/* LINKS */
-.footer-link {
-    cursor: pointer;
-    opacity: 0.85;
+.logo-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.55rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.footer-link:hover {
-    opacity: 1;
-    text-decoration: underline;
+.logo-chip img {
+  width: 88px;
+  height: auto;
 }
+
+.topbar-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.topbar-center small {
+  color: rgba(235, 248, 255, 0.78);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.topbar-center strong {
+  color: #eff9ff;
+  font-size: 1.03rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.session-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.5rem 0.82rem;
+  border-radius: 0.72rem;
+  color: #eefaff;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.session-action:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
 .app-main {
-  background: transparent;
+  position: relative;
+  min-height: 100vh;
+  padding-top: calc(70px + var(--safe-top));
+  padding-bottom: 70px;
+}
+
+.content-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1380px, 100%);
+  margin: 0 auto;
+  padding: 0.95rem 1rem 1.4rem;
 }
 
 .particles-bg {
   position: fixed;
-  inset: 0;              // top, right, bottom, left = 0
+  inset: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
-  pointer-events: none;  // no bloquea clicks
+  pointer-events: none;
+}
+
+.app-footer-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  height: 52px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(239, 249, 255, 0.3);
+  background: linear-gradient(120deg, rgba(7, 55, 92, 0.9), rgba(19, 95, 143, 0.78));
+}
+
+.footer-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0 1rem;
+  color: rgba(238, 250, 255, 0.88);
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sidebar-brand-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 0.78rem;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(13, 101, 157, 0.2);
+  padding: 0.2rem;
+}
+
+.sidebar-brand-copy h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #0f2f49;
+}
+
+.sidebar-brand-copy small {
+  color: #3e617f;
+  font-size: 0.76rem;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.62rem;
+  padding-top: 0.2rem;
+}
+
+.menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.66rem;
+  padding: 0.68rem 0.74rem;
+  border-radius: 0.82rem;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid transparent;
+  color: #173954;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.menu-item-icon {
+  width: 1.9rem;
+  height: 1.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.62rem;
+  background: rgba(58, 168, 221, 0.2);
+  color: #0d6ea8;
+}
+
+.menu-item-label {
+  color: #173954;
+}
+
+.menu-item:hover {
+  transform: translateX(3px);
+  border-color: rgba(12, 117, 170, 0.32);
+  background: rgba(231, 246, 255, 0.95);
+}
+
+@media (max-width: 960px) {
+  .topbar-center {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo-chip img {
+    width: 74px;
+  }
+
+  .session-action {
+    padding: 0.5rem 0.62rem;
+  }
+
+  .session-action span {
+    display: none;
+  }
+
+  .content-shell {
+    padding: 0.8rem 0.7rem 1.2rem;
+  }
+
+  .footer-inner {
+    font-size: 0.72rem;
+    padding: 0 0.8rem;
+  }
 }
