@@ -1,44 +1,74 @@
-
-<div class="p-fluid p-formgrid grid ">
-    <div class="field col-12">
-        <label>Seleccione negocio:</label>
-        <p-dropdown 
-            [(ngModel)]="idCliente" 
-            placeholder="Seleccione negocio" 
-            optionLabel="nombreNegocio"
-            optionValue="idCliente" 
-            [options]="clientes" />
+<div class="order-modal">
+    <section class="order-hero">
+        <div class="hero-icon">
+            <i class="pi pi-snowflake"></i>
+        </div>
+        <div class="hero-copy">
+            <h3>Nuevo pedido</h3>
+            <p>Programa una entrega de hielo en segundos y confirma los datos antes de enviar.</p>
+        </div>
+    </section>
+    <section class="order-summary">
+        <div class="summary-item">
+            <small>Precio por bolsa</small>
+            <strong>${{ unitPrice | number:'1.2-2' }} MXN</strong>
+        </div>
+        <div class="summary-item">
+            <small>Total estimado</small>
+            <strong>${{ totalEstimated | number:'1.2-2' }} MXN</strong>
+        </div>
+    </section>
+    <div class="p-fluid p-formgrid grid form-grid">
+        <div class="field col-12">
+            <label>Negocio / punto de entrega</label>
+            <p-dropdown 
+                [(ngModel)]="idCliente" 
+                (ngModelChange)="onClientChange($event)"
+                placeholder="Seleccione negocio" 
+                optionLabel="nombreNegocio"
+                optionValue="idCliente" 
+                [options]="clientes" />
+            <small class="field-help">Selecciona el cliente o planta al que se asociara esta orden.</small>
+            @if(idCliente > 0 && unitPrice <= 0){
+                <small class="field-help field-help-warning">
+                    Este cliente no tiene precio por bolsa configurado. No se puede crear la orden.
+                </small>
+            }
+        </div>
+        <div class="field col-12 md:col-5">
+            <label>Total de bolsas</label>
+            <input 
+                type="number"
+                min="1"
+                pInputText 
+                placeholder="Ej. 10"
+                [(ngModel)]="bolsas" />
+        </div>
+        <div class="field col-12 md:col-7">
+            <label>Fecha programada de entrega</label>
+            <p-calendar 
+                [showIcon]="true" 
+                appendTo="body"
+                [readonlyInput]="true" 
+                dateFormat="dd-mm-yy"
+                placeholder="Seleccione fecha"
+                [minDate]="minDate"
+                [(ngModel)]="scheduledDate" />
+        </div>
+        <div class="field col-12">
+            <label>Comentarios para reparto</label>
+            <textarea 
+                rows="4" 
+                cols="30" 
+                [(ngModel)]="comments"
+                placeholder="Ej. tocar puerta lateral, dejar ticket en caja, etc."
+                pInputTextarea>
+            </textarea>
+        </div>
     </div>
-    <div class="field col-12">
-        <label>Ingrese la cantidad de bolsas a comprar:</label>
-        <input 
-            type="number" 
-            pInputText 
-            [(ngModel)]="bolsas" />
-    </div>
-    <div class="field col-12">
-        <label>Seleccione una fecha para programar la entrega:</label>
-        <p-calendar 
-            [showIcon]="true" 
-            appendTo="body"
-            [readonlyInput]="true" 
-            dateFormat="dd-mm-yy"
-            placeholder="Seleccione fecha"
-            [minDate]="minDate"
-            [(ngModel)]="scheduledDate" />
-    </div>
-    <div class="field col-12">
-        <label>Ingrese comentarios adicionales:</label>
-        <textarea 
-            rows="5" 
-            cols="30" 
-            [(ngModel)]="comments" 
-            pInputTextarea>
-        </textarea>
-    </div>
-    <div class="field col-12">
+    <div class="modal-actions">
         <p-button 
-            label="Hacer pedido" 
+            label="Confirmar pedido"
             severity="success" 
             [loading]="loading" 
             [disabled]="!isValid()"
