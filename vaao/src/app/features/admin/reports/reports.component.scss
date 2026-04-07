@@ -1,0 +1,75 @@
+:host { display: block; }
+
+.hero-ice {
+  border-radius: 1.1rem;
+  border: 1px solid rgba(13, 101, 157, .28);
+  padding: 1rem 1.1rem;
+  background: linear-gradient(125deg, rgba(6, 76, 124, .95), rgba(35, 147, 204, .86));
+  box-shadow: 0 18px 36px rgba(10, 72, 112, .2);
+  display: flex;
+  justify-content: space-between;
+  gap: .8rem;
+}
+
+.hero-copy h1 { margin: .2rem 0 .35rem; color: #f1fbff; font-size: clamp(1.1rem, 2.6vw, 1.45rem); }
+.hero-copy p { margin: 0; color: rgba(223, 243, 255, .9); font-size: .9rem; }
+
+.hero-pill {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  background: rgba(255, 255, 255, .14);
+  color: #f0faff;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .45rem .7rem;
+  font-weight: 700;
+}
+
+.filters-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .65rem; align-items: end; }
+
+.compliance-box {
+  min-height: 8rem;
+  border-radius: .9rem;
+  border: 1px solid rgba(13, 101, 157, .24);
+  background: linear-gradient(160deg, rgba(240, 250, 255, .95), rgba(228, 245, 255, .86));
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: .24rem;
+}
+.compliance-box strong { color: #0f6ea9; font-size: clamp(1.2rem, 3vw, 1.7rem); font-family: var(--font-heading); }
+.compliance-box strong.low { color: #c24c35; }
+.compliance-box small { color: #4f7087; font-size: .74rem; }
+
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .5rem; }
+.summary-item { border-radius: .78rem; border: 1px solid rgba(13, 101, 157, .23); background: rgba(245, 252, 255, .9); padding: .58rem; }
+.summary-item small { display: block; color: #55728a; font-size: .67rem; text-transform: uppercase; letter-spacing: .04em; }
+.summary-item strong { color: #0f5d8b; font-size: 1rem; font-family: var(--font-heading); }
+.summary-item.warning { border-color: rgba(194, 76, 53, .35); }
+
+.empty-state {
+  min-height: 12rem;
+  border-radius: .95rem;
+  border: 1px dashed rgba(13, 101, 157, .35);
+  background: rgba(243, 251, 255, .84);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: .36rem;
+}
+
+.reports-title {
+  border-radius: .9rem;
+  border: 1px solid rgba(13, 101, 157, .3);
+  background: rgba(12, 83, 131, .9);
+  display: inline-flex;
+  align-items: center;
+  padding: .52rem .8rem;
+}
+.reports-title i, .reports-title h2 { margin: 0; color: #eff9ff; font-size: 1rem; }
+
+@media (max-width: 900px) {
+  .hero-ice { flex-direction: column; align-items: flex-start; }
+  .filters-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,185 @@
+<div class="reports-page p-fluid p-formgrid grid mt-3">
+    <div class="field col-12 mb-0">
+        <section class="hero-ice">
+            <div class="hero-copy">
+                <small>Centro de reportes</small>
+                <h1>Radar de venta perdida</h1>
+                <p>Control semanal por negocio para medir cumplimiento de la meta de bolsas de hielo.</p>
+            </div>
+            <div class="hero-pill">
+                <i class="pi pi-star"></i>
+                <span>Meta semanal: {{ META_BOLSAS_SEMANAL }} bolsas</span>
+            </div>
+        </section>
+    </div>
+
+    <div class="field col-12 lg:col-8 mb-0">
+        <app-card-dashboard
+            [startDate]="datesReports[0]"
+            [endDate]="datesReports[1]"
+            title="Filtro de periodo"
+            icon="pi pi-calendar">
+            <div class="filters-grid">
+                <div class="filter-control">
+                    <label>Rango de fechas</label>
+                    <p-calendar
+                        [showIcon]="true"
+                        selectionMode="range"
+                        dateFormat="dd/mm/yy"
+                        appendTo="body"
+                        [readonlyInput]="true"
+                        [(ngModel)]="datesReports" />
+                </div>
+                <div class="filter-action">
+                    <p-button
+                        label="Actualizar"
+                        icon="pi pi-search"
+                        severity="success"
+                        (onClick)="getVentasPerdidasResumen()" />
+                </div>
+            </div>
+        </app-card-dashboard>
+    </div>
+
+    <div class="field col-12 lg:col-4 mb-0">
+        <app-card-dashboard
+            [loading]="loading"
+            title="Termometro de cumplimiento"
+            icon="pi pi-chart-line">
+            <div class="compliance-box">
+                <strong [class.low]="summary.porcentajeCumplimiento < 100">
+                    {{ summary.porcentajeCumplimiento | number:'1.0-2' }}%
+                </strong>
+                <small>cumplimiento global del periodo</small>
+            </div>
+        </app-card-dashboard>
+    </div>
+
+    <div class="field col-12 mb-0">
+        <app-card-dashboard
+            [loading]="loading"
+            title="Resumen semanal"
+            icon="pi pi-chart-bar">
+            <div class="summary-grid">
+                <article class="summary-item">
+                    <small>Negocios</small>
+                    <strong>{{ summary.totalNegocios }}</strong>
+                </article>
+                <article class="summary-item">
+                    <small>Semanas</small>
+                    <strong>{{ summary.totalSemanas }}</strong>
+                </article>
+                <article class="summary-item">
+                    <small>Meta total</small>
+                    <strong>{{ summary.totalBolsasObjetivo }}</strong>
+                </article>
+                <article class="summary-item">
+                    <small>Bolsas compradas</small>
+                    <strong>{{ summary.totalBolsasCompradas }}</strong>
+                </article>
+                <article class="summary-item warning">
+                    <small>Bolsas perdidas</small>
+                    <strong>{{ summary.totalBolsasPerdidas }}</strong>
+                </article>
+                <article class="summary-item">
+                    <small>Negocios con faltante</small>
+                    <strong>{{ summary.negociosConFaltante }}</strong>
+                </article>
+                <article class="summary-item">
+                    <small>Negocios sin compras</small>
+                    <strong>{{ summary.negociosSinCompras }}</strong>
+                </article>
+            </div>
+        </app-card-dashboard>
+    </div>
+
+    <div class="field col-12 mb-0">
+        <app-card-dashboard
+            [loading]="loading"
+            title="Detalle de venta perdida por negocio"
+            icon="pi pi-table">
+            @if (detalleConFaltante.length === 0) {
+                <div class="empty-state">
+                    <i class="pi pi-inbox"></i>
+                    <h3>Sin faltantes en el periodo</h3>
+                    <p>Todos los negocios cumplieron la meta semanal seleccionada.</p>
+                </div>
+            } @else {
+                <p-table
+                    [value]="detalleConFaltante"
+                    [paginator]="true"
+                    [rows]="10"
+                    styleClass="p-datatable-sm">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Negocio</th>
+                            <th>Cliente</th>
+                            <th>Semana</th>
+                            <th>Periodo</th>
+                            <th>Meta</th>
+                            <th>Compradas</th>
+                            <th>Perdidas</th>
+                            <th>Total pagado</th>
+                            <th>Estatus</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td>{{ row.nombreNegocio }}</td>
+                            <td>{{ row.nombreCliente }}</td>
+                            <td>S{{ row.numeroSemana }}/{{ row.anioSemana }}</td>
+                            <td>{{ row.inicioSemana | date:'dd/MM/yyyy' }} - {{ row.finSemana | date:'dd/MM/yyyy' }}</td>
+                            <td>{{ row.bolsasObjetivo }}</td>
+                            <td>{{ row.bolsasCompradas }}</td>
+                            <td>{{ row.bolsasPerdidas }}</td>
+                            <td>{{ row.totalPagado | currency:'MXN' }}</td>
+                            <td>
+                                <p-tag
+                                    [value]="row.cumplioObjetivo ? 'Meta cumplida' : 'Bajo meta'"
+                                    [severity]="getCumplimientoSeverity(row)">
+                                </p-tag>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            }
+        </app-card-dashboard>
+    </div>
+
+    <div class="field col-12 mb-0">
+        <div class="reports-title">
+            <i class="pi pi-file-excel"></i>
+            <h2>Descarga de reportes</h2>
+        </div>
+    </div>
+
+    <div class="field col-12 lg:col-6 mb-0 lg:mb-7 xl:mb-7">
+        <app-report-download-card
+            title="Reporte de venta perdida"
+            [downloadInProgress]="downloadVentaPerdida"
+            [startDate]="datesReports[0]"
+            [endDate]="datesReports[1]"
+            [fields]="[
+                'Negocio',
+                'Cliente',
+                'Semana y periodo',
+                'Meta, compradas y perdidas'
+            ]"
+            (download)="downloadReportVentaPerdida()" />
+    </div>
+
+    <div class="field col-12 lg:col-6 mb-7">
+        <app-report-download-card
+            title="Reporte de venta cancelada"
+            [downloadInProgress]="downloadRechazado"
+            [startDate]="datesReports[0]"
+            [endDate]="datesReports[1]"
+            [fields]="[
+                'Cliente',
+                'Negocio',
+                'Semana',
+                'Bolsas solicitadas y dinero perdido'
+            ]"
+            (download)="downloadReportPedidoRechazado()" />
+    </div>
+</div>
