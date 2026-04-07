@@ -1,17 +1,17 @@
 <div class="p-fluid p-formgrid grid">
     <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mt-3 mb-0">
         <label style="color: white;">Seleccione un rango de fechas:</label>
-        <p-calendar 
-            [(ngModel)]="dates" 
-            [showIcon]="true" 
-            dateFormat="dd/mm/yy" 
-            selectionMode="range"/>
+        <p-calendar
+            [(ngModel)]="dates"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            selectionMode="range" />
     </div>
     <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 sm:mt-0 md:mt-0 lg:mt-3 xl:mt-3 mt-0 mb-0">
-        <p-button 
-            severity="success" 
-            label="Buscar" 
-            [style]="{'margin-top': '1.59rem'}" 
+        <p-button
+            severity="success"
+            label="Buscar"
+            [style]="{'margin-top': '1.59rem'}"
             icon="pi pi-search"
             [raised]="true"
             (onClick)="getDataDashboard()" />
@@ -19,45 +19,35 @@
     <div class="field col-12 sm:col-12 md:col-12 lg:col-6 xl:col-6 my-0">
         <div class="p-fluid p-formgrid grid">
             <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
-                <app-card-dashboard 
+                <app-card-dashboard
                     (click)="filterDataTable(1)"
                     [loading]="loadingCards"
                     title="Venta diaria"
                     icon="pi pi-box">
-                    <div 
-                        class="flex align-items-center justify-content-center gap-2">
-                        <h1 
-                            class="my-0">${{dataCards.today}}
-                        </h1>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        <h1 class="my-0">${{dataCards.today}}</h1>
                     </div>
                 </app-card-dashboard>
             </div>
             <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
-                <app-card-dashboard 
+                <app-card-dashboard
                     (click)="filterDataTable(2)"
                     [loading]="loadingCards"
                     title="Venta semanal"
                     icon="pi pi-box">
-                    <div 
-                        class="flex align-items-center justify-content-center gap-2">
-                        <h1 
-                            class="my-0">
-                            ${{dataCards.week}}
-                        </h1>
+                    <div class="flex align-items-center justify-content-center gap-2">
+                        <h1 class="my-0">${{dataCards.week}}</h1>
                     </div>
                 </app-card-dashboard>
             </div>
             <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 my-0">
-                <app-card-dashboard 
+                <app-card-dashboard
                     (click)="filterDataTable(3)"
                     [loading]="loadingCards"
                     title="Venta del mes"
                     icon="pi pi-box">
                     <div class="flex align-items-center justify-content-center gap-2">
-                        <h1 
-                            class="my-0">
-                            ${{dataCards.month}}
-                        </h1>
+                        <h1 class="my-0">${{dataCards.month}}</h1>
                     </div>
                 </app-card-dashboard>
             </div>
@@ -65,9 +55,8 @@
                 <div class="field col-12">
                     <app-card-dashboard
                         icon="pi pi-dollar"
-                        [title]="'Información ventas por: ' + (idDataTableSelected === 1 ? 'Hoy' : (idDataTableSelected === 2 ? 'Esta semana' : 'Este mes'))">
-                        <p-table
-                            [value]="dataTableCards">
+                        [title]="'Informacion ventas por: ' + (idDataTableSelected === 1 ? 'Hoy' : (idDataTableSelected === 2 ? 'Esta semana' : 'Este mes'))">
+                        <p-table [value]="dataTableCards">
                             <ng-template pTemplate="caption"></ng-template>
                             <ng-template pTemplate="header">
                                 <tr>
@@ -75,7 +64,7 @@
                                     <th>Cliente</th>
                                     <th>Bolsas compradas</th>
                                     <th>Total pagado</th>
-                                    <th>Datelles</th>
+                                    <th>Detalles</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-data>
@@ -85,7 +74,10 @@
                                     <td>{{data.totalBolsas}}</td>
                                     <td>{{data.totalPagar}}</td>
                                     <td>
-                                        <p-button label="Ver detalles" icon="pi pi-eye" (onClick)="openModalDetails(dataCards)"/>
+                                        <p-button
+                                            label="Ver detalles"
+                                            icon="pi pi-eye"
+                                            (onClick)="openModalDetails(dataCards)" />
                                     </td>
                                 </tr>
                             </ng-template>
@@ -93,107 +85,27 @@
                     </app-card-dashboard>
                 </div>
             }
-            <!-- <div class="field col-12 my-0">
-                <app-card-dashboard 
-                    title="Venta diaria"
-                    icon="pi pi-dollar">
-                    <p-table 
-                        #dataTable 
-                        [columns]="cols" 
-                        [value]="ventas?.table" 
-                        [scrollable]="true"
-                        scrollHeight="22.3rem">
-                        <ng-template pTemplate="caption">
-                            <div class="flex justify-content-end my-0 align-items-center">
-                                <p-button 
-                                    icon="pi pi-file-excel" 
-                                    severity="success" 
-                                    label="Exportar"
-                                    (onClick)="dataTable.exportCSV()" />
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Bolsas compradas</th>
-                                <th>$ generado</th>
-                                <th>Fecha de compra</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-body>
-                            <tr>
-                                <td>{{body.cliente}}</td>
-                                <td>{{body.bolsas}}</td>
-                                <td>{{body.total}}</td>
-                                <td>{{body.pedido | date:'dd/MM/yyyy HH:mm:SS'}}</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </app-card-dashboard>
-            </div> -->
         </div>
     </div>
     <div class="field col-12 sm:col-12 md:col-12 lg:col-6 xl:col-6 my-0">
-        <app-card-dashboard 
+        <app-card-dashboard
             title="Venta diaria"
             icon="pi pi-box">
-            <p-chart 
-                type="bar" 
-                [data]="ventas?.chart" 
-                height="32.7rem"/>
+            <p-chart
+                type="bar"
+                [data]="ventas?.chart"
+                height="32.7rem" />
         </app-card-dashboard>
     </div>
     <div class="field col-12 my-0">
-        <app-card-dashboard 
+        <app-card-dashboard
             title="Venta diaria"
             icon="pi pi-box">
-            <p-chart 
-                height="20rem" 
-                type="bar" 
-                [data]="statusChart" 
-                [options]="options"/>
+            <p-chart
+                height="20rem"
+                type="bar"
+                [data]="statusChart"
+                [options]="options" />
         </app-card-dashboard>
-    </div>
-    <div class="field col-12 my-0">
-        <div class="section flex align-items-center justify-content-center gap-2">
-            <i class="pi pi-file-excel" style="font-size: 1.7rem; color: white;"></i>
-            <h1 class="my-0" style="color: white;">Reportes</h1>
-        </div>
-    </div>
-    <div class="field col-12" style="color: #FFF;">
-        <label>Seleccione rango de fechas para los reportes</label>
-        <p-calendar
-            [showIcon]="true"
-            selectionMode="range"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
-            [(ngModel)]="datesReports"/>
-    </div>
-    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mb-0 lg:mb-7 xl:mb-7">
-        <app-report-download-card
-            title="Reporte de ventas perdidas"
-            [startDate]="datesReports[0]"
-            [endDate]="datesReports[1]"
-            [fields]="[
-                'Nombre del cliente',
-                'Nombre del negocio',
-                'Número de semana',
-                'Bolsas restantes'
-            ]"
-            (download)="downloadReport()"/>
-    </div>
-    <div class="field col-12 sm:col-12 md:col-12 lg:col-4 xl:col-4 mb-7">
-        <app-report-download-card
-            title="Reporte de ventas canceladas"
-            [startDate]="datesReports[0]"
-            [endDate]="datesReports[1]"
-            [fields]="[
-                'Fecha pedido',
-                'Cliente',
-                'Negocio',
-                'Bolsas solicitadas',
-                'Dinero perdido'
-            ]"
-            (download)="downloadReportPedidoRechazado()"/>
     </div>
 </div>
