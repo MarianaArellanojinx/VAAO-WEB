@@ -67,6 +67,11 @@ export class LayoutComponent implements AfterViewInit, OnInit {
       label: 'Dashboard'
     },
     {
+      path: '/reports',
+      icon: 'pi pi-file-excel',
+      label: 'Reportes'
+    },
+    {
       path: '/clients',
       icon: 'pi pi-users',
       label: 'Clientes'

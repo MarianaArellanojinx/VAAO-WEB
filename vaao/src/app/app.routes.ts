@@ -17,6 +17,7 @@ import { CorteComponent } from './features/admin/corte/corte.component';
 import { AddVisitComponent } from './features/add-visit/add-visit.component';
 import { VisitsComponent } from './features/visits/visits.component';
 import { OrdersByClientComponent } from './features/orders-by-client/orders-by-client.component';
+import { ReportsComponent } from './features/admin/reports/reports.component';
 
 export const routes: Routes = [
     {
@@ -32,6 +33,11 @@ export const routes: Routes = [
             {
                 path: "dashboard",
                 component: DashboardComponent,
+                canActivate: [adminGuard]
+            },
+            {
+                path: 'reports',
+                component: ReportsComponent,
                 canActivate: [adminGuard]
             },
             {
