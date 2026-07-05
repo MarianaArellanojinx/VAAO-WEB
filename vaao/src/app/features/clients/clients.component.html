@@ -4,12 +4,25 @@
     </div>
     <div class="field col-12 mb-7 mt-0">
         <app-card-dashboard title="Clientes registrados" icon="pi pi-users">
+            <div class="mb-3">
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-search"></i>
+                    <input
+                        pInputText
+                        type="text"
+                        class="w-full"
+                        placeholder="Buscar por usuario, cliente, negocio, direccion, telefono..."
+                        (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+                </span>
+            </div>
             <p-table 
+                #dt
                 [scrollable]="true"
                 scrollHeight="38rem"
                 dataKey="userName" 
                 editMode="row" 
                 [value]="clients" 
+                [globalFilterFields]="['userName', 'userPassowrd', 'nombreNegocio', 'nombreCliente', 'calle', 'numeroExterior', 'colonia', 'cp', 'telefono', 'conservadores', 'ubicacion']"
                 styleClass="">
                 <ng-template pTemplate="header">
                     <tr>
